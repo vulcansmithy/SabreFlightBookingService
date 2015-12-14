@@ -57,3 +57,5 @@ group :development, :test do
   gem "awesome_print", "1.6.1"    # https://github.com/michaeldv/awesome_print
 end
 
+gem "savon",           "2.11.1"   # https://github.com/savonrb/savon
+
