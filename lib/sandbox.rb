@@ -11,4 +11,16 @@ class Sandbox
     puts "@DEBUG #{__LINE__}    #{ap response.to_hash}"
   end
   
+  def exp2
+    cert_wsdl_url = "http://wsdl-crt.cert.sabre.com/sabreXML1.0.00/usg/SessionCreateRQ.wsdl"
+    client        = Savon.client(wsdl: cert_wsdl_url, log: true, log_level: :debug, pretty_print_xml: true)
+    
+    operations = client.operations
+    puts "@DEBUG #{__LINE__}    operations=#{ap operations}"
+  end
+  
+  def exp3
+    new_session = Session.new
+  end  
+  
 end
