@@ -1,6 +1,6 @@
 class Sandbox
   
-  def exp1
+  def archived_exp1
     wsdl   = "http://www.webservicex.net/uszip.asmx?WSDL"
     client = Savon.client(wsdl: wsdl, log: true, log_level: :debug, pretty_print_xml: true)
     
@@ -11,7 +11,7 @@ class Sandbox
     puts "@DEBUG #{__LINE__}    #{ap response.to_hash}"
   end
   
-  def exp2
+  def archived_exp2
     cert_wsdl_url = "http://wsdl-crt.cert.sabre.com/sabreXML1.0.00/usg/SessionCreateRQ.wsdl"
     client        = Savon.client(wsdl: cert_wsdl_url, log: true, log_level: :debug, pretty_print_xml: true)
     
@@ -19,8 +19,28 @@ class Sandbox
     puts "@DEBUG #{__LINE__}    operations=#{ap operations}"
   end
   
-  def exp3
+  def exp1
     new_session = Session.establish
-  end  
+  end 
+  
+  def exp2
+    message_header = {
+  
+      "mes:From" => {
+        "mes:PartyId" => "",
+        :attributes! => { 
+          "type" => "urn:x12.org:IO5:01"
+        }  
+      }
+  
+      "mes:To"   => {
+        "mes:PartyId" => "",
+        :attributes! => { 
+          "type" => "urn:x12.org:IO5:01"
+        }
+      }
+
+    }
+  end   
   
 end
