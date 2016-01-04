@@ -9,8 +9,13 @@ class Session
                 :ref_message_id, 
                 :account_email, 
                 :domain
+  
+  def initialize
+    initialize_configuration
+  end              
+                
 
-  def self.initialize_configuration
+  def initialize_configuration
     
     # retrieve required setting for 'username'
     if ENV["username"].nil?
@@ -51,10 +56,74 @@ class Session
     
   end
 
-  def self.establish
-    initialize_configuration
-    
+  def establish
     savon_client = Savon.client(wsdl: SESSION_CREATE_RQ_WSDL, log: true, log_level: :debug, pretty_print_xml: true)
   end
+  
+  def build_header
+    timestamp = Time.now
+    
+    message_header = {
+
+      "mes:MessageHeader" => {
+        "mes:From" => {
+          "mes:PartyId" => "",
+          :attributes! => { 
+            "mes:PartyId" => {
+              "type" => "urn:x12.org:IO5:01"
+            } 
+          }  
+        },
+
+        "mes:To"   => {
+          "mes:PartyId" => "",
+          :attributes! => { 
+            "mes:PartyId" => {
+              "type" => "urn:x12.org:IO5:01"
+            }
+          }
+        },
+
+        "eb:CPAId" => "6A3H",
+
+        "mes:ConversationId" => "ulysses.legaspi@deferointernational.com",
+      
+        "mes:Service" => "",
+        :attributes! => { 
+          "mes:Service" => {
+            "type" => "sabreXML"
+          }
+        },   
+
+        "mes:Action" => "SessionCreateRQ",
+
+        "mes:MessageData" => {
+          "mes:MessageId"  => "mid:20151222-020311@deferointernational.com",
+          "mes:Timestamp"  => timestamp.strftime("%Y-%m-%dT%H:%M:%SZ"),
+          "mes:TimeToLive" => (timestamp + 20.minutes).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        },
+      
+        "mes:DuplicateElimination" => "",
+        "mes:Description" => "",
+      },
+      :attributes! => { 
+        "mes:MessageHeader" => {
+          "id"      => "1",
+          "version" => "1.0",
+        }
+      },
+      
+      "sec:Security" => {
+        "sec:UsernameToken"  => {
+          "sec:Username"     => @username,
+          "sec:Password"     => @password,
+          "sec:Organization" => @ipcc,
+          "sec:Domain"       => "DEFAULT"
+        }
+      }
+    }
+    
+    puts Gyoku.xml(message_header)
+  end  
                       
 end
