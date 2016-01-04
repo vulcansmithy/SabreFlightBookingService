@@ -1,5 +1,7 @@
 class Session
   
+  SESSION_CREATE_RQ_WSDL = "http://wsdl-crt.cert.sabre.com/sabreXML1.0.00/usg/SessionCreateRQ.wsdl"
+  
   attr_accessor :username, 
                 :password, 
                 :ipcc, 
@@ -11,7 +13,7 @@ class Session
   def self.initialize_configuration
     
     # retrieve required setting for 'username'
-    if ENV["usernamee"].nil?
+    if ENV["username"].nil?
       raise "Missing required 'username' configuration setting." 
     else  
       @username = ENV["username"]
@@ -51,7 +53,8 @@ class Session
 
   def self.establish
     initialize_configuration
-    puts "@DEBUG #{__LINE__}    Running inside establish..."
+    
+    savon_client = Savon.client(wsdl: SESSION_CREATE_RQ_WSDL, log: true, log_level: :debug, pretty_print_xml: true)
   end
                       
 end
