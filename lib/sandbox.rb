@@ -25,22 +25,68 @@ class Sandbox
   
   def exp2
     message_header = {
-  
-      "mes:From" => {
-        "mes:PartyId" => "",
+
+      "mes:MessageHeader" => {
+        "mes:From" => {
+          "mes:PartyId" => "",
+          :attributes! => { 
+            "mes:PartyId" => {
+              "type" => "urn:x12.org:IO5:01"
+            } 
+          }  
+        },
+
+        "mes:To"   => {
+          "mes:PartyId" => "",
+          :attributes! => { 
+            "mes:PartyId" => {
+              "type" => "urn:x12.org:IO5:01"
+            }
+          }
+        },
+
+        "eb:CPAId" => "6A3H",
+
+        "mes:ConversationId" => "ulysses.legaspi@deferointernational.com",
+      
+        "mes:Service" => "",
         :attributes! => { 
-          "type" => "urn:x12.org:IO5:01"
-        }  
-      }
-  
-      "mes:To"   => {
-        "mes:PartyId" => "",
-        :attributes! => { 
-          "type" => "urn:x12.org:IO5:01"
+          "mes:Service" => {
+            "type" => "sabreXML"
+          }
+        },   
+
+        "mes:Action" => "SessionCreateRQ",
+
+        "mes:MessageData" => {
+          "mes:MessageId"  => "mid:20151222-020311@deferointernational.com",
+          "mes:Timestamp"  => "2015-12-22T02:25:33Z",
+          "mes:TimeToLive" => "2016-12-22T02:25:33Z",
+        },
+      
+        "mes:DuplicateElimination" => "",
+        "mes:Description" => "",
+      },
+      :attributes! => { 
+        "mes:MessageHeader" => {
+          "id"      => "1",
+          "version" => "1.0",
+        }
+      },
+      
+      "sec:Security" => {
+        "sec:UsernameToken"  => {
+          "sec:Username"     => "7971",
+          "sec:Password"     => "WS288071",
+          "sec:Organization" => "6A3H",
+          "sec:Domain"       => "DEFAULT"
         }
       }
-
     }
+    
+    
+    
+    puts Gyoku.xml(message_header)
   end   
   
 end

@@ -55,8 +55,10 @@ group :development, :test do
   gem "spring"
   
   gem "awesome_print", "1.6.1"   # https://github.com/michaeldv/awesome_print
+  gem "gyoku",         "1.3.1"   # https://github.com/savonrb/gyoku 
 end
 
 gem "savon",           "2.11.1"                                                 # https://github.com/savonrb/savon
 gem "dotenv-rails",    "2.0.1", :groups => [:development, :test, :production]   # https://github.com/bkeepers/dotenv 
+                              
 
