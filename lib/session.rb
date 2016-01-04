@@ -10,6 +10,7 @@ class Session
 
   def initialize
     puts "@DEBUG #{__LINE__}    Running inside initialize..."  
+    puts "@DEBUG #{__LINE__}    ENV['foo']=#{ENV["foo"]}"
   end
                 
 end
