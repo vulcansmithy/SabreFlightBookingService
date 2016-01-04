@@ -43,7 +43,7 @@ class Session
     if ENV["account_email"].nil?
       raise "Missing 'account_email' configuration setting." 
     else
-      @ipcc = ENV["account_email"]
+      @account_email = ENV["account_email"]
     end
     
     # TODO is 'domain' a required field
@@ -84,9 +84,9 @@ class Session
           }
         },
 
-        "eb:CPAId" => "6A3H",
+        "eb:CPAId" => @ipcc,
 
-        "mes:ConversationId" => "ulysses.legaspi@deferointernational.com",
+        "mes:ConversationId" => @account_email,
       
         "mes:Service" => "",
         :attributes! => { 
@@ -98,7 +98,7 @@ class Session
         "mes:Action" => "SessionCreateRQ",
 
         "mes:MessageData" => {
-          "mes:MessageId"  => "mid:20151222-020311@deferointernational.com",
+          "mes:MessageId"  => "mid:#{timestamp.strftime("%Y%m%d-%H%M%S")}@#{@domain}",
           "mes:Timestamp"  => timestamp.strftime("%Y-%m-%dT%H:%M:%SZ"),
           "mes:TimeToLive" => (timestamp + 20.minutes).strftime("%Y-%m-%dT%H:%M:%SZ"),
         },
@@ -123,7 +123,9 @@ class Session
       }
     }
     
-    puts Gyoku.xml(message_header)
+    puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_header)}"
+    
+    return message_header
   end  
                       
 end
