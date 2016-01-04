@@ -21,7 +21,7 @@ class Sandbox
   
   def exp1
     new_session = Session.new
-    new_session.build_header
+    new_session.establish
   end 
   
   def exp2
@@ -89,5 +89,27 @@ class Sandbox
     
     puts Gyoku.xml(message_header)
   end   
+  
+  def exp3
+    message_body = {
+      "ns:SessionCreateRQ" => {
+        "ns:POS" => {
+          "ns:Source" => "",
+          :attributes! => { 
+            "ns:Source" => {
+              "PseudoCityCode" => "6A3H"
+            }
+          }
+        }
+      },
+      :attributes! => { 
+        "ns:SessionCreateRQ" => {
+          "returnContextID" => "1"
+        }
+      }
+    }
+    
+    puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_body)}"
+  end  
   
 end

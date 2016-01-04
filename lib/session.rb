@@ -8,7 +8,8 @@ class Session
                 :binary_security_token, 
                 :ref_message_id, 
                 :account_email, 
-                :domain
+                :domain,
+                :ref_message_id
   
   def initialize
     initialize_configuration
@@ -57,7 +58,32 @@ class Session
   end
 
   def establish
-    savon_client = Savon.client(wsdl: SESSION_CREATE_RQ_WSDL, log: true, log_level: :debug, pretty_print_xml: true)
+    
+    namespaces = {
+      "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
+      "xmlns:ns"  => "http://www.opentravel.org/OTA/2002/11",
+      "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
+      "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
+    }
+    
+    savon_client = Savon.client(
+      wsdl:                    SESSION_CREATE_RQ_WSDL, 
+      namespaces:              namespaces,
+      soap_header:             build_header,
+      log:                     true, 
+      log_level:               :debug, 
+      pretty_print_xml:        true,
+      convert_request_keys_to: :none
+    )
+    
+    response = savon_client.call(:session_create_rq, message: build_message)
+    puts "@DEBUG #{__LINE__}    #{ap response.to_hash}"
+    
+    @binary_security_token = response.xpath("//wsse:BinarySecurityToken")[0].content
+    @ref_message_id        = response.xpath("//eb:RefToMessageId"       )[0].content 
+    
+    puts "@DEBUG #{__LINE__}    binary_security_token='#{@binary_security_token}'"
+    puts "@DEBUG #{__LINE__}    ref_message_id       ='#{@ref_message_id       }'"
   end
   
   def build_header
@@ -84,7 +110,7 @@ class Session
           }
         },
 
-        "eb:CPAId" => @ipcc,
+        "mes:CPAId" => @ipcc,
 
         "mes:ConversationId" => @account_email,
       
@@ -127,5 +153,29 @@ class Session
     
     return message_header
   end  
+  
+  def build_message
+    message_body = {
+      "ns:SessionCreateRQ" => {
+        "ns:POS" => {
+          "ns:Source" => "",
+          :attributes! => { 
+            "ns:Source" => {
+              "PseudoCityCode" => @ipcc
+            }
+          }
+        }
+      },
+      :attributes! => { 
+        "ns:SessionCreateRQ" => {
+          "returnContextID" => "1"
+        }
+      }
+    }
+    
+    puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_body)}"
+    
+    return message_body
+  end
                       
 end
