@@ -9,8 +9,11 @@ class Session
                 :domain
 
   def initialize
-    puts "@DEBUG #{__LINE__}    Running inside initialize..."  
-    puts "@DEBUG #{__LINE__}    ENV['foo']=#{ENV["foo"]}"
+    @username      = ENV["username"     ]
+    @password      = ENV["password"     ]
+    @ipcc          = ENV["ipcc"         ]
+    @account_email = ENV["account_email"]
+    @domain        = ENV["domain"       ]
   end
                 
 end

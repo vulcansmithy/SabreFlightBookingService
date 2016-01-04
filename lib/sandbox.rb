@@ -21,6 +21,7 @@ class Sandbox
   
   def exp3
     new_session = Session.new
+    puts "@DEBUG #{__LINE__}    new_session=#{ap new_session}"
   end  
   
 end
