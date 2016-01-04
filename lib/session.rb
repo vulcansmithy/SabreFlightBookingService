@@ -15,5 +15,9 @@ class Session
     @account_email = ENV["account_email"]
     @domain        = ENV["domain"       ]
   end
-                
+
+  def self.establish
+    puts "@DEBUG #{__LINE__}    Running inside establish..."
+  end
+                      
 end
