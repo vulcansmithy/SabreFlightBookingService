@@ -121,7 +121,5 @@ class Sandbox
     
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_body)}"
   end  
-  
-  
-  
+
 end
