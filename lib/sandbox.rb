@@ -19,6 +19,16 @@ class Sandbox
     puts "@DEBUG #{__LINE__}    operations=#{ap operations}"
   end
   
+  def util1
+    time_now = Time.now
+    
+    message_id   = "mid:#{time_now.strftime("%Y%m%d-%H%M%S")}@deferointernational.com"
+    timestamp    =  time_now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    puts "@DEBUG #{__LINE__}    message_id...   #{message_id}"
+    puts "@DEBUG #{__LINE__}    timestamp....   #{timestamp}"
+  end  
+  
   def exp1
     new_session = Session.new
     new_session.establish
@@ -111,5 +121,7 @@ class Sandbox
     
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_body)}"
   end  
+  
+  
   
 end
