@@ -56,6 +56,7 @@ group :development, :test do
   
   gem "awesome_print", "1.6.1"   # https://github.com/michaeldv/awesome_print
   gem "gyoku",         "1.3.1"   # https://github.com/savonrb/gyoku 
+  gem "rspec-rails",   "3.2.1"   # https://github.com/rspec/rspec-rails
 end
 
 gem "savon",           "2.11.1"                                                 # https://github.com/savonrb/savon
