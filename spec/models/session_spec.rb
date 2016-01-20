@@ -33,4 +33,10 @@ RSpec.describe Session, type: :model do
     expect(session.domain       ).to eq domain
   end
   
+  it "should do something" do
+    session = Session.new
+    
+    r = session.build_header
+    puts "@DEBUG #{__LINE__}    #{ap r}"
+  end
 end

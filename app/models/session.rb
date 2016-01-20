@@ -10,6 +10,7 @@ class Session
                 :account_email, 
                 :domain,
                 :ref_message_id
+                :debug_mode
                 
   def initialize(attributes={})
     super
@@ -36,4 +37,75 @@ class Session
 
   end              
 
+  def build_header
+    time_now = Time.now
+    
+    message_id   = "mid:#{time_now.strftime("%Y%m%d-%H%M%S")}@#{@domain}"
+    timestamp    =  time_now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    time_to_live = (time_now + 20.minutes).strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    message_header = {
+
+      "mes:MessageHeader" => {
+        "mes:From" => {
+          "mes:PartyId" => "",
+          :attributes! => { 
+            "mes:PartyId" => {
+              "type" => "urn:x12.org:IO5:01"
+            } 
+          }  
+        },
+
+        "mes:To"   => {
+          "mes:PartyId" => "",
+          :attributes! => { 
+            "mes:PartyId" => {
+              "type" => "urn:x12.org:IO5:01"
+            }
+          }
+        },
+
+        "mes:CPAId" => @ipcc,
+
+        "mes:ConversationId" => @account_email,
+      
+        "mes:Service" => "",
+        :attributes! => { 
+          "mes:Service" => {
+            "type" => "sabreXML"
+          }
+        },   
+
+        "mes:Action" => "SessionCreateRQ",
+
+        "mes:MessageData" => {
+          "mes:MessageId"  => message_id,
+          "mes:Timestamp"  => timestamp,
+          "mes:TimeToLive" => time_to_live,
+        },
+      
+        "mes:DuplicateElimination" => "",
+        "mes:Description" => "",
+      },
+      :attributes! => { 
+        "mes:MessageHeader" => {
+          "id"      => "1",
+          "version" => "1.0",
+        }
+      },
+      
+      "sec:Security" => {
+        "sec:UsernameToken"  => {
+          "sec:Username"     => @username,
+          "sec:Password"     => @password,
+          "sec:Organization" => @ipcc,
+          "sec:Domain"       => "DEFAULT"
+        }
+      }
+    }
+    
+    puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_header)}"
+    
+    return message_header
+  end  
 end
