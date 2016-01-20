@@ -115,47 +115,57 @@ class Session
   end  
   
   def create_session_token
+    begin
+      namespaces = {
+        "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
+        "xmlns:ns"  => "http://www.opentravel.org/OTA/2002/11",
+        "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
+        "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
+      }
     
-    namespaces = {
-      "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
-      "xmlns:ns"  => "http://www.opentravel.org/OTA/2002/11",
-      "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
-      "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
-    }
-    
-    message_body = {
-      "ns:SessionCreateRQ" => {
-        "ns:POS" => {
-          "ns:Source" => "",
-          :attributes! => { 
-            "ns:Source" => {
-              "PseudoCityCode" => @ipcc
+      message_body = {
+        "ns:SessionCreateRQ" => {
+          "ns:POS" => {
+            "ns:Source" => "",
+            :attributes! => { 
+              "ns:Source" => {
+                "PseudoCityCode" => @ipcc
+              }
             }
           }
-        }
-      },
-      :attributes! => { 
-        "ns:SessionCreateRQ" => {
-          "returnContextID" => "1"
+        },
+        :attributes! => { 
+          "ns:SessionCreateRQ" => {
+            "returnContextID" => "1"
+          }
         }
       }
-    }
-    
-    savon_client = Savon.client(
-      wsdl:                    SESSION_CREATE_RQ_WSDL, 
-      namespaces:              namespaces,
-      soap_header:             build_header,
-      log:                     true, 
-      log_level:               :debug, 
-      pretty_print_xml:        true,
-      convert_request_keys_to: :none
-    )
-    
-    response = savon_client.call(:session_create_rq, message: message_body)
 
+      savon_client = Savon.client(
+        wsdl:                    SESSION_CREATE_RQ_WSDL, 
+        namespaces:              namespaces,
+        soap_header:             build_header,
+        log:                     true, 
+        log_level:               :debug, 
+        pretty_print_xml:        true,
+        convert_request_keys_to: :none
+      )
     
-    @binary_security_token = response.xpath("//wsse:BinarySecurityToken")[0].content
-    
-    return @binary_security_token
+      response = savon_client.call(:session_create_rq, message: message_body)
+      
+    rescue Savon::SOAPFault => error
+      
+      if error.to_hash[:fault][:faultcode] == "soap-env:Client.AuthenticationFailed"
+        raise "Authentication failed." 
+      else
+        raise "Exception encountered."
+      end    
+
+    else
+      @binary_security_token = response.xpath("//wsse:BinarySecurityToken")[0].content 
+
+      return @binary_security_token     
+    end
   end
+  
 end
