@@ -1,4 +1,6 @@
 class Session
+  
+  SESSION_CREATE_RQ_WSDL = "http://webservices.sabre.com/wsdl/sabreXML1.0.00/usg/SessionCreateRQ.wsdl"
 
   include ActiveModel::Model
   
@@ -6,11 +8,9 @@ class Session
                 :password, 
                 :ipcc, 
                 :binary_security_token, 
-                :ref_message_id, 
                 :account_email, 
                 :domain,
                 :ref_message_id
-                :debug_mode
                 
   def initialize(attributes={})
     super
@@ -43,6 +43,10 @@ class Session
     message_id   = "mid:#{time_now.strftime("%Y%m%d-%H%M%S")}@#{@domain}"
     timestamp    =  time_now.strftime("%Y-%m-%dT%H:%M:%SZ")
     time_to_live = (time_now + 20.minutes).strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    puts "@DEBUG #{__LINE__}    message_id..... #{message_id  }"
+    puts "@DEBUG #{__LINE__}    timestamp...... #{timestamp   }"
+    puts "@DEBUG #{__LINE__}    time_to_live... #{time_to_live}"
     
     message_header = {
 
@@ -105,7 +109,53 @@ class Session
     }
     
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_header)}"
+
     
     return message_header
   end  
+  
+  def create_session_token
+    
+    namespaces = {
+      "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
+      "xmlns:ns"  => "http://www.opentravel.org/OTA/2002/11",
+      "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
+      "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
+    }
+    
+    message_body = {
+      "ns:SessionCreateRQ" => {
+        "ns:POS" => {
+          "ns:Source" => "",
+          :attributes! => { 
+            "ns:Source" => {
+              "PseudoCityCode" => @ipcc
+            }
+          }
+        }
+      },
+      :attributes! => { 
+        "ns:SessionCreateRQ" => {
+          "returnContextID" => "1"
+        }
+      }
+    }
+    
+    savon_client = Savon.client(
+      wsdl:                    SESSION_CREATE_RQ_WSDL, 
+      namespaces:              namespaces,
+      soap_header:             build_header,
+      log:                     true, 
+      log_level:               :debug, 
+      pretty_print_xml:        true,
+      convert_request_keys_to: :none
+    )
+    
+    response = savon_client.call(:session_create_rq, message: message_body)
+
+    
+    @binary_security_token = response.xpath("//wsse:BinarySecurityToken")[0].content
+    
+    return @binary_security_token
+  end
 end

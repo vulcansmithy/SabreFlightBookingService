@@ -33,10 +33,10 @@ RSpec.describe Session, type: :model do
     expect(session.domain       ).to eq domain
   end
   
-  it "should do something" do
+  it "should be able to establish a session token" do
     session = Session.new
     
-    r = session.build_header
-    puts "@DEBUG #{__LINE__}    #{ap r}"
+    session_token = session.create_session_token
+    puts "@DEBUG #{__LINE__}    session_token=#{session_token}"
   end
 end
