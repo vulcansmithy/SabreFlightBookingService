@@ -36,7 +36,7 @@ RSpec.describe Session, type: :model do
   it "should be able to establish a session token" do
     session = Session.new
     
-    session_token = session.create_session_token
-    puts "@DEBUG #{__LINE__}    session_token=#{session_token}"
+    session_token = session.establish_session
   end
+  
 end

@@ -168,4 +168,11 @@ class Session
     end
   end
   
+  def establish_session
+    self.create_session_token
+  end  
+  
+  def re_establish_session
+    self.create_session_token
+  end
 end
