@@ -59,6 +59,8 @@ group :development, :test do
   gem "rspec-rails",   "3.2.1"   # https://github.com/rspec/rspec-rails
   gem "guard-rspec",   "4.5.0"   # https://github.com/guard/guard-rspec
   gem "rb-fsevent",    "0.9.4"   # https://github.com/thibaudgg/rb-fsevent
+  gem "faker",         "1.4.3"   # https://github.com/stympy/faker
+  
 end
 
 gem "savon",           "2.11.1"                                                 # https://github.com/savonrb/savon

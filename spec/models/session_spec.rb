@@ -12,4 +12,25 @@ RSpec.describe Session, type: :model do
     expect(session.domain       ).to eq ENV["domain"       ]
   end
   
+  it "should be able to override the configuration settings by passing a hash to the initializer" do
+    username      = Faker::Internet.password
+    password      = Faker::Internet.password
+    ipcc          = "A1B2" 
+    account_email = "accounts@example.com"
+    domain        = "example.com" 
+    
+    session = Session.new(
+      username:      username, 
+      password:      password, 
+      ipcc:          ipcc, 
+      account_email: account_email, 
+      domain:        domain
+    )
+    expect(session.username     ).to eq username
+    expect(session.password     ).to eq password
+    expect(session.ipcc         ).to eq ipcc
+    expect(session.account_email).to eq account_email
+    expect(session.domain       ).to eq domain
+  end
+  
 end
