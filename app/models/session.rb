@@ -1,6 +1,9 @@
 class Session
   
-  SESSION_CREATE_RQ_WSDL = "http://webservices.sabre.com/wsdl/sabreXML1.0.00/usg/SessionCreateRQ.wsdl"
+  SESSION_CREATE_RQ_WSDL          = "http://webservices.sabre.com/wsdl/sabreXML1.0.00/usg/SessionCreateRQ.wsdl"
+  
+  HEADER_ACTION_SESSION_CREATE_RQ = "SessionCreateRQ"
+  HEADER_ACTION_SESSION_CLOSE_RQ  = "SessionCloseRQ"
 
   include ActiveModel::Model
   
@@ -37,7 +40,9 @@ class Session
 
   end              
 
-  def build_header
+  def build_header(header_action, binary_security_token=nil)
+    raise "Missing 'header_action' parameter." if header_action.nil?
+    
     time_now = Time.now
     
     message_id   = "mid:#{time_now.strftime("%Y%m%d-%H%M%S")}@#{@domain}"
@@ -80,7 +85,7 @@ class Session
           }
         },   
 
-        "mes:Action" => "SessionCreateRQ",
+        "mes:Action" => header_action,
 
         "mes:MessageData" => {
           "mes:MessageId"  => message_id,
@@ -105,7 +110,10 @@ class Session
           "sec:Organization" => @ipcc,
           "sec:Domain"       => "DEFAULT"
         }
-      }
+      },
+      
+      "sec:BinarySecurityToken" => binary_security_token.nil? ? "" : binary_security_token,
+      
     }
     
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_header)}"
@@ -144,7 +152,7 @@ class Session
       savon_client = Savon.client(
         wsdl:                    SESSION_CREATE_RQ_WSDL, 
         namespaces:              namespaces,
-        soap_header:             build_header,
+        soap_header:             build_header(HEADER_ACTION_SESSION_CREATE_RQ),
         log:                     true, 
         log_level:               :debug, 
         pretty_print_xml:        true,
