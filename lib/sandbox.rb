@@ -30,7 +30,7 @@ class Sandbox
   end  
   
   def exp1
-    new_session = Session.new
+    new_session = Sessionn.new
     new_session.establish
   end 
   
