@@ -22,25 +22,16 @@ class BargainFinderMax
   def build_pos_section
     section = {
       "xsd1:Source" => {
+        :@PseudoCityCode => "6A3H",
+        
         "xsd1:RequestorID" => {
-          "xsd1:CompanyName" => "",
-          :attributes! => {
-            "xsd1:CompanyName" => {
-              "Code" => "TN",    
-            },    
+          :@Type => "1",
+          :@ID   => "1",
+
+          "xsd1:CompanyName" => {
+            :@Code => "TN",  
           },
         },
-        :attributes! => {
-          "xsd1:RequestorID" => {
-            "Type" => "1",
-            "ID"   => "1",
-          },
-        },
-      },
-      :attributes! => {
-        "xsd1:Source" => {
-          "PseudoCityCode" => "6A3H",    
-        },    
       },
     }
     
@@ -58,6 +49,22 @@ class BargainFinderMax
 
     message_body = {
       "xsd1:POS" => build_pos_section,
+      "xsd1:OriginDestinationInformation" => {
+        :@RPH => "1",
+        
+        # DepartureDateTime
+        "xsd1:DepartureDateTime" => "2016-02-14T00:00:00",
+        
+        # OriginLocation
+        "xsd1:OriginLocation" => {
+          :@LocationCode => "MNL",
+        },
+
+        # DestinationLocation
+        "xsd1:DestinationLocation" => {
+          :@LocationCode => "SIN",     
+        },
+      },
     }
     
     savon_client = Savon.client(

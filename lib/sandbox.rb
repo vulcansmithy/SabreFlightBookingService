@@ -121,5 +121,54 @@ class Sandbox
     
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_body)}"
   end  
+  
+  def build_pos_section
+    section = {
+      "xsd1:Source" => {
+        
+        :@PseudoCityCode => "6A3H",
+        
+        "xsd1:RequestorID" => {
+          
+          :@Type => "1",
+          :@ID   => "1",
+
+          "xsd1:CompanyName" => {
+            :@Code => "TN",  
+          },
+          
+        },
+
+      },
+    }
+    
+    return section
+  end
+  
+  def exp4
+    message_body = {
+      "xsd1:POS" => build_pos_section,
+      "xsd1:OriginDestinationInformation" => {
+        
+        :@RPH => "1",
+        
+        # DepartureDateTime
+        "xsd1:DepartureDateTime" => "2016-02-14T00:00:00",
+        
+        # OriginLocation
+        "xsd1:OriginLocation" => {
+          :@LocationCode => "MNL",
+        },
+
+        # DestinationLocation
+        "xsd1:DestinationLocation" => {
+          :@LocationCode => "SIN",     
+        },
+
+      },
+    }
+    
+    puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_body)}"
+  end
 
 end
