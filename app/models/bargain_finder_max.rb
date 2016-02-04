@@ -72,6 +72,25 @@ class BargainFinderMax
           },
         },
       },
+      "xsd1:TravelerInfoSummary" => {
+        "xsd1:SeatsRequested"   => 3,
+        "xsd1:AirTravelerAvail" => {
+          "xsd1:PassengerTypeQuantity" => [
+            {
+              :@Code     => "ADT",
+              :@Quantity => "1",  
+            },
+            {
+              :@Code     => "CNN",
+              :@Quantity => "1",  
+            },
+            {
+              :@Code     => "INF",
+              :@Quantity => "1",  
+            },
+          ],
+        },
+      },
     }
     
     savon_client = Savon.client(
