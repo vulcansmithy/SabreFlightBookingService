@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe BargainFinderMax, type: :model do
   
-  it "should do something" do
+  it "should be able to create a Air Availability request for 'One Way' trip using Bargain Finder Max (BFM)" do
     session = Session.new
     session.create_session_token
     
