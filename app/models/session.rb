@@ -50,11 +50,8 @@ class Session
     
     message_id   = "mid:#{time_now.strftime("%Y%m%d-%H%M%S")}@#{@domain}"
     timestamp    =  time_now.strftime("%Y-%m-%dT%H:%M:%SZ")
-    time_to_live = (time_now + 20.minutes).strftime("%Y-%m-%dT%H:%M:%SZ")
-    
     puts "@DEBUG #{__LINE__}    message_id..... #{message_id  }"
     puts "@DEBUG #{__LINE__}    timestamp...... #{timestamp   }"
-    puts "@DEBUG #{__LINE__}    time_to_live... #{time_to_live}"
     
     message_header = {
 
@@ -91,9 +88,8 @@ class Session
         "mes:Action" => header_action,
 
         "mes:MessageData" => {
-          "mes:MessageId"  => message_id,
-          "mes:Timestamp"  => timestamp,
-          "mes:TimeToLive" => time_to_live,
+          "mes:MessageId" => message_id,
+          "mes:Timestamp" => timestamp,
         },
       
         "mes:DuplicateElimination" => "",
