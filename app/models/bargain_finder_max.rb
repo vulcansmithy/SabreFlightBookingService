@@ -98,8 +98,8 @@ class BargainFinderMax
     return seats_requested, passenger_type_quantity_list
   end  
   
-  def bfm_one_way(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
-
+  def build_message_body(origins_and_destinations, trip_type, passenger_types_and_quantities, request_type)
+  
     pos_section                                   = build_pos_section
     origin_destination_information_section        = build_origin_destination_information_section(origins_and_destinations)
     travel_preferences_section                    = build_travel_preferences_section(TRIP_TYPE_ONE_WAY)
@@ -122,8 +122,13 @@ class BargainFinderMax
           },
         },
       },
-    }
+    } 
     
+    return message_body 
+  end  
+  
+  def bfm_one_way(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
+
     savon_client = Savon.client(
       wsdl:                    BARGAIN_FINDER_MAX_RQ_WSDL, 
       namespaces:              namespaces,
@@ -134,8 +139,9 @@ class BargainFinderMax
       convert_request_keys_to: :none,
       namespace_identifier:    :ns
     )
-    
-    response = savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
+
+    message_body = build_message_body(origins_and_destinations, TRIP_TYPE_ONE_WAY, passenger_types_and_quantities, request_type)  
+    response     = savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
     
     return savon_client
   end
