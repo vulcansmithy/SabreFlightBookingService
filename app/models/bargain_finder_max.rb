@@ -21,14 +21,14 @@ class BargainFinderMax
   
   def build_pos_section
     section = {
-      "xsd1:Source" => {
+      "ns:Source" => {
         :@PseudoCityCode => "6A3H",
         
-        "xsd1:RequestorID" => {
+        "ns:RequestorID" => {
           :@Type => "1",
           :@ID   => "1",
 
-          "xsd1:CompanyName" => {
+          "ns:CompanyName" => {
             :@Code => "TN",  
           },
         },
@@ -42,40 +42,40 @@ class BargainFinderMax
     
     namespaces = {
       "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
-      "xmlns:ns"  => "http://www.opentravel.org/OTA/2002/11",
+      "xmlns:ns"  => "http://www.opentravel.org/OTA/2003/05",
       "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
       "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
     }
 
     message_body = {
-      "xsd1:POS" => build_pos_section,
-      "xsd1:OriginDestinationInformation" => {
+      "ns:POS" => build_pos_section,
+      "ns:OriginDestinationInformation" => {
         :@RPH => "1",
         
         # DepartureDateTime
-        "xsd1:DepartureDateTime" => "2016-02-14T00:00:00",
+        "ns:DepartureDateTime" => "2016-02-14T00:00:00",
         
         # OriginLocation
-        "xsd1:OriginLocation" => {
+        "ns:OriginLocation" => {
           :@LocationCode => "MNL",
         },
 
         # DestinationLocation
-        "xsd1:DestinationLocation" => {
+        "ns:DestinationLocation" => {
           :@LocationCode => "SIN",     
         },
       },
-      "xsd1:TravelPreferences" => {
-        "xsd1:TPA_Extensions" => {
-          "xsd1:TripType" => {
+      "ns:TravelPreferences" => {
+        "ns:TPA_Extensions" => {
+          "ns:TripType" => {
             :@Value => "OneWay",
           },
         },
       },
-      "xsd1:TravelerInfoSummary" => {
-        "xsd1:SeatsRequested"   => 3,
-        "xsd1:AirTravelerAvail" => {
-          "xsd1:PassengerTypeQuantity" => [
+      "ns:TravelerInfoSummary" => {
+        "ns:SeatsRequested"   => 3,
+        "ns:AirTravelerAvail" => {
+          "ns:PassengerTypeQuantity" => [
             {
               :@Code     => "ADT",
               :@Quantity => "1",  
@@ -91,9 +91,9 @@ class BargainFinderMax
           ],
         },
       },
-      "xsd1:TPA_Extensions" => {
-        "xsd1:IntelliSellTransaction" => {
-          "xsd1:RequestType" => {
+      "ns:TPA_Extensions" => {
+        "ns:IntelliSellTransaction" => {
+          "ns:RequestType" => {
             :@Name => "50ITINS",
           },
         },
@@ -107,10 +107,11 @@ class BargainFinderMax
       log:                     true, 
       log_level:               :debug, 
       pretty_print_xml:        true,
-      convert_request_keys_to: :none
+      convert_request_keys_to: :none,
+      namespace_identifier:    :ns
     )
     
-   response = savon_client.call(:bargain_finder_max_rq, attributes: operation_attributes, message: message_body)
+    response = savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
     
     return savon_client
   end
