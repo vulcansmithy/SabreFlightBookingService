@@ -69,41 +69,56 @@ class BargainFinderMax
     return origin_destination_list
   end  
   
-  def bfm_one_way(session, origins_and_destinations)
-
-    message_body = {
-      "ns:POS"                          => build_pos_section,
-      "ns:OriginDestinationInformation" => build_origin_destination_information_section(origins_and_destinations), 
-      "ns:TravelPreferences" => {
-        "ns:TPA_Extensions" => {
-          "ns:TripType" => {
-            :@Value => TRIP_TYPE_ONE_WAY,
-          },
+  def build_travel_preferences_section(trip_type)
+    section = {
+      "ns:TPA_Extensions" => {
+        "ns:TripType" => {
+          :@Value => trip_type,
         },
       },
+    }
+    
+    return section
+  end
+  
+  def build_passenger_type_quantity_section(passenger_types_and_quantities)
+    raise "'passenger_types_and_quantities' parameters should not be empty." if passenger_types_and_quantities.empty?
+    
+    passenger_type_quantity_list = []
+    
+    seats_requested = 0
+    passenger_types_and_quantities.each do |entry|
+      passenger_type_quantity_list << {
+        :@Code     => entry[:passenger_type],
+        :@Quantity => entry[:quantity      ],
+      }
+      seats_requested += entry[:quantity]
+    end
+    
+    return seats_requested, passenger_type_quantity_list
+  end  
+  
+  def bfm_one_way(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
+
+    pos_section                                   = build_pos_section
+    origin_destination_information_section        = build_origin_destination_information_section(origins_and_destinations)
+    travel_preferences_section                    = build_travel_preferences_section(TRIP_TYPE_ONE_WAY)
+    seats_requested, passenger_type_quantity_list = build_passenger_type_quantity_section(passenger_types_and_quantities)
+
+    message_body = {
+      "ns:POS"                          => pos_section,
+      "ns:OriginDestinationInformation" => origin_destination_information_section, 
+      "ns:TravelPreferences"            => travel_preferences_section,
       "ns:TravelerInfoSummary" => {
-        "ns:SeatsRequested"    => 3,
+        "ns:SeatsRequested"    => seats_requested,
         "ns:AirTravelerAvail"  => {
-          "ns:PassengerTypeQuantity" => [
-            {
-              :@Code     => "ADT",
-              :@Quantity => "1",  
-            },
-            {
-              :@Code     => "CNN",
-              :@Quantity => "1",  
-            },
-            {
-              :@Code     => "INF",
-              :@Quantity => "1",  
-            },
-          ],
+          "ns:PassengerTypeQuantity" => passenger_type_quantity_list,
         },
       },
       "ns:TPA_Extensions" => {
         "ns:IntelliSellTransaction" => {
           "ns:RequestType" => {
-            :@Name => "50ITINS",
+            :@Name => request_type,
           },
         },
       },

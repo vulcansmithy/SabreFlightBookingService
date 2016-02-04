@@ -218,5 +218,36 @@ class Sandbox
     puts "@DEBUG #{__LINE__}    #{ap origin_destination_information_collection}"
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(origin_destination_information_collection)}"
   end
-
+  
+  def exp6 
+    
+    passenger_types_and_quantities = [
+      {
+        :passenger_type => "ADT",
+        :quantity       => 1,
+      },
+      {
+        :passenger_type => "CNN",
+        :quantity       => 1, 
+      },
+      {
+        :passenger_type => "INF",
+        :quantity       => 1,
+      },
+    ]
+    
+    passenger_type_quantity_list = []
+    
+    seats_requested = 0
+    passenger_types_and_quantities.each do |entry|
+      passenger_type_quantity_list << {
+        :@Code     => entry[:passenger_type],
+        :@Quantity => entry[:quantity      ],
+      }
+      seats_requested += entry[:quantity]
+    end
+    
+    return seats_requested, passenger_type_quantity_list
+  end
+    
 end

@@ -32,8 +32,24 @@ RSpec.describe BargainFinderMax, type: :model do
     ]
     
     
+    passenger_types_and_quantities = [
+      {
+        :passenger_type => "ADT",
+        :quantity       => 1,
+      },
+      {
+        :passenger_type => "CNN",
+        :quantity       => 1, 
+      },
+      {
+        :passenger_type => "INF",
+        :quantity       => 1,
+      },
+    ]
+    
+    
     bfm = BargainFinderMax.new
-    result = bfm.bfm_one_way(session, origins_and_destinations)
+    result = bfm.bfm_one_way(session, origins_and_destinations, passenger_types_and_quantities)
   end
 
 end
