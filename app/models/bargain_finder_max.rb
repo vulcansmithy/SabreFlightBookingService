@@ -65,6 +65,13 @@ class BargainFinderMax
           :@LocationCode => "SIN",     
         },
       },
+      "xsd1:TravelPreferences" => {
+        "xsd1:TPA_Extensions" => {
+          "xsd1:TripType" => {
+            :@Value => "OneWay",
+          },
+        },
+      },
     }
     
     savon_client = Savon.client(
