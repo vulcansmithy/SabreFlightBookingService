@@ -39,7 +39,26 @@ class BargainFinderMax
     return section
   end
   
-  def bfm_one_way(session, origin_destination_information)
+  def build_origin_destination_information_section(origins_and_destinations)
+    raise "'origins_and_destinations' parameters should not be empty." if origins_and_destinations.empty?
+    
+    origin_destination_list = []
+    
+    count = 0
+    origins_and_destinations.each do |entry|
+      count += 1
+      origin_destination_list << {
+        :@RPH => count,
+        "ns:DepartureDateTime"   => { :content!      => entry[:departure_date_time ], },
+        "ns:OriginLocation"      => { :@LocationCode => entry[:origin_location     ], },
+        "ns:DestinationLocation" => { :@LocationCode => entry[:destination_location], },
+      }
+    end
+    
+    return origin_destination_list
+  end  
+  
+  def bfm_one_way(session, origins_and_destinations)
     
     namespaces = {
       "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
@@ -47,25 +66,10 @@ class BargainFinderMax
       "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
       "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
     }
-
+    
     message_body = {
-      "ns:POS" => build_pos_section,
-      "ns:OriginDestinationInformation" => {
-        :@RPH => "1",
-        
-        # DepartureDateTime
-        "ns:DepartureDateTime" => "2016-02-14T00:00:00",
-        
-        # OriginLocation
-        "ns:OriginLocation" => {
-          :@LocationCode => "MNL",
-        },
-
-        # DestinationLocation
-        "ns:DestinationLocation" => {
-          :@LocationCode => "SIN",     
-        },
-      },
+      "ns:POS"                          => build_pos_section,
+      "ns:OriginDestinationInformation" => build_origin_destination_information_section(origins_and_destinations), 
       "ns:TravelPreferences" => {
         "ns:TPA_Extensions" => {
           "ns:TripType" => {

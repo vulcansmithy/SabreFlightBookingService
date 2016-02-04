@@ -170,5 +170,53 @@ class Sandbox
     
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_body)}"
   end
+  
+  def exp5
+    data = [
+      {
+        :departure_date_time  => "2016-02-14T00:00:00",
+        :origin_location      => "MNL",
+        :destination_location => "SIN",
+      },
+=begin  
+      {
+        :departure_date_time  => "2016-02-22T00:00:00",
+        :origin_location      => "SIN",
+        :destination_location => "CGK",
+      },
+      {
+        :departure_date_time  => "2016-02-24T00:00:00",
+        :origin_location      => "CGK",
+        :destination_location => "BKK",
+      },
+      {
+        :departure_date_time  => "2016-02-28T00:00:00",
+        :origin_location      => "BKK",
+        :destination_location => "MNL",
+      },
+=end      
+    ]
+
+
+    array_of_origins_and_destinations = []
+    
+    count = 0
+    data.each do |entry|
+      count += 1
+      array_of_origins_and_destinations << {
+        :@RPH => count,
+        "ns:DepartureDateTime"   => entry[:departure_date_time ],
+        "ns:OriginLocation"      => entry[:origin_location     ],
+        "ns:DestinationLocation" => entry[:destination_location],
+      }
+    end
+    
+    origin_destination_information_collection = {
+      "ns:OriginDestinationInformation" => array_of_origins_and_destinations
+    }
+
+    puts "@DEBUG #{__LINE__}    #{ap origin_destination_information_collection}"
+    puts "@DEBUG #{__LINE__}    #{Gyoku.xml(origin_destination_information_collection)}"
+  end
 
 end
