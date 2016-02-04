@@ -20,6 +20,17 @@ class BargainFinderMax
     return attributes
   end  
   
+  def namespaces
+    namespaces = {
+      "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
+      "xmlns:ns"  => "http://www.opentravel.org/OTA/2003/05",
+      "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
+      "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
+    }
+    
+    return namespaces
+  end  
+  
   def build_pos_section
     section = {
       "ns:Source" => {
@@ -59,14 +70,7 @@ class BargainFinderMax
   end  
   
   def bfm_one_way(session, origins_and_destinations)
-    
-    namespaces = {
-      "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
-      "xmlns:ns"  => "http://www.opentravel.org/OTA/2003/05",
-      "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
-      "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
-    }
-    
+
     message_body = {
       "ns:POS"                          => build_pos_section,
       "ns:OriginDestinationInformation" => build_origin_destination_information_section(origins_and_destinations), 
