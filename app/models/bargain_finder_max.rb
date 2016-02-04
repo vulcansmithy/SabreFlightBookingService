@@ -6,12 +6,7 @@ class BargainFinderMax
   
   include ActiveModel::Model
   
-  def initialize(attributes={})
-    super
-  end  
-  
   def bfm_one_way(session)
-    
     namespaces = {
       "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
       "xmlns:ns"  => "http://www.opentravel.org/OTA/2002/11",
