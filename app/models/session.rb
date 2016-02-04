@@ -109,10 +109,11 @@ class Session
           "sec:Password"     => @password,
           "sec:Organization" => @ipcc,
           "sec:Domain"       => "DEFAULT"
-        }
+        },
+        "sec:BinarySecurityToken" => binary_security_token.nil? ? "" : binary_security_token,
       },
       
-      "sec:BinarySecurityToken" => binary_security_token.nil? ? "" : binary_security_token,
+      
       
     }
     
