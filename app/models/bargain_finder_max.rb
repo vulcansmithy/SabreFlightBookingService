@@ -91,6 +91,13 @@ class BargainFinderMax
           ],
         },
       },
+      "xsd1:TPA_Extensions" => {
+        "xsd1:IntelliSellTransaction" => {
+          "xsd1:RequestType" => {
+            :@Name => "50ITINS",
+          },
+        },
+      },
     }
     
     savon_client = Savon.client(
