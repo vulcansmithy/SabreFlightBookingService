@@ -6,6 +6,7 @@ class BargainFinderMax
   # == Constants ==============================================================
   BARGAIN_FINDER_MAX_RQ_WSDL          = "http://files.developer.sabre.com/wsdl/sabreXML1.0.00/shopping/BargainFinderMaxRQ_v1-9-2.wsdl"
   HEADER_ACTION_BARGAIN_FINDER_MAX_RQ = "BargainFinderMaxRQ"
+  TRIP_TYPE_ONE_WAY                   = "OneWay"
   
   # == Instance methods =======================================================
   def operation_attributes
@@ -68,13 +69,13 @@ class BargainFinderMax
       "ns:TravelPreferences" => {
         "ns:TPA_Extensions" => {
           "ns:TripType" => {
-            :@Value => "OneWay",
+            :@Value => TRIP_TYPE_ONE_WAY,
           },
         },
       },
       "ns:TravelerInfoSummary" => {
-        "ns:SeatsRequested"   => 3,
-        "ns:AirTravelerAvail" => {
+        "ns:SeatsRequested"    => 3,
+        "ns:AirTravelerAvail"  => {
           "ns:PassengerTypeQuantity" => [
             {
               :@Code     => "ADT",
