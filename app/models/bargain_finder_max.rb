@@ -8,6 +8,34 @@ class BargainFinderMax
   HEADER_ACTION_BARGAIN_FINDER_MAX_RQ = "BargainFinderMaxRQ"
   
   # == Instance methods =======================================================
+  def build_pos_section
+    section = {
+      "ns:Source" => {
+        "ns:RequestorID" => {
+          "ns:CompanyName" => "",
+          :attributes! => {
+            "ns:CompanyName" => {
+              "Code" => "TN",    
+            },    
+          },
+        },
+        :attributes! => {
+          "ns:RequestorID" => {
+            "Type" => "1",
+            "ID"   => "1",
+          },
+        },
+      },
+      :attributes! => {
+        "ns:Source" => {
+          "PseudoCityCode" => "6A3H",    
+        },    
+      },
+    }
+    
+    return section
+  end
+  
   def bfm_one_way(session, origin_destination_information)
     
     namespaces = {
@@ -19,29 +47,7 @@ class BargainFinderMax
     
     message_body = {
       "ns:OTA_AirLowFareSearchRQ" => {
-        "ns:POS" => {
-          "ns:Source" => {
-            "ns:RequestorID" => {
-              "ns:CompanyName" => "",
-              :attributes! => {
-                "ns:CompanyName" => {
-                  "Code" => "TN",    
-                },    
-              },
-            },
-            :attributes! => {
-              "ns:RequestorID" => {
-                "Type" => "1",
-                "ID"   => "1",
-              },
-            },
-          },
-          :attributes! => {
-            "ns:Source" => {
-              "PseudoCityCode" => "6A3H",    
-            },    
-          },
-        },
+        "ns:POS" => build_pos_section,
       },
       :attributes! => { 
         "ns:OTA_AirLowFareSearchRQ" => {
