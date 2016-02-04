@@ -8,26 +8,37 @@ class BargainFinderMax
   HEADER_ACTION_BARGAIN_FINDER_MAX_RQ = "BargainFinderMaxRQ"
   
   # == Instance methods =======================================================
+  def operation_attributes
+    attributes = {
+      "Target"          => "Production",
+      "Version"         => "1.9.2",
+      "ResponseType"    => "OTA",
+      "ResponseVersion" => "1.9.2",
+    }
+    
+    return attributes
+  end  
+  
   def build_pos_section
     section = {
-      "ns:Source" => {
-        "ns:RequestorID" => {
-          "ns:CompanyName" => "",
+      "xsd1:Source" => {
+        "xsd1:RequestorID" => {
+          "xsd1:CompanyName" => "",
           :attributes! => {
-            "ns:CompanyName" => {
+            "xsd1:CompanyName" => {
               "Code" => "TN",    
             },    
           },
         },
         :attributes! => {
-          "ns:RequestorID" => {
+          "xsd1:RequestorID" => {
             "Type" => "1",
             "ID"   => "1",
           },
         },
       },
       :attributes! => {
-        "ns:Source" => {
+        "xsd1:Source" => {
           "PseudoCityCode" => "6A3H",    
         },    
       },
@@ -44,21 +55,26 @@ class BargainFinderMax
       "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
       "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
     }
-    
+  
+=begin    
     message_body = {
-      "ns:OTA_AirLowFareSearchRQ" => {
-        "ns:POS" => build_pos_section,
+      "xsd1:OTA_AirLowFareSearchRQ" => {
+        "xsd1:POS" => build_pos_section,
       },
       :attributes! => { 
-        "ns:OTA_AirLowFareSearchRQ" => {
+        "xsd1:OTA_AirLowFareSearchRQ" => {
           "Target"          => "Production",
           "Version"         => "1.9.2",
           "ResponseType"    => "OTA",
           "ResponseVersion" => "1.9.2",
         },
       },     
-      
     }  
+=end
+    
+    message_body = {
+      "xsd1:POS" => build_pos_section,
+    }
     
     savon_client = Savon.client(
       wsdl:                    BARGAIN_FINDER_MAX_RQ_WSDL, 
@@ -70,7 +86,7 @@ class BargainFinderMax
       convert_request_keys_to: :none
     )
     
-    response = savon_client.call(:bargain_finder_max_rq, message: message_body)
+   response = savon_client.call(:bargain_finder_max_rq, attributes: operation_attributes, message: message_body)
     
     return savon_client
   end
