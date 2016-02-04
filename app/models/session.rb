@@ -1,12 +1,13 @@
 class Session
+  # == Includes ===============================================================
+  include ActiveModel::Model
   
+  # == Constants ==============================================================
   SESSION_CREATE_RQ_WSDL          = "http://webservices.sabre.com/wsdl/sabreXML1.0.00/usg/SessionCreateRQ.wsdl"
-  
   HEADER_ACTION_SESSION_CREATE_RQ = "SessionCreateRQ"
   HEADER_ACTION_SESSION_CLOSE_RQ  = "SessionCloseRQ"
 
-  include ActiveModel::Model
-  
+  # == Attributes =============================================================
   attr_accessor :username, 
                 :password, 
                 :ipcc, 
@@ -15,6 +16,7 @@ class Session
                 :domain,
                 :ref_message_id
                 
+  # == Initalizer ============================================================              
   def initialize(attributes={})
     super
     
@@ -40,6 +42,7 @@ class Session
 
   end              
 
+  # == Instance methods =======================================================
   def build_header(header_action, binary_security_token=nil)
     raise "Missing 'header_action' parameter." if header_action.nil?
     

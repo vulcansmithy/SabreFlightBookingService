@@ -1,11 +1,13 @@
 class BargainFinderMax
   
-  BARGAIN_FINDER_MAX_RQ_WSDL          = "http://files.developer.sabre.com/wsdl/sabreXML1.0.00/shopping/BargainFinderMaxRQ_v1-9-2.wsdl"
-  
-  HEADER_ACTION_BARGAIN_FINDER_MAX_RQ = "BargainFinderMaxRQ"
-  
+  # == Includes ===============================================================
   include ActiveModel::Model
   
+  # == Constants ==============================================================
+  BARGAIN_FINDER_MAX_RQ_WSDL          = "http://files.developer.sabre.com/wsdl/sabreXML1.0.00/shopping/BargainFinderMaxRQ_v1-9-2.wsdl"
+  HEADER_ACTION_BARGAIN_FINDER_MAX_RQ = "BargainFinderMaxRQ"
+  
+  # == Instance methods =======================================================
   def bfm_one_way(session)
     namespaces = {
       "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
