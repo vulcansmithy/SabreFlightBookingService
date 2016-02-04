@@ -55,23 +55,7 @@ class BargainFinderMax
       "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
       "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
     }
-  
-=begin    
-    message_body = {
-      "xsd1:OTA_AirLowFareSearchRQ" => {
-        "xsd1:POS" => build_pos_section,
-      },
-      :attributes! => { 
-        "xsd1:OTA_AirLowFareSearchRQ" => {
-          "Target"          => "Production",
-          "Version"         => "1.9.2",
-          "ResponseType"    => "OTA",
-          "ResponseVersion" => "1.9.2",
-        },
-      },     
-    }  
-=end
-    
+
     message_body = {
       "xsd1:POS" => build_pos_section,
     }
