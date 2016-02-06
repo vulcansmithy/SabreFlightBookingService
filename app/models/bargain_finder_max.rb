@@ -129,7 +129,7 @@ class BargainFinderMax
     return message_body 
   end  
   
-  def bfm_one_way(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
+  def  air_availability_one_way(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
 
     savon_client = Savon.client(
       wsdl:                    BARGAIN_FINDER_MAX_RQ_WSDL, 
@@ -148,7 +148,7 @@ class BargainFinderMax
     return savon_client
   end
 
-  def bfm_return(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
+  def air_availability_return(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
 
     savon_client = Savon.client(
       wsdl:                    BARGAIN_FINDER_MAX_RQ_WSDL, 
@@ -167,7 +167,7 @@ class BargainFinderMax
     return savon_client
   end
 
-  def bfm_circle(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
+  def air_availability_circle(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
 
     savon_client = Savon.client(
       wsdl:                    BARGAIN_FINDER_MAX_RQ_WSDL, 

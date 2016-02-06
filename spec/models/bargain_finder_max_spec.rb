@@ -30,7 +30,7 @@ RSpec.describe BargainFinderMax, type: :model do
     ]
     
     bfm    = BargainFinderMax.new
-    result = bfm.bfm_one_way(session, origins_and_destinations, passenger_types_and_quantities)
+    result = bfm.air_availability_one_way(session, origins_and_destinations, passenger_types_and_quantities)
   end
 
   it "should be able to create a Air Availability request for 'Return' trip using Bargain Finder Max" do
@@ -66,7 +66,7 @@ RSpec.describe BargainFinderMax, type: :model do
     ]
     
     bfm    = BargainFinderMax.new
-    result = bfm.bfm_return(session, origins_and_destinations, passenger_types_and_quantities)
+    result = bfm.air_availability_return(session, origins_and_destinations, passenger_types_and_quantities)
   end
 
   it "should be able to create a Air Availability request for multi sector/'Circle' trip using Bargain Finder Max" do
@@ -112,7 +112,7 @@ RSpec.describe BargainFinderMax, type: :model do
     ]
     
     bfm    = BargainFinderMax.new
-    result = bfm.bfm_circle(session, origins_and_destinations, passenger_types_and_quantities)
+    result = bfm.air_availability_circle(session, origins_and_destinations, passenger_types_and_quantities)
   end
 
 end
