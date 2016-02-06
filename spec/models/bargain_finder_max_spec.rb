@@ -6,30 +6,19 @@ RSpec.describe BargainFinderMax, type: :model do
     session = Session.new
     session.create_session_token
     
+    bfm = BargainFinderMax.new
+    
     origins_and_destinations = [
-      {
-        :departure_date_time  => "2016-02-14T00:00:00",
-        :origin_location      => "MNL",
-        :destination_location => "SIN",
-      },
+      bfm.build_origin_and_destination("2016-02-14T00:00:00", "MNL", "SIN"),
     ]
     
     passenger_types_and_quantities = [
-      {
-        :passenger_type => "ADT",
-        :quantity       => 1,
-      },
-      {
-        :passenger_type => "CNN",
-        :quantity       => 1, 
-      },
-      {
-        :passenger_type => "INF",
-        :quantity       => 1,
-      },
+      bfm.build_passenger_type_and_quantity("ADT", 1),
+      bfm.build_passenger_type_and_quantity("CNN", 1),
+      bfm.build_passenger_type_and_quantity("INF", 1),
     ]
     
-    bfm    = BargainFinderMax.new
+    
     result = bfm.air_availability_one_way(session, origins_and_destinations, passenger_types_and_quantities)
   end
 
@@ -37,35 +26,19 @@ RSpec.describe BargainFinderMax, type: :model do
     session = Session.new
     session.create_session_token
     
+    bfm = BargainFinderMax.new
     origins_and_destinations = [
-      {
-        :departure_date_time  => "2016-02-14T00:00:00",
-        :origin_location      => "MNL",
-        :destination_location => "LHR",
-      },
-      {
-        :departure_date_time  => "2016-02-14T00:00:00",
-        :origin_location      => "LHR",
-        :destination_location => "MNL",
-      },
+      bfm.build_origin_and_destination("2016-02-14T00:00:00", "MNL", "LHR"),
+      bfm.build_origin_and_destination("2016-02-14T00:00:00", "LHR", "MNL"),
     ]
     
     passenger_types_and_quantities = [
-      {
-        :passenger_type => "ADT",
-        :quantity       => 1,
-      },
-      {
-        :passenger_type => "CNN",
-        :quantity       => 1, 
-      },
-      {
-        :passenger_type => "INF",
-        :quantity       => 1,
-      },
+      bfm.build_passenger_type_and_quantity("ADT", 1),
+      bfm.build_passenger_type_and_quantity("CNN", 1),
+      bfm.build_passenger_type_and_quantity("INF", 1),
     ]
     
-    bfm    = BargainFinderMax.new
+    
     result = bfm.air_availability_return(session, origins_and_destinations, passenger_types_and_quantities)
   end
 
@@ -73,6 +46,7 @@ RSpec.describe BargainFinderMax, type: :model do
     session = Session.new
     session.create_session_token
     
+    bfm = BargainFinderMax.new
     origins_and_destinations = [
       {
         :departure_date_time  => "2016-02-14T00:00:00",
@@ -97,21 +71,11 @@ RSpec.describe BargainFinderMax, type: :model do
     ]
     
     passenger_types_and_quantities = [
-      {
-        :passenger_type => "ADT",
-        :quantity       => 1,
-      },
-      {
-        :passenger_type => "CNN",
-        :quantity       => 1, 
-      },
-      {
-        :passenger_type => "INF",
-        :quantity       => 1,
-      },
+      bfm.build_passenger_type_and_quantity("ADT", 1),
+      bfm.build_passenger_type_and_quantity("CNN", 1),
+      bfm.build_passenger_type_and_quantity("INF", 1),
     ]
     
-    bfm    = BargainFinderMax.new
     result = bfm.air_availability_circle(session, origins_and_destinations, passenger_types_and_quantities)
   end
 

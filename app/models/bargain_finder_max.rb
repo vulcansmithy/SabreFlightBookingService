@@ -11,6 +11,14 @@ class BargainFinderMax
   TRIP_TYPE_CIRCLE                    = "Circle"
   
   # == Instance methods =======================================================
+  def build_origin_and_destination(departure_date_time, origin_location, destination_location)
+    return { departure_date_time: departure_date_time, origin_location: origin_location, destination_location: destination_location }
+  end  
+  
+  def build_passenger_type_and_quantity(passenger_type, quantity)
+    return { passenger_type: passenger_type, quantity: quantity }
+  end
+  
   def operation_attributes
     attributes = {
       "Target"          => "Production",
