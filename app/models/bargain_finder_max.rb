@@ -137,7 +137,7 @@ class BargainFinderMax
     return message_body 
   end  
   
-  def  air_availability_one_way(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
+  def air_availability_one_way(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
 
     savon_client = Savon.client(
       wsdl:                    BARGAIN_FINDER_MAX_RQ_WSDL, 
