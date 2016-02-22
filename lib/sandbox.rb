@@ -19,22 +19,7 @@ class Sandbox
     puts "@DEBUG #{__LINE__}    operations=#{ap operations}"
   end
   
-  def util1
-    time_now = Time.now
-    
-    message_id   = "mid:#{time_now.strftime("%Y%m%d-%H%M%S")}@deferointernational.com"
-    timestamp    =  time_now.strftime("%Y-%m-%dT%H:%M:%SZ")
-    
-    puts "@DEBUG #{__LINE__}    message_id...   #{message_id}"
-    puts "@DEBUG #{__LINE__}    timestamp....   #{timestamp}"
-  end  
-  
-  def exp1
-    new_session = Sessionn.new
-    new_session.establish
-  end 
-  
-  def exp2
+  def archived_exp3
     message_header = {
 
       "mes:MessageHeader" => {
@@ -98,9 +83,14 @@ class Sandbox
     
     
     puts Gyoku.xml(message_header)
-  end   
+  end 
   
-  def exp3
+  def archived_exp4
+    new_session = Sessionn.new
+    new_session.establish
+  end 
+  
+  def archived_exp5
     message_body = {
       "ns:SessionCreateRQ" => {
         "ns:POS" => {
@@ -120,32 +110,9 @@ class Sandbox
     }
     
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_body)}"
-  end  
+  end 
   
-  def build_pos_section
-    section = {
-      "xsd1:Source" => {
-        
-        :@PseudoCityCode => "6A3H",
-        
-        "xsd1:RequestorID" => {
-          
-          :@Type => "1",
-          :@ID   => "1",
-
-          "xsd1:CompanyName" => {
-            :@Code => "TN",  
-          },
-          
-        },
-
-      },
-    }
-    
-    return section
-  end
-  
-  def exp4
+  def archived_exp6
     message_body = {
       "xsd1:POS" => build_pos_section,
       "xsd1:OriginDestinationInformation" => {
@@ -171,7 +138,7 @@ class Sandbox
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_body)}"
   end
   
-  def exp5
+  def archived_exp7
     data = [
       {
         :departure_date_time  => "2016-02-14T00:00:00",
@@ -219,7 +186,7 @@ class Sandbox
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(origin_destination_information_collection)}"
   end
   
-  def exp6 
+  def archived_exp8
     
     passenger_types_and_quantities = [
       {
@@ -249,5 +216,38 @@ class Sandbox
     
     return seats_requested, passenger_type_quantity_list
   end
+  
+  def util1
+    time_now = Time.now
     
+    message_id   = "mid:#{time_now.strftime("%Y%m%d-%H%M%S")}@deferointernational.com"
+    timestamp    =  time_now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    
+    puts "@DEBUG #{__LINE__}    message_id...   #{message_id}"
+    puts "@DEBUG #{__LINE__}    timestamp....   #{timestamp}"
+  end  
+  
+  def build_pos_section
+    section = {
+      "xsd1:Source" => {
+        
+        :@PseudoCityCode => "6A3H",
+        
+        "xsd1:RequestorID" => {
+          
+          :@Type => "1",
+          :@ID   => "1",
+
+          "xsd1:CompanyName" => {
+            :@Code => "TN",  
+          },
+          
+        },
+
+      },
+    }
+    
+    return section
+  end
+
 end
