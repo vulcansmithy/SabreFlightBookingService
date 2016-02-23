@@ -11,6 +11,27 @@ class BargainFinderMax
   TRIP_TYPE_CIRCLE                    = "Circle"
   
   # == Instance methods =======================================================
+  def initialize
+    @savon_client = nil
+  end  
+  
+  def establish_connection(session)
+    raise "Passed 'session' parameter was nil. Said parameter must not be nil." if session.nil?
+    
+    @savon_client = Savon.client(
+      wsdl:                    BARGAIN_FINDER_MAX_RQ_WSDL, 
+      namespaces:              namespaces,
+      soap_header:             session.build_header(HEADER_ACTION_BARGAIN_FINDER_MAX_RQ, session.binary_security_token),
+      log:                     true, 
+      log_level:               :debug, 
+      pretty_print_xml:        true,
+      convert_request_keys_to: :none,
+      namespace_identifier:    :ns
+    )
+    
+    return @savon_client
+  end
+  
   def build_origin_and_destination(departure_date_time, origin_location, destination_location)
     return { departure_date_time: departure_date_time, origin_location: origin_location, destination_location: destination_location }
   end  
@@ -137,23 +158,19 @@ class BargainFinderMax
     return message_body 
   end  
   
-  def air_availability_one_way(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
+  def air_availability_one_way(origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
 
-    savon_client = Savon.client(
-      wsdl:                    BARGAIN_FINDER_MAX_RQ_WSDL, 
-      namespaces:              namespaces,
-      soap_header:             session.build_header(HEADER_ACTION_BARGAIN_FINDER_MAX_RQ, session.binary_security_token),
-      log:                     true, 
-      log_level:               :debug, 
-      pretty_print_xml:        true,
-      convert_request_keys_to: :none,
-      namespace_identifier:    :ns
-    )
+    raise "No established 'savon_client' instance." if @savon_client.nil?
 
-    message_body = build_message_body(origins_and_destinations, TRIP_TYPE_ONE_WAY, passenger_types_and_quantities, request_type)  
-    response     = savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
-    
-    return savon_client
+    begin
+      message_body = build_message_body(origins_and_destinations, TRIP_TYPE_ONE_WAY, passenger_types_and_quantities, request_type)  
+      response     = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
+    rescue Savon::Error => error
+      puts "@DEBUG #{__LINE__}    error.http.code=#{error.http.code}" 
+      raise
+    else
+      return response
+    end      
   end
 
   def air_availability_return(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")

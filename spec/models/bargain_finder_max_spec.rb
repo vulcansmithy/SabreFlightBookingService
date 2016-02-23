@@ -3,11 +3,13 @@ require "rails_helper"
 RSpec.describe BargainFinderMax, type: :model do
 
   it "should be able to create a Air Availability request for 'One Way' trip using Bargain Finder Max" do
+
     session = Session.new
     session.create_session_token
     
     bfm = BargainFinderMax.new
-    
+    bfm.establish_connection(session)
+
     origins_and_destinations = [
       bfm.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
     ]
@@ -17,8 +19,8 @@ RSpec.describe BargainFinderMax, type: :model do
       bfm.build_passenger_type_and_quantity("CNN", 1),
       bfm.build_passenger_type_and_quantity("INF", 1),
     ]
-    
-    result = bfm.air_availability_one_way(session, origins_and_destinations, passenger_types_and_quantities)
+
+    result = bfm.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities)
   end
 
 =begin
