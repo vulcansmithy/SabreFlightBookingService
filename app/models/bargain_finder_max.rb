@@ -188,23 +188,19 @@ class BargainFinderMax
     end
   end
 
-  def air_availability_circle(session, origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
+  def air_availability_circle(origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
 
-    savon_client = Savon.client(
-      wsdl:                    BARGAIN_FINDER_MAX_RQ_WSDL, 
-      namespaces:              namespaces,
-      soap_header:             session.build_header(HEADER_ACTION_BARGAIN_FINDER_MAX_RQ, session.binary_security_token),
-      log:                     true, 
-      log_level:               :debug, 
-      pretty_print_xml:        true,
-      convert_request_keys_to: :none,
-      namespace_identifier:    :ns
-    )
+    raise "No established 'savon_client' instance." if @savon_client.nil?
 
-    message_body = build_message_body(origins_and_destinations, TRIP_TYPE_CIRCLE, passenger_types_and_quantities, request_type)  
-    response     = savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
-    
-    return savon_client
+    begin
+      message_body = build_message_body(origins_and_destinations, TRIP_TYPE_CIRCLE, passenger_types_and_quantities, request_type)  
+      response     = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
+    rescue Savon::Error => error
+      puts "@DEBUG #{__LINE__}    error.http.code=#{error.http.code}" 
+      raise
+    else
+      return response
+    end
   end
   
 end

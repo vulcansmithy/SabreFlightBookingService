@@ -44,17 +44,18 @@ RSpec.describe BargainFinderMax, type: :model do
     result = bfm.air_availability_return(origins_and_destinations, passenger_types_and_quantities)
   end
 
-=begin
   it "should be able to create a Air Availability request for multi sector/'Circle' trip using Bargain Finder Max" do
     session = Session.new
     session.create_session_token
     
     bfm = BargainFinderMax.new
+    bfm.establish_connection(session)
+    
     origins_and_destinations = [
-      bfm.build_origin_and_destination("2016-02-14T00:00:00", "MNL", "SIN"),
-      bfm.build_origin_and_destination("2016-02-22T00:00:00", "SIN", "CGK"),
-      bfm.build_origin_and_destination("2016-02-24T00:00:00", "CGK", "BKK"),
-      bfm.build_origin_and_destination("2016-02-28T00:00:00", "BKK", "MNL"),
+      bfm.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
+      bfm.build_origin_and_destination("2016-06-22T00:00:00", "SIN", "CGK"),
+      bfm.build_origin_and_destination("2016-06-24T00:00:00", "CGK", "BKK"),
+      bfm.build_origin_and_destination("2016-06-28T00:00:00", "BKK", "MNL"),
     ]
     
     passenger_types_and_quantities = [
@@ -63,8 +64,7 @@ RSpec.describe BargainFinderMax, type: :model do
       bfm.build_passenger_type_and_quantity("INF", 1),
     ]
     
-    result = bfm.air_availability_circle(session, origins_and_destinations, passenger_types_and_quantities)
+    result = bfm.air_availability_circle(origins_and_destinations, passenger_types_and_quantities)
   end
-=end
   
 end
