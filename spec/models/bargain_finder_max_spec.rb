@@ -5,10 +5,10 @@ RSpec.describe BargainFinderMax, type: :model do
   it "should be able to create a Air Availability request for 'One Way' trip using Bargain Finder Max" do
 
     session = Session.new
-    session.create_session_token
+    session.create_session_token(use_sandbox_environment=true)
     
     bfm = BargainFinderMax.new
-    bfm.establish_connection(session)
+    bfm.establish_connection(session, use_sandbox_environment=true)
 
     origins_and_destinations = [
       bfm.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
@@ -23,6 +23,7 @@ RSpec.describe BargainFinderMax, type: :model do
     result = bfm.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities)
   end
 
+=begin
   it "should be able to create a Air Availability request for 'Return' trip using Bargain Finder Max" do
     session = Session.new
     session.create_session_token
@@ -66,5 +67,6 @@ RSpec.describe BargainFinderMax, type: :model do
     
     result = bfm.air_availability_circle(origins_and_destinations, passenger_types_and_quantities)
   end
-  
+=end
+    
 end

@@ -4,6 +4,8 @@ class Session
   
   # == Constants ==============================================================
   SESSION_CREATE_RQ_WSDL          = "http://webservices.sabre.com/wsdl/sabreXML1.0.00/usg/SessionCreateRQ.wsdl"
+  SABRE_SANDBOX_ENDPOINT          = "https://sws3-crt.cert.sabre.com"
+  
   HEADER_ACTION_SESSION_CREATE_RQ = "SessionCreateRQ"
   HEADER_ACTION_SESSION_CLOSE_RQ  = "SessionCloseRQ"
 
@@ -122,7 +124,7 @@ class Session
     return message_header
   end  
   
-  def create_session_token
+  def create_session_token(use_sandbox_environment=false)
     begin
       namespaces = {
         "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
@@ -158,6 +160,8 @@ class Session
         pretty_print_xml:        true,
         convert_request_keys_to: :none
       )
+      
+      savon_client.globals.endpoint(SABRE_SANDBOX_ENDPOINT) if use_sandbox_environment
     
       response = savon_client.call(:session_create_rq, message: message_body)
       

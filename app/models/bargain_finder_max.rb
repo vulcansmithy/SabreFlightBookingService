@@ -5,6 +5,8 @@ class BargainFinderMax
   
   # == Constants ==============================================================
   BARGAIN_FINDER_MAX_RQ_WSDL          = "http://files.developer.sabre.com/wsdl/sabreXML1.0.00/shopping/BargainFinderMaxRQ_v1-9-2.wsdl"
+  SABRE_SANDBOX_ENDPOINT              = "https://sws3-crt.cert.sabre.com"
+
   HEADER_ACTION_BARGAIN_FINDER_MAX_RQ = "BargainFinderMaxRQ"
   TRIP_TYPE_ONE_WAY                   = "OneWay"
   TRIP_TYPE_RETURN                    = "Return"
@@ -15,7 +17,7 @@ class BargainFinderMax
     @savon_client = nil
   end  
   
-  def establish_connection(session)
+  def establish_connection(session, use_sandbox_environment=false)
     raise "Passed 'session' parameter was nil. Said parameter must not be nil." if session.nil?
     
     @savon_client = Savon.client(
@@ -29,6 +31,8 @@ class BargainFinderMax
       namespace_identifier:    :ns
     )
     
+    @savon_client.globals.endpoint(SABRE_SANDBOX_ENDPOINT) if use_sandbox_environment
+
     return @savon_client
   end
   
