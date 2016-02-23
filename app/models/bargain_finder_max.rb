@@ -17,7 +17,7 @@ class BargainFinderMax
     @savon_client = nil
   end  
   
-  def establish_connection(session, use_sandbox_environment=false)
+  def establish_connection(session)
     raise "Passed 'session' parameter was nil. Said parameter must not be nil." if session.nil?
     
     @savon_client = Savon.client(
@@ -31,7 +31,7 @@ class BargainFinderMax
       namespace_identifier:    :ns
     )
     
-    @savon_client.globals.endpoint(SABRE_SANDBOX_ENDPOINT) if use_sandbox_environment
+    @savon_client.globals.endpoint(SABRE_SANDBOX_ENDPOINT)  if session.non_production_environment
 
     return @savon_client
   end

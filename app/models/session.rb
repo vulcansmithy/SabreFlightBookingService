@@ -4,7 +4,8 @@ class Session
   
   # == Constants ==============================================================
   SESSION_CREATE_RQ_WSDL          = "http://webservices.sabre.com/wsdl/sabreXML1.0.00/usg/SessionCreateRQ.wsdl"
-  SABRE_SANDBOX_ENDPOINT          = "https://sws3-crt.cert.sabre.com"
+  NON_PRODUCTION_ENDPOINT         = "https://sws3-crt.cert.sabre.com"
+  PRODUCTION_ENDPOINT             = "https://webservices3.sabre.com"
   
   HEADER_ACTION_SESSION_CREATE_RQ = "SessionCreateRQ"
   HEADER_ACTION_SESSION_CLOSE_RQ  = "SessionCloseRQ"
@@ -16,7 +17,9 @@ class Session
                 :binary_security_token, 
                 :account_email, 
                 :domain,
-                :ref_message_id
+                :ref_message_id,
+                :non_production_environment
+                
                 
   # == Initalizer ============================================================              
   def initialize(attributes={})
@@ -42,6 +45,7 @@ class Session
     raise "Missing 'domain' configuration setting." if ENV["domain"].nil?
     @domain = attributes[:domain].nil? ? ENV["domain"] : attributes[:domain] 
 
+    @non_production_environment = false
   end              
 
   # == Instance methods =======================================================
@@ -124,67 +128,74 @@ class Session
     return message_header
   end  
   
-  def create_session_token(use_sandbox_environment=false)
-    begin
-      namespaces = {
-        "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
-        "xmlns:ns"  => "http://www.opentravel.org/OTA/2002/11",
-        "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
-        "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
-      }
-    
-      message_body = {
-        "ns:SessionCreateRQ" => {
-          "ns:POS" => {
-            "ns:Source" => "",
-            :attributes! => { 
-              "ns:Source" => {
-                "PseudoCityCode" => @ipcc
-              }
-            }
-          }
-        },
-        :attributes! => { 
-          "ns:SessionCreateRQ" => {
-            "returnContextID" => "1"
-          }
-        }
-      }
-
-      savon_client = Savon.client(
-        wsdl:                    SESSION_CREATE_RQ_WSDL, 
-        namespaces:              namespaces,
-        soap_header:             build_header(HEADER_ACTION_SESSION_CREATE_RQ),
-        log:                     true, 
-        log_level:               :debug, 
-        pretty_print_xml:        true,
-        convert_request_keys_to: :none
-      )
-      
-      savon_client.globals.endpoint(SABRE_SANDBOX_ENDPOINT) if use_sandbox_environment
-    
-      response = savon_client.call(:session_create_rq, message: message_body)
-      
-    rescue Savon::SOAPFault => error
-      
-      if error.to_hash[:fault][:faultcode] == "soap-env:Client.AuthenticationFailed"
-        raise "Authentication failed." 
-      else
-        raise "Exception encountered."
-      end    
-
-    else
-      @binary_security_token = response.xpath("//wsse:BinarySecurityToken")[0].content 
-
-      return @binary_security_token     
-    end
-  end
-  
   def establish_session
-    self.create_session_token
+    create_session_token
   end  
   
   def re_establish_session
-    self.create_session_token
+    create_session_token
   end
+  
+  def set_to_non_production
+    @non_production_environment = true
+  end
+  
+  def set_to_production
+    @non_production_environment = false
+  end    
+
+
+  # == Private methods ========================================================
+  private
+    def create_session_token
+      begin
+        namespaces = {
+          "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
+          "xmlns:ns"  => "http://www.opentravel.org/OTA/2002/11",
+          "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
+          "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
+        }
+    
+        message_body = {
+          "ns:SessionCreateRQ" => {
+            "ns:POS" => {
+              "ns:Source" => "",
+              :attributes! => { 
+                "ns:Source" => {
+                  "PseudoCityCode" => @ipcc
+                }
+              }
+            }
+          },
+          :attributes! => { 
+            "ns:SessionCreateRQ" => {
+              "returnContextID" => "1"
+            }
+          }
+        } 
+
+        savon_client = Savon.client(
+          wsdl:                    SESSION_CREATE_RQ_WSDL, 
+          namespaces:              namespaces,
+          soap_header:             build_header(HEADER_ACTION_SESSION_CREATE_RQ),
+          log:                     true, 
+          log_level:               :debug, 
+          pretty_print_xml:        true,
+          convert_request_keys_to: :none
+        )
+      
+        savon_client.globals.endpoint(NON_PRODUCTION_ENDPOINT) if @non_production_environment
+
+        response = savon_client.call(:session_create_rq, message: message_body)
+      
+      rescue Savon::SOAPFault => error
+        raise (error.to_hash[:fault][:faultcode] == "soap-env:Client.AuthenticationFailed" ? "Authentication failed." : "Exception encountered.")
+
+      else
+        @binary_security_token = response.xpath("//wsse:BinarySecurityToken")[0].content 
+
+        return @binary_security_token     
+      end
+    end
+    
 end
