@@ -50,4 +50,43 @@ class BookFromAirAvailability
     return @savon_client
   end
   
+  
+  def operation_attributes
+    attributes = {
+      "ReturnHostCommand" => "false",
+      "TimeStamp"         => Time.now.strftime("%Y-%m-%dT%H:%M:%SZ"),
+      "Version"           => "2.0.1",
+    }
+    
+    return attributes
+  end
+  
+  ##
+  ## DepartureDateTime="2016-06-05T17:05:00"
+  ## ArrivalDateTime="2016-06-05T20:40:00"
+  ## FlightNumber="764"
+  ## <DepartureAirport LocationCode="MNL" TerminalID="1"/>
+  ## <ArrivalAirport LocationCode="SIN" TerminalID="1"/>
+  ## <OperatingAirline Code="3K" FlightNumber="764"/>
+  def execute_booking
+    
+    flight_segment = {
+      :@DepartureDateTime => "06-05",
+      :@FlightNumber      => "764",
+      :@NumberInParty     => "3",
+      :@ResBookDesigCode  => "Y",
+      :@RPH               => "1",
+      :@Status            => "NN",
+    }
+    
+    message_body = {
+      "ns:FlightSegment" => flight_segment,
+    }
+    
+    response = @savon_client.call(:short_sell_rq, soap_action: "ns:ShortSellRQ", attributes: operation_attributes, message: message_body)
+  end  
+  ##
+  ##  
+  ##
+  
 end
