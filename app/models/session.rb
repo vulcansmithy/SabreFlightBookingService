@@ -117,9 +117,6 @@ class Session
         },
         "sec:BinarySecurityToken" => binary_security_token.nil? ? "" : binary_security_token,
       },
-      
-      
-      
     }
     
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_header)}"

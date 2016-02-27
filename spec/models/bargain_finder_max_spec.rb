@@ -84,7 +84,7 @@ RSpec.describe BargainFinderMax, type: :model do
     
     puts "@DEBUG #{__LINE__}    elapse_seconds=#{elapse_seconds}"  
   end
-   
+     
 end
 
 
