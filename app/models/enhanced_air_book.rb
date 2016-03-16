@@ -17,9 +17,9 @@ class EnhancedAirBook
   def namespaces
     namespaces = {
       "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
-      "xmlns:ns"  => "http://webservices.sabre.com/sabreXML/2011/10", 
+      "xmlns:v"   => "http://services.sabre.com/sp/eab/v3_2", 
       "xmlns:mes" => "http://www.ebxml.org/namespaces/messageHeader", 
-      "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
+      "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext",
     }
     
     return namespaces
@@ -42,7 +42,7 @@ class EnhancedAirBook
       log_level:               :debug, 
       pretty_print_xml:        true,
       convert_request_keys_to: :none,
-      namespace_identifier:    :ns
+      namespace_identifier:    :v,
     )
     
     @savon_client.globals.endpoint(NON_PRODUCTION_ENVIRONMENT_ENDPOINT)  if session.non_production_environment
@@ -52,32 +52,44 @@ class EnhancedAirBook
   
   def operation_attributes
     attributes = {
-      "ReturnHostCommand" => "false",
-      "TimeStamp"         => Time.now.strftime("%Y-%m-%dT%H:%M:%SZ"),
-      "Version"           => "2.3.0",
-      "xmlns"             => "http://webservices.sabre.com/sabreXML/2011/10",
-      "xmlns:xs"          => "http://www.w3.org/2001/XMLSchema",
-      "xmlns:xsi"         => "http://www.w3.org/2001/XMLSchema-instance",
+      "version"       => "3.2.0",
+      "xmlns"         => "http://services.sabre.com/sp/eab/v3_2",
+      "IgnoreOnError" => "true",
+      "HaltOnError"   => "true",
     }
     
     return attributes
   end
   
-=begin  
-  def execute 
-    
+  def execute_enhanced_air_book 
     message_body = {
-      "ns:OriginDestinationInformation" => {
-        "ns:FlightSegment" => {
-          :@DepartureDateTime => departure_date_time,
-          "ns:DestinationLocation" => { :@LocationCode => origin_location,      },
-          "ns:OriginLocation"      => { :@LocationCode => destination_location, },
+      "v:OTA_AirBookRQ" => {
+        "v:OriginDestinationInformation" => {
+          "v:FlightSegment" => {
+            :@DepartureDateTime => "2016-06-05T17:05:00",
+            :@FlightNumber      => "764",
+            :@NumberInParty     => "1",
+            :@ResBookDesigCode  => "H",
+            :@Status            => "NN",
+            
+            "v:DestinationLocation" => { :@LocationCode => "SIN" },
+            "v:MarketingAirline"    => { :@Code         => "3K", :@FlightNumber => "764" },
+            "v:OriginLocation"      => { :@LocationCode => "MNL" },
+          },
+          
         },
+      },
+      
+      "v:PostProcessing" => {
+        :@IgnoreAfter => "true",
+        "v:RedisplayReservation" => { },
+      },
+      "v:PreProcessing" => {
+        "v:UniqueID" => { :@ID => "" },
       },
     }
     
-    response = @savon_client.call(:ota_air_avail_rq, soap_action: "ns:OTA_AirAvailRQ", attributes: operation_attributes, message: message_body)
+   response = @savon_client.call(:enhanced_air_book_rq, soap_action: "v:EnhancedAirBookRQ", attributes: operation_attributes, message: message_body)
   end
-=end  
 
 end
