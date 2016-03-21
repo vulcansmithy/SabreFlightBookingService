@@ -4,10 +4,8 @@ class PassengerDetail
   include ActiveModel::Model
   
   # == Constants ==============================================================
-  PASSENGER_DETAILS_RQ_WSDL           = "http://files.developer.sabre.com/wsdl/sabreXML1.0.00/ServicesPlatform/PassengerDetails3.2.0RQ.wsdl"
-  NON_PRODUCTION_ENVIRONMENT_ENDPOINT = "https://sws3-crt.cert.sabre.com"
-  
-  PASSENGER_DETAILS_RQ                = "PassengerDetailsRQ"
+  PASSENGER_DETAILS_RQ_WSDL = "http://files.developer.sabre.com/wsdl/sabreXML1.0.00/ServicesPlatform/PassengerDetails3.2.0RQ.wsdl"
+  PASSENGER_DETAILS_RQ      = "PassengerDetailsRQ"
   
   # == Instance methods =======================================================
   def initialize
@@ -45,7 +43,7 @@ class PassengerDetail
       namespace_identifier:    :v,
     )
     
-    @savon_client.globals.endpoint(NON_PRODUCTION_ENVIRONMENT_ENDPOINT)  if session.non_production_environment
+    @savon_client = session.set_endpoint_environment(@savon_client)
 
     return @savon_client
   end

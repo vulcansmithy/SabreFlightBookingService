@@ -141,6 +141,22 @@ class Session
     @non_production_environment = false
   end    
 
+  def non_production_environment?
+    return @non_production_environment
+  end
+  
+  def set_endpoint_environment(savon_client)
+    target_end_point = nil
+    if non_production_environment?
+      target_end_point = Session::NON_PRODUCTION_ENDPOINT 
+    else
+      target_end_point = Session::PRODUCTION_ENDPOINT 
+    end  
+    
+    savon_client.globals.endpoint(target_end_point)
+    
+    return savon_client
+  end  
 
   # == Private methods ========================================================
   private
