@@ -33,9 +33,14 @@ RSpec.describe Session, type: :model do
     expect(session.domain       ).to eq domain
   end
   
-  it "should be able to establish a session token" do
+  it "should be able to establish a session token from a non-production environment" do
     session = Session.new
-    
+    session.set_to_non_production
+    session_token = session.establish_session
+  end
+  
+  it "should be able to establish a session token from a production environment" do
+    session = Session.new
     session_token = session.establish_session
   end
   
