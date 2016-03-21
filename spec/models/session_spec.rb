@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Session, type: :model do
-  
+ 
   it "should be able to instantiate a new Session and initialize the required configuration settings" do
     session = Session.new
 
@@ -32,7 +32,7 @@ RSpec.describe Session, type: :model do
     expect(session.account_email).to eq account_email
     expect(session.domain       ).to eq domain
   end
-  
+
   it "should be able to establish a session token from a non-production environment" do
     session = Session.new
     session.set_to_non_production

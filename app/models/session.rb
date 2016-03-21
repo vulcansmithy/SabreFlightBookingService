@@ -1,4 +1,5 @@
 class Session
+  
   # == Includes ===============================================================
   include ActiveModel::Model
   
@@ -60,36 +61,24 @@ class Session
     puts "@DEBUG #{__LINE__}    timestamp...... #{timestamp   }"
     
     message_header = {
-
+  
       "mes:MessageHeader" => {
+        :@id      => "1",
+        :@version => "1.0",
+
         "mes:From" => {
-          "mes:PartyId" => "",
-          :attributes! => { 
-            "mes:PartyId" => {
-              "type" => "urn:x12.org:IO5:01"
-            } 
-          }  
+          "mes:PartyId" => { :@type => "urn:x12.org:IO5:01" },
         },
 
-        "mes:To"   => {
-          "mes:PartyId" => "",
-          :attributes! => { 
-            "mes:PartyId" => {
-              "type" => "urn:x12.org:IO5:01"
-            }
-          }
+        "mes:To" => {
+          "mes:PartyId" => { :@type => "urn:x12.org:IO5:01" },   
         },
 
         "mes:CPAId" => @ipcc,
 
         "mes:ConversationId" => @account_email,
       
-        "mes:Service" => "",
-        :attributes! => { 
-          "mes:Service" => {
-            "type" => "sabreXML"
-          }
-        },   
+        "mes:Service" => { :@type => "sabreXML" },
 
         "mes:Action" => header_action,
 
@@ -101,13 +90,7 @@ class Session
         "mes:DuplicateElimination" => "",
         "mes:Description" => "",
       },
-      :attributes! => { 
-        "mes:MessageHeader" => {
-          "id"      => "1",
-          "version" => "1.0",
-        }
-      },
-      
+
       "sec:Security" => {
         "sec:UsernameToken"  => {
           "sec:Username"     => @username,
@@ -121,7 +104,6 @@ class Session
     
     puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_header)}"
 
-    
     return message_header
   end  
   
@@ -157,6 +139,14 @@ class Session
     
     return savon_client
   end  
+  
+  def operation_attributes
+    attributes = {
+      "returnContextID" => "1",
+    }
+    
+    return attributes
+  end
 
   # == Private methods ========================================================
   private
@@ -170,21 +160,11 @@ class Session
         }
     
         message_body = {
-          "ns:SessionCreateRQ" => {
-            "ns:POS" => {
-              "ns:Source" => "",
-              :attributes! => { 
-                "ns:Source" => {
-                  "PseudoCityCode" => @ipcc
-                }
-              }
-            }
-          },
-          :attributes! => { 
-            "ns:SessionCreateRQ" => {
-              "returnContextID" => "1"
-            }
-          }
+          "ns:POS" => {
+            "ns:Source" => {
+              :@PseudoCityCode => @ipcc,
+            },
+          },          
         } 
 
         savon_client = Savon.client(
@@ -194,12 +174,12 @@ class Session
           log:                     true, 
           log_level:               :debug, 
           pretty_print_xml:        true,
-          convert_request_keys_to: :none
+          convert_request_keys_to: :none,
+          namespace_identifier:    :ns,
         )
       
-        savon_client.globals.endpoint(NON_PRODUCTION_ENDPOINT) if @non_production_environment
-
-        response = savon_client.call(:session_create_rq, message: message_body)
+        savon_client = self.set_endpoint_environment(savon_client)
+        response     = savon_client.call(:session_create_rq, soap_action: "ns:SessionCreateRQ", attributes: operation_attributes, message: message_body)
       
       rescue Savon::SOAPFault => error
         raise (error.to_hash[:fault][:faultcode] == "soap-env:Client.AuthenticationFailed" ? "Authentication failed." : "Exception encountered.")
