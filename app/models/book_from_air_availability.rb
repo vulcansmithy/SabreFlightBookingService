@@ -4,10 +4,8 @@ class BookFromAirAvailability
   include ActiveModel::Model
   
   # == Constants ==============================================================
-  SHORT_SELL_LLS_RQ_WSDL              = "http://webservices.sabre.com/wsdl/tpfc/ShortSellLLS2.0.1RQ.wsdl"
-  NON_PRODUCTION_ENVIRONMENT_ENDPOINT = "https://sws3-crt.cert.sabre.com"
-  
-  HEADER_ACTION_SHORT_SELL_LLS_RQ     = "ShortSellLLSRQ"
+  SHORT_SELL_LLS_RQ_WSDL          = "http://webservices.sabre.com/wsdl/tpfc/ShortSellLLS2.0.1RQ.wsdl"
+  HEADER_ACTION_SHORT_SELL_LLS_RQ = "ShortSellLLSRQ"
 
   # == Instance methods =======================================================
   def initialize
@@ -45,7 +43,7 @@ class BookFromAirAvailability
       namespace_identifier:    :ns
     )
     
-    @savon_client.globals.endpoint(NON_PRODUCTION_ENVIRONMENT_ENDPOINT)  if session.non_production_environment
+    @savon_client = session.set_endpoint_environment(@savon_client)
 
     return @savon_client
   end
