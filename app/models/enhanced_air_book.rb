@@ -4,10 +4,8 @@ class EnhancedAirBook
   include ActiveModel::Model
   
   # == Constants ==============================================================
-  ENHANCED_AIR_BOOK_RQ_WSDL           = "http://files.developer.sabre.com/wsdl/sabreXML1.0.00/ServicesPlatform/EnhancedAirBook3.2.0RQ.wsdl"
-  NON_PRODUCTION_ENVIRONMENT_ENDPOINT = "https://sws3-crt.cert.sabre.com"
-  
-  ENHANCED_AIR_BOOK_RQ                = "EnhancedAirBookRQ"
+  ENHANCED_AIR_BOOK_RQ_WSDL = "http://files.developer.sabre.com/wsdl/sabreXML1.0.00/ServicesPlatform/EnhancedAirBook3.2.0RQ.wsdl"
+  ENHANCED_AIR_BOOK_RQ      = "EnhancedAirBookRQ"
   
   # == Instance methods =======================================================
   def initialize
@@ -45,7 +43,7 @@ class EnhancedAirBook
       namespace_identifier:    :v,
     )
     
-    @savon_client.globals.endpoint(NON_PRODUCTION_ENVIRONMENT_ENDPOINT)  if session.non_production_environment
+    @savon_client = session.set_endpoint_environment(@savon_client)
 
     return @savon_client
   end
