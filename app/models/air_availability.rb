@@ -4,11 +4,8 @@ class AirAvailability
   include ActiveModel::Model
   
   # == Constants ==============================================================
-  OTA_AIR_AVAIL_LLS_RQ_WSDL           = "http://webservices.sabre.com/wsdl/tpfc/OTA_AirAvailLLS2.3.0RQ.wsdl"
-  NON_PRODUCTION_ENVIRONMENT_ENDPOINT = "https://sws3-crt.cert.sabre.com"
-  SABRE_SANDBOX_ENDPOINT              = "https://sws3-crt.cert.sabre.com"
-  
-  HEADER_OTA_AIR_AVAIL_LLS_RQ         = "OTA_AirAvailLLSRQ"
+  OTA_AIR_AVAIL_LLS_RQ_WSDL   = "http://webservices.sabre.com/wsdl/tpfc/OTA_AirAvailLLS2.3.0RQ.wsdl"
+  HEADER_OTA_AIR_AVAIL_LLS_RQ = "OTA_AirAvailLLSRQ"
 
   # == Instance methods =======================================================
   def initialize
@@ -46,7 +43,7 @@ class AirAvailability
       namespace_identifier:    :ns
     )
     
-    @savon_client.globals.endpoint(NON_PRODUCTION_ENVIRONMENT_ENDPOINT)  if session.non_production_environment
+    @savon_client = session.set_endpoint_environment(@savon_client)
 
     return @savon_client
   end
