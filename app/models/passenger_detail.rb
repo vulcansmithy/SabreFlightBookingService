@@ -10,6 +10,7 @@ class PassengerDetail
   # == Instance methods =======================================================
   def initialize
     @savon_client = nil
+    @message_body = {}
   end 
   
   def namespaces
@@ -60,8 +61,7 @@ class PassengerDetail
   end
   
   def execute_passenger_detail
-
-    message_body = {
+    @message_body = {
       "v:PostProcessing" => {
         :@IgnoreAfter          => "false",
         :@RedisplayReservation => "true",
@@ -70,7 +70,7 @@ class PassengerDetail
   
       "v:PreProcessing" => {
         :@IgnoreBefore => "true",
-        "v:UniqueID" => { :@ID => "" },
+        "v:UniqueID"   => { :@ID => "" },
       },
 
       "v:SpecialReqDetails" => {
@@ -78,43 +78,43 @@ class PassengerDetail
           "v:SpecialServiceInfo" => {
             "v:AdvancePassenger" => {
               :@SegmentNumber => "A",
-              "v:Document"    => {
-                :@ExpirationDate => "2018-05-26",
-                :@Number         => "1234567890",
-                :@Type           => "P",
+              
+              "v:Document" => {
+                :@ExpirationDate       => "2018-05-26",
+                :@Number               => "1234567890",
+                :@Type                 => "P",
                 
                 "v:IssueCountry"       => "FR",
                 "v:NationalityCountry" => "FR",
               },
-              "v:PersonName"  => {
+              
+              "v:PersonName" => {
                 :@DateOfBirth    => "1980-12-02",
                 :@Gender         => "M",
                 :@NameNumber     => "1.1",
                 :@DocumentHolder => "true",
-                "v:GivenName"  => "JAMES",
-                "v:MiddleName" => "MALCOLM",
-                "v:Surname"    => "GREEN",
+                
+                "v:GivenName"    => "JAMES",
+                "v:MiddleName"   => "MALCOLM",
+                "v:Surname"      => "GREEN",
               },
-              "v:VendorPrefs" => {
-                "v:Airline"   => { :@Hosted => "false",  },
-              },
+              
+              "v:VendorPrefs" => { "v:Airline" => { :@Hosted => "false" } },
             },
           },
         },
       },
       
       "v:TravelItineraryAddInfoRQ" => {
-        "v:AgencyInfo"   => {
+        "v:AgencyInfo" => {
           "v:Address"  => {
             "v:AddressLine"     => "SABRE TRAVEL",
             "v:CityName"        => "SOUTHLAKE",
             "v:CountryCode"     => "US",
             "v:PostalCode"      => "76092",     
-            "v:StateCountyProv" => { :@StateCode => "TX", },
+            "v:StateCountyProv" => { :@StateCode => "TX" },
             "v:StreetNmbr"      => "3150 SABRE DRIVE", 
-            "v:VendorPrefs"     => {
-              "v:Airline"       => { :@Hosted => "true", },
-            },
+            "v:VendorPrefs"     => { "v:Airline" => { :@Hosted => "true" } },
           },
         },
         "v:CustomerInfo" => {
@@ -137,7 +137,9 @@ class PassengerDetail
       },
     }
     
-   response = @savon_client.call(:passenger_details_rq, soap_action: "v:PassengerDetailsRQ", attributes: operation_attributes, message: message_body)
+    response = @savon_client.call(:passenger_details_rq, soap_action: "v:PassengerDetailsRQ", attributes: operation_attributes, message: @message_body)
+  
+    return response
   end
 
 end
