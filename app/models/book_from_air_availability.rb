@@ -10,6 +10,7 @@ class BookFromAirAvailability
   # == Instance methods =======================================================
   def initialize
     @savon_client = nil
+    @message_body = {}
   end 
   
   def namespaces
@@ -62,7 +63,7 @@ class BookFromAirAvailability
   end
   
   def execute_booking
-    message_body = {
+    @message_body = {
       "ns:OriginDestinationInformation" => {
         "ns:FlightSegment" => {
           :@DepartureDateTime      => "06-05",
@@ -77,7 +78,7 @@ class BookFromAirAvailability
       },
     }
     
-    response = @savon_client.call(:short_sell_rq, soap_action: "ns:ShortSellRQ", attributes: operation_attributes, message: message_body)
+    response = @savon_client.call(:short_sell_rq, soap_action: "ns:ShortSellRQ", attributes: operation_attributes, message: @message_body)
   end  
 
 end

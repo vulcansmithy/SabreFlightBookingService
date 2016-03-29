@@ -10,6 +10,7 @@ class EnhancedAirBook
   # == Instance methods =======================================================
   def initialize
     @savon_client = nil
+    @message_body = {}
   end 
   
   def namespaces
@@ -60,7 +61,7 @@ class EnhancedAirBook
   end
   
   def execute_enhanced_air_book 
-    message_body = {
+    @message_body = {
       "v:OTA_AirBookRQ" => {
         "v:OriginDestinationInformation" => {
           "v:FlightSegment" => {
@@ -87,7 +88,7 @@ class EnhancedAirBook
       },
     }
     
-   response = @savon_client.call(:enhanced_air_book_rq, soap_action: "v:EnhancedAirBookRQ", attributes: operation_attributes, message: message_body)
+   response = @savon_client.call(:enhanced_air_book_rq, soap_action: "v:EnhancedAirBookRQ", attributes: operation_attributes, message: @message_body)
   end
 
 end

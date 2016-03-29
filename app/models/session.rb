@@ -47,6 +47,8 @@ class Session
     @domain = attributes[:domain].nil? ? ENV["domain"] : attributes[:domain] 
 
     @non_production_environment = false
+    
+    @message_body = {}
   end              
 
   # == Instance methods =======================================================
@@ -159,7 +161,7 @@ class Session
           "xmlns:sec" => "http://schemas.xmlsoap.org/ws/2002/12/secext"
         }
     
-        message_body = {
+        @message_body = {
           "ns:POS" => {
             "ns:Source" => {
               :@PseudoCityCode => @ipcc,
@@ -179,7 +181,7 @@ class Session
         )
       
         savon_client = self.set_endpoint_environment(savon_client)
-        response     = savon_client.call(:session_create_rq, soap_action: "ns:SessionCreateRQ", attributes: operation_attributes, message: message_body)
+        response     = savon_client.call(:session_create_rq, soap_action: "ns:SessionCreateRQ", attributes: operation_attributes, message: @message_body)
       
       rescue Savon::SOAPFault => error
         raise (error.to_hash[:fault][:faultcode] == "soap-env:Client.AuthenticationFailed" ? "Authentication failed." : "Exception encountered.")

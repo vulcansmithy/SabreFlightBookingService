@@ -14,6 +14,7 @@ class BargainFinderMax
   # == Instance methods =======================================================
   def initialize
     @savon_client = nil
+    @message_body = {}
   end  
   
   def establish_connection(session)
@@ -166,8 +167,8 @@ class BargainFinderMax
     raise "No established 'savon_client' instance." if @savon_client.nil?
 
     begin
-      message_body = build_message_body(origins_and_destinations, TRIP_TYPE_ONE_WAY, passenger_types_and_quantities, request_type)  
-      response     = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
+      @message_body = build_message_body(origins_and_destinations, TRIP_TYPE_ONE_WAY, passenger_types_and_quantities, request_type)  
+      response      = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: @message_body)
     rescue Savon::Error => error
       puts "@DEBUG #{__LINE__}    error.http.code=#{error.http.code}" 
       raise
@@ -181,8 +182,8 @@ class BargainFinderMax
     raise "No established 'savon_client' instance." if @savon_client.nil?
 
     begin
-      message_body = build_message_body(origins_and_destinations, TRIP_TYPE_RETURN, passenger_types_and_quantities, request_type)  
-      response     = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
+      @message_body = build_message_body(origins_and_destinations, TRIP_TYPE_RETURN, passenger_types_and_quantities, request_type)  
+      response      = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: @message_body)
     rescue Savon::Error => error
       puts "@DEBUG #{__LINE__}    error.http.code=#{error.http.code}" 
       raise

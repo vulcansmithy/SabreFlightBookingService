@@ -10,6 +10,7 @@ class AirAvailability
   # == Instance methods =======================================================
   def initialize
     @savon_client = nil
+    @message_body = {}
   end 
   
   def namespaces
@@ -66,7 +67,7 @@ class AirAvailability
   # origin_location      = "MNL"
   def execute_air_availability(departure_date_time, origin_location, destination_location)
     
-    message_body = {
+    @message_body = {
       "ns:OriginDestinationInformation" => {
         "ns:FlightSegment" => {
           :@DepartureDateTime => departure_date_time,
@@ -76,7 +77,7 @@ class AirAvailability
       },
     }
     
-    response = @savon_client.call(:ota_air_avail_rq, soap_action: "ns:OTA_AirAvailRQ", attributes: operation_attributes, message: message_body)
+    response = @savon_client.call(:ota_air_avail_rq, soap_action: "ns:OTA_AirAvailRQ", attributes: operation_attributes, message: @message_body)
   end
     
 end
