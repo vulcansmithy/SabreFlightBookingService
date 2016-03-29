@@ -63,9 +63,6 @@ class AirAvailability
     return attributes
   end
   
-  # departure_date_time  = "06-05"
-  # destination_location = "SIN"
-  # origin_location      = "MNL"
   def execute_air_availability(departure_date_time, origin_location, destination_location)
     
     @message_body = {
@@ -78,9 +75,11 @@ class AirAvailability
       },
     }
     
-    response = @savon_client.call(:ota_air_avail_rq, soap_action: "ns:OTA_AirAvailRQ", attributes: operation_attributes, message: @message_body)
- 
-    return response.body[:ota_air_avail_rs][:origin_destination_options]
+    call_response     = @savon_client.call(:ota_air_avail_rq, soap_action: "ns:OTA_AirAvailRQ", attributes: operation_attributes, message: @message_body)
+    container_element = (call_response.body[:ota_air_avail_rs])[:origin_destination_options]
+    target_element    = container_element[:origin_destination_option]
+    
+    return target_element.nil? ? {} : container_element
   end
     
 end

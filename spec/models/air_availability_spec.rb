@@ -16,7 +16,7 @@ RSpec.describe AirAvailability, type: :model do
     origin_location      = "MNL"
     
     result = air_availability.execute_air_availability(departure_date_time, origin_location, destination_location)
-    puts "@DEBUG #{__LINE__}    #{ap result}"
+    expect(result.empty?).to eq false
   end
   
 end
