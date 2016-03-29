@@ -65,6 +65,8 @@ class AirAvailability
   
   def execute_air_availability(departure_date_time, origin_location, destination_location)
     
+    raise "No established 'savon_client' instance." if @savon_client.nil?
+    
     @message_body = {
       "ns:OriginDestinationInformation" => {
         "ns:FlightSegment" => {
