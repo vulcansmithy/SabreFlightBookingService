@@ -7,12 +7,13 @@ class AirAvailability
   OTA_AIR_AVAIL_LLS_RQ_WSDL   = "http://webservices.sabre.com/wsdl/tpfc/OTA_AirAvailLLS2.3.0RQ.wsdl"
   HEADER_OTA_AIR_AVAIL_LLS_RQ = "OTA_AirAvailLLSRQ"
 
-  # == Instance methods =======================================================
+  # == Class Initializer ======================================================
   def initialize
     @savon_client = nil
     @message_body = {}
   end 
   
+  # == Instance methods =======================================================  
   def namespaces
     namespaces = {
       "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
@@ -78,6 +79,8 @@ class AirAvailability
     }
     
     response = @savon_client.call(:ota_air_avail_rq, soap_action: "ns:OTA_AirAvailRQ", attributes: operation_attributes, message: @message_body)
+ 
+    return response.body[:ota_air_avail_rs][:origin_destination_options]
   end
     
 end

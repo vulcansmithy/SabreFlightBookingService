@@ -15,7 +15,8 @@ RSpec.describe AirAvailability, type: :model do
     destination_location = "SIN"
     origin_location      = "MNL"
     
-    air_availability.execute_air_availability(departure_date_time, origin_location, destination_location)
+    result = air_availability.execute_air_availability(departure_date_time, origin_location, destination_location)
+    puts "@DEBUG #{__LINE__}    #{ap result}"
   end
   
 end
