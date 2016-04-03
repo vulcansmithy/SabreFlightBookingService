@@ -7,6 +7,40 @@ class PassengerDetail
   PASSENGER_DETAILS_RQ_WSDL = "http://files.developer.sabre.com/wsdl/sabreXML1.0.00/ServicesPlatform/PassengerDetails3.2.0RQ.wsdl"
   PASSENGER_DETAILS_RQ      = "PassengerDetailsRQ"
   
+  # == Class Methods ==========================================================
+  # Build the Visa section under the AdvancePassenger.Document section.
+  # 
+  # @param [Hash] args The args hash.
+  # @option args [String] :issue_date The visa issue date.
+  # @option args [String] ::applicable_country The applicable country.
+  # @option args [String] :place_of_birth The place of birth.
+  # @option args [String] :place_of_issue The place of issue.
+  # @return args [Hash] Return a hash representing the Visa section.
+  def self.build_advance_passenger_document_visa_section(args)
+    defaults = {}
+    args.merge!(defaults)
+    
+    visa_section = Hash.new
+    
+    unless args[:issue_date].nil?
+      visa_section[:@IssueDate] = args[:issue_date]         
+    end  
+      
+    unless args[:applicable_country].nil?
+      visa_section[:ApplicableCountry] = args[:applicable_country] 
+    end  
+    
+    unless args[:place_of_birth].nil?
+      visa_section[:PlaceOfBirth] = args[:place_of_birth]     
+    end
+      
+    unless args[:place_of_issue].nil?
+      visa_section[:PlaceOfIssue] = args[:place_of_issue]    
+    end
+      
+    return visa_section
+  end
+  
   # == Instance methods =======================================================
   def initialize
     @savon_client = nil
