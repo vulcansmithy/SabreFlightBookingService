@@ -8,7 +8,45 @@ class PassengerDetail
   PASSENGER_DETAILS_RQ      = "PassengerDetailsRQ"
   
   # == Class Methods ==========================================================
-  # Build the Visa section under the AdvancePassenger.Document section.
+  # Build the Document section. Document section is under the AdvancePassenger section.
+  # 
+  # @param [Hash] args The args hash.
+  # @option args [String] :@ExpirationDate "ExpirationDate" is used to specify the document expiration date. ExpirationDate" follows this format: YYYY-MM-DD.
+  # @option args [String] :@Number "Number" is used to specify the document number.
+  # @option args [String] :@Type "Type" is used to specify the document type. Type" is used to specify the document type. Acceptable values include: "A" - Alien resident card, "C" - Permanent resident card, "F" - Facilitation document, "I" - National ID card, "IN" - Nexus Card.  "M" - Military, "N" - Naturalization certificate, "P" - Passport, "T" - Refugee travel document and re-entry permit, US Travel document, "V" - Border crossing card.
+  # @option args [String] :IssueCountry The issuing country.
+  # @option args [String] :NationalityCountry The person's nationality country.
+  # @return args [Hash] Return a hash representing the Document section.
+  def self.build_advance_passenger_document_section(args)
+    defaults = {}
+    args.merge!(defaults)
+    
+    document_section = Hash.new
+    
+    unless args[:@ExpirationDate].nil?
+      document_section[:@ExpirationDate] = args[:@ExpirationDate]         
+    end  
+
+    unless args[:@Number].nil?
+      document_section[:@Number] = args[:@Number]         
+    end    
+    
+    unless args[:@Type].nil?
+      document_section[:@Type] = args[:@Type]         
+    end   
+    
+    unless args[:IssueCountry].nil?
+      document_section[:IssueCountry] = args[:IssueCountry]         
+    end  
+    
+    unless args[:NationalityCountry].nil?
+      document_section[:NationalityCountry] = args[:NationalityCountry]         
+    end      
+    
+    return document_section
+  end
+
+  # Build the Visa section. Visa section is under the AdvancePassenger.Document section.
   # 
   # @param [Hash] args The args hash.
   # @option args [String] :issue_date The visa issue date.
@@ -41,6 +79,82 @@ class PassengerDetail
     return visa_section
   end
   
+  # Build the PersonName section. PersonName section is under the AdvancePassenger section.
+  # 
+  # @param [Hash] args The args hash.
+  # @option args [String] :@DateOfBirth "DateOfBirth" follows this format: YYYY-MM-DD.  
+  # @option args [String] :@DocumentHolder "DocumentHolder" is used to identify the primary passport holder when the passport document is issued for multiple passengers.
+  # @option args [String] :@Gender "Gender" can be "M" or "F" value.
+  # @option args [String] :@NameNumber Assigned "NameNumber". 
+  # @option args [String] :GivenName Given first name.
+  # @option args [String] :MiddleName Given middle name.
+  # @option args [String] :Surname Given last name.
+  # @return args [Hash] Return a hash representing the PersonName section.
+  def self.build_advance_passenger_person_name_section(args)
+    defaults = {}
+    args.merge!(defaults)
+    
+    person_name_section = Hash.new
+    
+    unless args[:@DateOfBirth].nil?
+      person_name_section[:@DateOfBirth] = args[:@DateOfBirth]         
+    end  
+
+    unless args[:@DocumentHolder].nil?
+      person_name_section[:@DocumentHolder] = args[:@DocumentHolder]         
+    end    
+    
+    unless args[:@Gender].nil?
+      person_name_section[:@Gender] = args[:@Gender]         
+    end   
+    
+    unless args[:@NameNumber].nil?
+      person_name_section[:@NameNumber] = args[:@NameNumber].upcase         
+    end  
+    
+    unless args[:GivenName].nil?
+      person_name_section[:GivenName] = args[:GivenName].upcase         
+    end   
+    
+    unless args[:MiddleName].nil?
+      person_name_section[:MiddleName] = args[:MiddleName].upcase         
+    end   
+    
+    unless args[:Surname].nil?
+      person_name_section[:Surname] = args[:Surname]         
+    end      
+    
+    return person_name_section
+  end 
+  
+  # Build the ContactNumber section. ContactNumber section is under the ContactInfo section.
+  # 
+  # @param [Hash] args The args hash.
+  # @option args [String] :@NameNumber "NameNumber" is used to specify a passenger name number.  
+  # @option args [String] :@Phone "Phone" is used to add customer telephone numbers into the record if applicable.  
+  # @option args [String] :@PhoneUseType "PhoneUseType" is used to specify if the number is agency, "A," home, "H," business, "B," or fax, "F".  
+  # @return args [Hash] Return a hash representing the ContactNumber section.
+  def self.build_contact_info_contact_number_section(args)
+    defaults = {}
+    args.merge!(defaults)
+    
+    contact_number_section = Hash.new
+    
+    unless args[:@NameNumber].nil?
+      contact_number_section[:@NameNumber] = args[:@NameNumber]         
+    end  
+
+    unless args[:@Phone].nil?
+      contact_number_section[:@Phone] = args[:@Phone]         
+    end  
+    
+    unless args[:@PhoneUseType].nil?
+      contact_number_section[:@PhoneUseType] = args[:@PhoneUseType]         
+    end  
+    
+    return contact_number_section
+  end 
+
   # == Instance methods =======================================================
   def initialize
     @savon_client = nil
@@ -103,6 +217,22 @@ class PassengerDetail
       :NationalityCountry => "FR"
     )  
     
+    person_name_section = PassengerDetail.build_advance_passenger_person_name_section(
+      :@DateOfBirth       => "1980-12-02",
+      :@DocumentHolder    => "true",
+      :@Gender            => "M", 
+      :@NameNumber        => "1.1",
+      :GivenName          => "James",
+      :MiddleName         => "Malcolm",
+      :Surname            => "Green", 
+    )
+    
+    contact_number_section = PassengerDetail.build_contact_info_contact_number_section(
+      :@NameNumber        => "1.1",
+      :@Phone             => "817-555-1212",
+      :@PhoneUseType      => "H",  
+    )
+    
     @message_body = {
       "v:PostProcessing" => {
         :@IgnoreAfter          => "false",
@@ -120,19 +250,8 @@ class PassengerDetail
             "v:AdvancePassenger" => {
               :@SegmentNumber => "A",
               
-              "v:Document"   => document_section,
-              
-              "v:PersonName" => {
-                :@DateOfBirth    => "1980-12-02",
-                :@Gender         => "M",
-                :@NameNumber     => "1.1",
-                :@DocumentHolder => "true",
-                
-                "v:GivenName"    => "JAMES",
-                "v:MiddleName"   => "MALCOLM",
-                "v:Surname"      => "GREEN",
-              },
-              
+              "v:Document"    => document_section,
+              "v:PersonName"  => person_name_section,
               "v:VendorPrefs" => { "v:Airline" => { :@Hosted => "false" } },
             },
           },
@@ -153,11 +272,7 @@ class PassengerDetail
         },
         "v:CustomerInfo" => {
           "v:ContactNumbers" => {
-            "v:ContactNumber" => {
-              :@NameNumber   => "1.1",
-              :@Phone        => "817-555-1212",
-              :@PhoneUseType => "H", 
-            }, 
+            "v:ContactNumber" => contact_number_section, 
           },
           "v:PersonName"     => {
             :@NameNumber    => "1.1",   
@@ -175,44 +290,6 @@ class PassengerDetail
     target_element = (call_response.body[:passenger_details_rs])[:travel_itinerary_read_rs]
 
     return target_element.nil? ? {} : target_element
-  end
-  
-  # Build the Document section under the AdvancePassenger section.
-  # 
-  # @param [Hash] args The args hash.
-  # @option args [String] :@ExpirationDate "ExpirationDate" is used to specify the document expiration date. ExpirationDate" follows this format: YYYY-MM-DD.
-  # @option args [String] :@Number "Number" is used to specify the document number.
-  # @option args [String] :@Type "Type" is used to specify the document type. Type" is used to specify the document type. Acceptable values include: "A" - Alien resident card, "C" - Permanent resident card, "F" - Facilitation document, "I" - National ID card, "IN" - Nexus Card.  "M" - Military, "N" - Naturalization certificate, "P" - Passport, "T" - Refugee travel document and re-entry permit, US Travel document, "V" - Border crossing card.
-  # @option args [String] :IssueCountry The issuing country.
-  # @option args [String] :NationalityCountry The person's nationality country.
-  # @return args [Hash] Return a hash representing the Document section.
-  def self.build_advance_passenger_document_section(args)
-    defaults = {}
-    args.merge!(defaults)
-    
-    document_section = Hash.new
-    
-    unless args[:@ExpirationDate].nil?
-      document_section[:@ExpirationDate] = args[:@ExpirationDate]         
-    end  
-
-    unless args[:@Number].nil?
-      document_section[:@Number] = args[:@Number]         
-    end    
-    
-    unless args[:@Type].nil?
-      document_section[:@Type] = args[:@Type]         
-    end   
-    
-    unless args[:IssueCountry].nil?
-      document_section[:IssueCountry] = args[:IssueCountry]         
-    end  
-    
-    unless args[:NationalityCountry].nil?
-      document_section[:NationalityCountry] = args[:NationalityCountry]         
-    end      
-    
-    return document_section
   end
 
 end
