@@ -137,9 +137,12 @@ class PassengerDetail
       },
     }
     
-    response = @savon_client.call(:passenger_details_rq, soap_action: "v:PassengerDetailsRQ", attributes: operation_attributes, message: @message_body)
-  
-    return response
+    call_response  = @savon_client.call(:passenger_details_rq, soap_action: "v:PassengerDetailsRQ", attributes: operation_attributes, message: @message_body)
+    target_element = (call_response.body[:passenger_details_rs])[:travel_itinerary_read_rs]
+
+    puts "@DEBUG #{__LINE__}    response=#{ap call_response}"
+        
+    return target_element.nil? ? {} : target_element
   end
 
 end

@@ -23,7 +23,8 @@ RSpec.describe PassengerDetail, type: :model do
     passenger_detail = PassengerDetail.new
     passenger_detail.establish_connection(session)
     
-    passenger_detail.execute_passenger_detail
+    result = passenger_detail.execute_passenger_detail
+    expect(result.empty?).to eq false
   end  
   
 end
