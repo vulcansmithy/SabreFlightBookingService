@@ -65,7 +65,6 @@ class PassengerDetail
       "v:PostProcessing" => {
         :@IgnoreAfter          => "false",
         :@RedisplayReservation => "true",
-        :@UnmaskCreditCard     => "true",
       },
   
       "v:PreProcessing" => {
