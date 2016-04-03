@@ -12,7 +12,7 @@ class PassengerDetail
   # 
   # @param [Hash] args The args hash.
   # @option args [String] :issue_date The visa issue date.
-  # @option args [String] ::applicable_country The applicable country.
+  # @option args [String] :applicable_country The applicable country.
   # @option args [String] :place_of_birth The place of birth.
   # @option args [String] :place_of_issue The place of issue.
   # @return args [Hash] Return a hash representing the Visa section.
@@ -95,6 +95,14 @@ class PassengerDetail
   end
   
   def execute_passenger_detail
+    document_section = PassengerDetail.build_advance_passenger_document_section(
+      :@ExpirationDate    => "2018-05-26", 
+      :@Number            => "1234567890",
+      :@Type              => "P",
+      :IssueCountry       => "FR",
+      :NationalityCountry => "FR"
+    )  
+    
     @message_body = {
       "v:PostProcessing" => {
         :@IgnoreAfter          => "false",
@@ -112,14 +120,7 @@ class PassengerDetail
             "v:AdvancePassenger" => {
               :@SegmentNumber => "A",
               
-              "v:Document" => {
-                :@ExpirationDate       => "2018-05-26",
-                :@Number               => "1234567890",
-                :@Type                 => "P",
-                
-                "v:IssueCountry"       => "FR",
-                "v:NationalityCountry" => "FR",
-              },
+              "v:Document"   => document_section,
               
               "v:PersonName" => {
                 :@DateOfBirth    => "1980-12-02",
@@ -174,6 +175,44 @@ class PassengerDetail
     target_element = (call_response.body[:passenger_details_rs])[:travel_itinerary_read_rs]
 
     return target_element.nil? ? {} : target_element
+  end
+  
+  # Build the Document section under the AdvancePassenger section.
+  # 
+  # @param [Hash] args The args hash.
+  # @option args [String] :@ExpirationDate "ExpirationDate" is used to specify the document expiration date. ExpirationDate" follows this format: YYYY-MM-DD.
+  # @option args [String] :@Number "Number" is used to specify the document number.
+  # @option args [String] :@Type "Type" is used to specify the document type. Type" is used to specify the document type. Acceptable values include: "A" - Alien resident card, "C" - Permanent resident card, "F" - Facilitation document, "I" - National ID card, "IN" - Nexus Card.  "M" - Military, "N" - Naturalization certificate, "P" - Passport, "T" - Refugee travel document and re-entry permit, US Travel document, "V" - Border crossing card.
+  # @option args [String] :IssueCountry The issuing country.
+  # @option args [String] :NationalityCountry The person's nationality country.
+  # @return args [Hash] Return a hash representing the Document section.
+  def self.build_advance_passenger_document_section(args)
+    defaults = {}
+    args.merge!(defaults)
+    
+    document_section = Hash.new
+    
+    unless args[:@ExpirationDate].nil?
+      document_section[:@ExpirationDate] = args[:@ExpirationDate]         
+    end  
+
+    unless args[:@Number].nil?
+      document_section[:@Number] = args[:@Number]         
+    end    
+    
+    unless args[:@Type].nil?
+      document_section[:@Type] = args[:@Type]         
+    end   
+    
+    unless args[:IssueCountry].nil?
+      document_section[:IssueCountry] = args[:IssueCountry]         
+    end  
+    
+    unless args[:NationalityCountry].nil?
+      document_section[:NationalityCountry] = args[:NationalityCountry]         
+    end      
+    
+    return document_section
   end
 
 end
