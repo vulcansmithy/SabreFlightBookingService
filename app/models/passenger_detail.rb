@@ -154,6 +154,49 @@ class PassengerDetail
     
     return contact_number_section
   end 
+  
+  # Build the PersonName section. PersonName section is under the ContactInfo section.
+  # 
+  # @param [Hash] args The args hash.
+  # @option args [String] :@Infant "Infant" is used to specify that the particular passenger is an infant.  
+  # @option args [String] :@NameNumber "NameNumber" is used to specify a passenger name number, and is only applicable when used in conjunction with @PassengerType.  
+  # @option args [String] :@NameReference "NameReference" is used to specify miscellaneous name reference-related information if applicable.
+  # @option args [String] :@PassengerType "PassengerType" is used to add a passenger type code into the record.
+  # @option args [String] :GivenName Given first name.
+  # @option args [String] :Surname Given last name.
+  # @return args [Hash] Return a hash representing the PersonName section.
+  def self.build_contact_info_person_name_section(args)
+    defaults = {}
+    args.merge!(defaults)
+    
+    person_name_section = Hash.new
+    
+    unless args[:@Infant].nil?
+      person_name_section[:@Infant] = args[:@Infant]         
+    end  
+    
+    unless args[:@NameNumber].nil?
+      person_name_section[:@NameNumber] = args[:@NameNumber]         
+    end  
+    
+    unless args[:@NameReference].nil?
+      person_name_section[:@NameReference] = args[:@NameReference]         
+    end  
+    
+    unless args[:@PassengerType].nil?
+      person_name_section[:@PassengerType] = args[:@PassengerType]         
+    end  
+    
+    unless args[:GivenName].nil?
+      person_name_section[:GivenName] = args[:GivenName]         
+    end  
+    
+    unless args[:Surname].nil?
+      person_name_section[:Surname] = args[:Surname]         
+    end  
+
+    return person_name_section
+  end
 
   # == Instance methods =======================================================
   def initialize
@@ -217,14 +260,14 @@ class PassengerDetail
       :NationalityCountry => "FR"
     )  
     
-    person_name_section = PassengerDetail.build_advance_passenger_person_name_section(
+    advance_passenger_person_name_section = PassengerDetail.build_advance_passenger_person_name_section(
       :@DateOfBirth       => "1980-12-02",
       :@DocumentHolder    => "true",
       :@Gender            => "M", 
       :@NameNumber        => "1.1",
-      :GivenName          => "James",
-      :MiddleName         => "Malcolm",
-      :Surname            => "Green", 
+      :GivenName          => "Charles",
+      :MiddleName         => "Cambell",
+      :Surname            => "Finley", 
     )
     
     contact_number_section = PassengerDetail.build_contact_info_contact_number_section(
@@ -232,6 +275,14 @@ class PassengerDetail
       :@Phone             => "817-555-1212",
       :@PhoneUseType      => "H",  
     )
+    
+    contact_info_person_name_section = PassengerDetail.build_contact_info_person_name_section(
+      :@Infant        => "false", 
+      :@NameNumber    => "1.1",
+      :@PassengerType => "ADT",
+      :GivenName      => advance_passenger_person_name_section[:GivenName],
+      :Surname        => advance_passenger_person_name_section[:Surname  ],
+    ) 
     
     @message_body = {
       "v:PostProcessing" => {
@@ -248,10 +299,10 @@ class PassengerDetail
         "v:SpecialServiceRQ" => {
           "v:SpecialServiceInfo" => {
             "v:AdvancePassenger" => {
-              :@SegmentNumber => "A",
+             :@SegmentNumber => "A",
               
               "v:Document"    => document_section,
-              "v:PersonName"  => person_name_section,
+              "v:PersonName"  => advance_passenger_person_name_section,
               "v:VendorPrefs" => { "v:Airline" => { :@Hosted => "false" } },
             },
           },
@@ -271,17 +322,8 @@ class PassengerDetail
           },
         },
         "v:CustomerInfo" => {
-          "v:ContactNumbers" => {
-            "v:ContactNumber" => contact_number_section, 
-          },
-          "v:PersonName"     => {
-            :@NameNumber    => "1.1",   
-            :@NameReference => "ABC123",  
-            :@PassengerType => "ADT", 
-            
-            "v:GivenName"   => "JAMES",
-            "v:Surname"     => "GREEN",
-          },
+          "v:ContactNumbers" => { "v:ContactNumber" => contact_number_section, },
+          "v:PersonName"     => contact_info_person_name_section,
         },
       },
     }
