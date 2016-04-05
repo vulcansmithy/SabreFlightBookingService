@@ -251,39 +251,29 @@ class PassengerDetail
     return attributes
   end
   
-  def execute_passenger_detail
-    document_section = PassengerDetail.build_advance_passenger_document_section(
-      :@ExpirationDate    => "2018-05-26", 
-      :@Number            => "1234567890",
-      :@Type              => "P",
-      :IssueCountry       => "FR",
-      :NationalityCountry => "FR"
-    )  
+  # Send a PassengerDetailsRQ SOAP request to Sabre
+  # 
+  # @param [Hash] args The args hash.
+  # @option args [String] :document_advance_passenger "document_advance_passenger" is a hash for the Document section that is under the AdvancePassenger section.  
+  # @option args [String] :person_name_advance_passenger "person_name_advance_passenger" is a hash for the PersonName section that is under the AdvancePassenger section. 
+  # @option args [String] :contact_number_contact_info "contact_number_contact_info" is a hash for the ContactNumber section that is under the ContactInfo section. 
+  # @option args [String] :person_name_contact_info "person_name_contact_info" is a hash for the PersonName section that is under the ContactInfo section. 
+  # @return args [Hash] Return a hash representing the content of the TravelItineraryReadRS returned by Sabre.
+  def execute_passenger_detail(args)
     
-    advance_passenger_person_name_section = PassengerDetail.build_advance_passenger_person_name_section(
-      :@DateOfBirth       => "1980-12-02",
-      :@DocumentHolder    => "true",
-      :@Gender            => "M", 
-      :@NameNumber        => "1.1",
-      :GivenName          => "Charles",
-      :MiddleName         => "Cambell",
-      :Surname            => "Finley", 
-    )
+    # Naming convention for keys for the passed hash is [section]_[parent senction], e.g. document_advance_passenger. 
+    # Document is the target section. AdvancePassenger is the parent section.
     
-    contact_number_section = PassengerDetail.build_contact_info_contact_number_section(
-      :@NameNumber        => "1.1",
-      :@Phone             => "817-555-1212",
-      :@PhoneUseType      => "H",  
-    )
+    defaults = {}
+    args.merge!(defaults)
+
+    # @TODO add error checking
+    document_advance_passenger    = args[:document_advance_passenger   ]   
+    person_name_advance_passenger = args[:person_name_advance_passenger]  
+    contact_number_contact_info   = args[:contact_number_contact_info  ]  
+    person_name_contact_info      = args[:person_name_contact_info     ]  
     
-    contact_info_person_name_section = PassengerDetail.build_contact_info_person_name_section(
-      :@Infant        => "false", 
-      :@NameNumber    => "1.1",
-      :@PassengerType => "ADT",
-      :GivenName      => advance_passenger_person_name_section[:GivenName],
-      :Surname        => advance_passenger_person_name_section[:Surname  ],
-    ) 
-    
+    # @TODO add a mechanism for adding the above passed hash parameter as optional
     @message_body = {
       "v:PostProcessing" => {
         :@IgnoreAfter          => "false",
@@ -301,8 +291,8 @@ class PassengerDetail
             "v:AdvancePassenger" => {
              :@SegmentNumber => "A",
               
-              "v:Document"    => document_section,
-              "v:PersonName"  => advance_passenger_person_name_section,
+              "v:Document"    => document_advance_passenger,
+              "v:PersonName"  => person_name_advance_passenger,
               "v:VendorPrefs" => { "v:Airline" => { :@Hosted => "false" } },
             },
           },
@@ -322,8 +312,8 @@ class PassengerDetail
           },
         },
         "v:CustomerInfo" => {
-          "v:ContactNumbers" => { "v:ContactNumber" => contact_number_section, },
-          "v:PersonName"     => contact_info_person_name_section,
+          "v:ContactNumbers" => { "v:ContactNumber" => contact_number_contact_info , },
+          "v:PersonName"     => person_name_contact_info,
         },
       },
     }
