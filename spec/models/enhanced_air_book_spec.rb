@@ -11,7 +11,8 @@ RSpec.describe EnhancedAirBook, type: :model do
     enhanced_air_book = EnhancedAirBook.new
     enhanced_air_book.establish_connection(session)
     
-    enhanced_air_book.execute_enhanced_air_book
+    response = enhanced_air_book.execute_enhanced_air_book
+    expect(response[:status]).to eq :success
   end  
   
 end

@@ -61,34 +61,49 @@ class EnhancedAirBook
   end
   
   def execute_enhanced_air_book 
-    @message_body = {
-      "v:OTA_AirBookRQ" => {
-        "v:OriginDestinationInformation" => {
-          "v:FlightSegment" => {
-            :@DepartureDateTime => "2016-06-05T17:05:00",
-            :@FlightNumber      => "764",
-            :@NumberInParty     => "1",
-            :@ResBookDesigCode  => "H",
-            :@Status            => "NN",
+    begin
+      @message_body = {
+        "v:OTA_AirBookRQ" => {
+          "v:OriginDestinationInformation" => {
+            "v:FlightSegment" => {
+              :@DepartureDateTime => "2016-06-05T17:05:00",
+              :@FlightNumber      => "764",
+              :@NumberInParty     => "1",
+              :@ResBookDesigCode  => "H",
+              :@Status            => "NN",
             
-            "v:DestinationLocation" => { :@LocationCode => "SIN" },
-            "v:MarketingAirline"    => { :@Code         => "3K", :@FlightNumber => "764" },
-            "v:OriginLocation"      => { :@LocationCode => "MNL" },
-          },
+              "v:DestinationLocation" => { :@LocationCode => "SIN" },
+              "v:MarketingAirline"    => { :@Code         => "3K", :@FlightNumber => "764" },
+              "v:OriginLocation"      => { :@LocationCode => "MNL" },
+            },
           
+          },
         },
-      },
       
-      "v:PostProcessing" => {
-        :@IgnoreAfter => "true",
-        "v:RedisplayReservation" => { },
-      },
-      "v:PreProcessing" => {
-        "v:UniqueID" => { :@ID => "" },
-      },
-    }
+        "v:PostProcessing" => {
+          :@IgnoreAfter => "true",
+          "v:RedisplayReservation" => { },
+        },
+        "v:PreProcessing" => {
+          "v:UniqueID" => { :@ID => "" },
+        },
+      }
     
-   response = @savon_client.call(:enhanced_air_book_rq, soap_action: "v:EnhancedAirBookRQ", attributes: operation_attributes, message: @message_body)
+      call_response = @savon_client.call(
+        :enhanced_air_book_rq, 
+        soap_action: "v:EnhancedAirBookRQ", 
+        attributes:  operation_attributes, 
+        message:     @message_body
+      )
+      
+    rescue Savon::SOAPFault => error
+      puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
+      
+      return { status: :failed,  result: error.to_hash[:fault] }
+    else
+      
+      return { status: :success, result: call_response.body[:enhanced_air_book_rs] }
+    end
   end
 
 end
