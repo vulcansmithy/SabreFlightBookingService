@@ -61,22 +61,32 @@ class EnhancedAirBook
   end
   
   def execute_enhanced_air_book 
+    
+    flight_segment_origin_destination_information = {
+      :@DepartureDateTime               => "2016-06-05T17:05:00",
+      :@FlightNumber                    => "764",
+      :@NumberInParty                   => "1",
+      :@ResBookDesigCode                => "H",
+      :@Status                          => "NN",
+      :@LocationCodeDestinationLocation => "SIN",
+      :@CodeMarketingAirline            => "3K",
+      :@LocationCodeOriginLocation      => "MNL",
+    }
+    
     begin
       @message_body = {
         "v:OTA_AirBookRQ" => {
           "v:OriginDestinationInformation" => {
             "v:FlightSegment" => {
-              :@DepartureDateTime => "2016-06-05T17:05:00",
-              :@FlightNumber      => "764",
-              :@NumberInParty     => "1",
-              :@ResBookDesigCode  => "H",
-              :@Status            => "NN",
-            
-              "v:DestinationLocation" => { :@LocationCode => "SIN" },
-              "v:MarketingAirline"    => { :@Code         => "3K", :@FlightNumber => "764" },
-              "v:OriginLocation"      => { :@LocationCode => "MNL" },
+              :@DepartureDateTime     => flight_segment_origin_destination_information[:@DepartureDateTime],
+              :@FlightNumber          => flight_segment_origin_destination_information[:@FlightNumber     ],
+              :@NumberInParty         => flight_segment_origin_destination_information[:@NumberInParty    ],
+              :@ResBookDesigCode      => flight_segment_origin_destination_information[:@ResBookDesigCode ],
+              :@Status                => flight_segment_origin_destination_information[:@Status           ],
+              "v:DestinationLocation" => { :@LocationCode => flight_segment_origin_destination_information[:@LocationCodeDestinationLocation] },
+              "v:MarketingAirline"    => { :@Code         => flight_segment_origin_destination_information[:@CodeMarketingAirline           ], :@FlightNumber => flight_segment_origin_destination_information[:@FlightNumber] },
+              "v:OriginLocation"      => { :@LocationCode => flight_segment_origin_destination_information[:@LocationCodeOriginLocation     ] },
             },
-          
           },
         },
       
