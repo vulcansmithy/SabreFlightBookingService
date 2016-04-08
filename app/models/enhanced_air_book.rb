@@ -8,6 +8,18 @@ class EnhancedAirBook
   ENHANCED_AIR_BOOK_RQ      = "EnhancedAirBookRQ"
   
   # == Class Methods ==========================================================
+  # Build the FlightSection section.
+  # 
+  # @param [Hash] args The args hash.
+  # @option args [String] :@DepartureDateTime "DepartureDateTime" is used to pass Departure Date and Time.  
+  # @option args [String] :@FlightNumber "FlightNumber".  
+  # @option args [String] :@NumberInParty "NumberInParty".
+  # @option args [String] :@ResBookDesigCode "ResBookDesigCode".
+  # @option args [String] :@Status "Status".
+  # @option args [String] :@LocationCodeDestinationLocation "LocationCodeDestinationLocation".
+  # @option args [String] :@CodeMarketingAirline "CodeMarketingAirline".
+  # @option args [String] :@LocationCodeOriginLocation "LocationCodeOriginLocation".
+  # @return args [Hash] Return a hash representing the FlightSection section.
   def self.build_flight_segment_origin_destination_information(args)
     defaults = {}
     args.merge!(defaults)
@@ -46,6 +58,27 @@ class EnhancedAirBook
       flight_segment_section[:OriginLocation] = { :@LocationCode => args[:@LocationCodeOriginLocation] }
     end  
     
+    return flight_segment_section
+  end
+  
+  # Build individual FlightSegment section. FlightSegment section is under the OriginDestinationInformation section.
+  # 
+  # @param [flight_segment_origin_destination_information] "flight_segment_origin_destination_information" is a hash previously build using the build_flight_segment_origin_destination_information method.
+  # @return args [Hash] Return a hash representing the FlightSegment section.
+  def self.build_individual_flight_segment(flight_segment_origin_destination_information)
+    flight_segment_section = Hash.new
+    
+    flight_segment_section = {
+      :@DepartureDateTime     => flight_segment_origin_destination_information[:@DepartureDateTime ],
+      :@FlightNumber          => flight_segment_origin_destination_information[:@FlightNumber      ],
+      :@NumberInParty         => flight_segment_origin_destination_information[:@NumberInParty     ],
+      :@ResBookDesigCode      => flight_segment_origin_destination_information[:@ResBookDesigCode  ],
+      :@Status                => flight_segment_origin_destination_information[:@Status            ],
+      "v:DestinationLocation" => flight_segment_origin_destination_information[:DestinationLocation],
+      "v:MarketingAirline"    => flight_segment_origin_destination_information[:MarketingAirline   ], 
+      "v:OriginLocation"      => flight_segment_origin_destination_information[:OriginLocation     ],
+    }
+  
     return flight_segment_section
   end
   
@@ -151,23 +184,6 @@ class EnhancedAirBook
       
       return { status: :success, result: call_response.body[:enhanced_air_book_rs] }
     end
-  end
-  
-  def self.build_individual_flight_segment(flight_segment_origin_destination_information)
-    flight_segment_section = Hash.new
-    
-    flight_segment_section = {
-      :@DepartureDateTime     => flight_segment_origin_destination_information[:@DepartureDateTime ],
-      :@FlightNumber          => flight_segment_origin_destination_information[:@FlightNumber      ],
-      :@NumberInParty         => flight_segment_origin_destination_information[:@NumberInParty     ],
-      :@ResBookDesigCode      => flight_segment_origin_destination_information[:@ResBookDesigCode  ],
-      :@Status                => flight_segment_origin_destination_information[:@Status            ],
-      "v:DestinationLocation" => flight_segment_origin_destination_information[:DestinationLocation],
-      "v:MarketingAirline"    => flight_segment_origin_destination_information[:MarketingAirline   ], 
-      "v:OriginLocation"      => flight_segment_origin_destination_information[:OriginLocation     ],
-    }
-  
-    return flight_segment_section
   end
 
 end
