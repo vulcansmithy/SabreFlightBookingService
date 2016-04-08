@@ -132,28 +132,7 @@ class EnhancedAirBook
         },
       }
       
-      
-      @message_body["v:OTA_AirBookRQ"]["v:OriginDestinationInformation"]["v:FlightSegment"] << {
-        :@DepartureDateTime     => flight_segment_origin_destination_information[:@DepartureDateTime ],
-        :@FlightNumber          => flight_segment_origin_destination_information[:@FlightNumber      ],
-        :@NumberInParty         => flight_segment_origin_destination_information[:@NumberInParty     ],
-        :@ResBookDesigCode      => flight_segment_origin_destination_information[:@ResBookDesigCode  ],
-        :@Status                => flight_segment_origin_destination_information[:@Status            ],
-        "v:DestinationLocation" => flight_segment_origin_destination_information[:DestinationLocation],
-        "v:MarketingAirline"    => flight_segment_origin_destination_information[:MarketingAirline   ], 
-        "v:OriginLocation"      => flight_segment_origin_destination_information[:OriginLocation     ],
-      }
-      @message_body["v:OTA_AirBookRQ"]["v:OriginDestinationInformation"]["v:FlightSegment"] << {
-        :@DepartureDateTime     => flight_segment_origin_destination_information[:@DepartureDateTime ],
-        :@FlightNumber          => flight_segment_origin_destination_information[:@FlightNumber      ],
-        :@NumberInParty         => flight_segment_origin_destination_information[:@NumberInParty     ],
-        :@ResBookDesigCode      => flight_segment_origin_destination_information[:@ResBookDesigCode  ],
-        :@Status                => flight_segment_origin_destination_information[:@Status            ],
-        "v:DestinationLocation" => flight_segment_origin_destination_information[:DestinationLocation],
-        "v:MarketingAirline"    => flight_segment_origin_destination_information[:MarketingAirline   ], 
-        "v:OriginLocation"      => flight_segment_origin_destination_information[:OriginLocation     ],
-      }
-      
+      @message_body["v:OTA_AirBookRQ"]["v:OriginDestinationInformation"]["v:FlightSegment"] << EnhancedAirBook.build_individual_flight_segment(flight_segment_origin_destination_information)
       
       puts "@DEBUG #{__LINE__}    @message_body=#{ap @message_body}"
     
@@ -172,6 +151,23 @@ class EnhancedAirBook
       
       return { status: :success, result: call_response.body[:enhanced_air_book_rs] }
     end
+  end
+  
+  def self.build_individual_flight_segment(flight_segment_origin_destination_information)
+    flight_segment_section = Hash.new
+    
+    flight_segment_section = {
+      :@DepartureDateTime     => flight_segment_origin_destination_information[:@DepartureDateTime ],
+      :@FlightNumber          => flight_segment_origin_destination_information[:@FlightNumber      ],
+      :@NumberInParty         => flight_segment_origin_destination_information[:@NumberInParty     ],
+      :@ResBookDesigCode      => flight_segment_origin_destination_information[:@ResBookDesigCode  ],
+      :@Status                => flight_segment_origin_destination_information[:@Status            ],
+      "v:DestinationLocation" => flight_segment_origin_destination_information[:DestinationLocation],
+      "v:MarketingAirline"    => flight_segment_origin_destination_information[:MarketingAirline   ], 
+      "v:OriginLocation"      => flight_segment_origin_destination_information[:OriginLocation     ],
+    }
+  
+    return flight_segment_section
   end
 
 end
