@@ -119,16 +119,7 @@ class EnhancedAirBook
       @message_body = {
         "v:OTA_AirBookRQ" => {
           "v:OriginDestinationInformation" => {
-            "v:FlightSegment" => {
-              :@DepartureDateTime     => flight_segment_origin_destination_information[:@DepartureDateTime ],
-              :@FlightNumber          => flight_segment_origin_destination_information[:@FlightNumber      ],
-              :@NumberInParty         => flight_segment_origin_destination_information[:@NumberInParty     ],
-              :@ResBookDesigCode      => flight_segment_origin_destination_information[:@ResBookDesigCode  ],
-              :@Status                => flight_segment_origin_destination_information[:@Status            ],
-              "v:DestinationLocation" => flight_segment_origin_destination_information[:DestinationLocation],
-              "v:MarketingAirline"    => flight_segment_origin_destination_information[:MarketingAirline   ], 
-              "v:OriginLocation"      => flight_segment_origin_destination_information[:OriginLocation     ],
-            },
+            "v:FlightSegment" => [],
           },
         },
       
@@ -140,6 +131,29 @@ class EnhancedAirBook
           "v:UniqueID" => { :@ID => "" },
         },
       }
+      
+      
+      @message_body["v:OTA_AirBookRQ"]["v:OriginDestinationInformation"]["v:FlightSegment"] << {
+        :@DepartureDateTime     => flight_segment_origin_destination_information[:@DepartureDateTime ],
+        :@FlightNumber          => flight_segment_origin_destination_information[:@FlightNumber      ],
+        :@NumberInParty         => flight_segment_origin_destination_information[:@NumberInParty     ],
+        :@ResBookDesigCode      => flight_segment_origin_destination_information[:@ResBookDesigCode  ],
+        :@Status                => flight_segment_origin_destination_information[:@Status            ],
+        "v:DestinationLocation" => flight_segment_origin_destination_information[:DestinationLocation],
+        "v:MarketingAirline"    => flight_segment_origin_destination_information[:MarketingAirline   ], 
+        "v:OriginLocation"      => flight_segment_origin_destination_information[:OriginLocation     ],
+      }
+      @message_body["v:OTA_AirBookRQ"]["v:OriginDestinationInformation"]["v:FlightSegment"] << {
+        :@DepartureDateTime     => flight_segment_origin_destination_information[:@DepartureDateTime ],
+        :@FlightNumber          => flight_segment_origin_destination_information[:@FlightNumber      ],
+        :@NumberInParty         => flight_segment_origin_destination_information[:@NumberInParty     ],
+        :@ResBookDesigCode      => flight_segment_origin_destination_information[:@ResBookDesigCode  ],
+        :@Status                => flight_segment_origin_destination_information[:@Status            ],
+        "v:DestinationLocation" => flight_segment_origin_destination_information[:DestinationLocation],
+        "v:MarketingAirline"    => flight_segment_origin_destination_information[:MarketingAirline   ], 
+        "v:OriginLocation"      => flight_segment_origin_destination_information[:OriginLocation     ],
+      }
+      
       
       puts "@DEBUG #{__LINE__}    @message_body=#{ap @message_body}"
     
