@@ -11,14 +11,14 @@ class EnhancedAirBook
   # Build the FlightSection section.
   # 
   # @param [Hash] args The args hash.
-  # @option args [String] :@DepartureDateTime "DepartureDateTime" is used to pass Departure Date and Time.  
-  # @option args [String] :@FlightNumber "FlightNumber".  
-  # @option args [String] :@NumberInParty "NumberInParty".
-  # @option args [String] :@ResBookDesigCode "ResBookDesigCode".
-  # @option args [String] :@Status "Status".
-  # @option args [String] :@LocationCodeDestinationLocation "LocationCodeDestinationLocation".
-  # @option args [String] :@CodeMarketingAirline "CodeMarketingAirline".
-  # @option args [String] :@LocationCodeOriginLocation "LocationCodeOriginLocation".
+  # @option args [String] :@DepartureDateTime "DepartureDateTime" is used to specify the time and date of flight departure.  
+  # @option args [String] :@FlightNumber "FlightNumber" is used to specify the flight number.  OPEN can also be passed if the user desires an open space ticket.  
+  # @option args [String] :@NumberInParty "NumberInParty" is used to specify the number of passengers that need to be booked during this transaction.
+  # @option args [String] :@ResBookDesigCode "ResBookDesigCode" is used to specify the booking class.
+  # @option args [String] :@Status "Status" is used to specify the action code to be used to sell the flight inventory.
+  # @option args [String] :@LocationCodeDestinationLocation "LocationCodeDestinationLocation" is used to specify the arrival airport code.
+  # @option args [String] :@CodeMarketingAirline "CodeMarketingAirline" is used to specify the marketing airline code.
+  # @option args [String] :@LocationCodeOriginLocation "LocationCodeOriginLocation" is used to specify the departure airport code.
   # @return args [Hash] Return a hash representing the FlightSection section.
   def self.build_flight_segment_origin_destination_information(args)
     defaults = {}
@@ -61,7 +61,7 @@ class EnhancedAirBook
     return flight_segment_section
   end
   
-  # Build individual FlightSegment section. FlightSegment section is under the OriginDestinationInformation section.
+  # Build individual FlightSegment section. There could be 1 or more FlightSegment. This method is a helper method that builds those individual entry.
   # 
   # @param [flight_segment_origin_destination_information] "flight_segment_origin_destination_information" is a hash previously build using the build_flight_segment_origin_destination_information method.
   # @return args [Hash] Return a hash representing the FlightSegment section.
@@ -135,18 +135,15 @@ class EnhancedAirBook
     return attributes
   end
   
-  def execute_enhanced_air_book 
+  def execute_enhanced_air_book(args)
+    defaults = {}
+    args.merge!(defaults)
     
-    flight_segment_origin_destination_information = EnhancedAirBook.build_flight_segment_origin_destination_information(
-      :@DepartureDateTime               => "2016-06-05T17:05:00",
-      :@FlightNumber                    => "764",
-      :@NumberInParty                   => "1",
-      :@ResBookDesigCode                => "H",
-      :@Status                          => "NN",
-      :@LocationCodeDestinationLocation => "SIN",
-      :@CodeMarketingAirline            => "3K",
-      :@LocationCodeOriginLocation      => "MNL",
-    )
+    raise "Missing :flight_segments." if args[:flight_segments].nil?
+    
+    raise "Empty :flight_segments."   if args[:flight_segments].empty?
+    
+    flight_segments = args[:flight_segments] 
 
     begin
       @message_body = {
@@ -165,8 +162,9 @@ class EnhancedAirBook
         },
       }
       
-      @message_body["v:OTA_AirBookRQ"]["v:OriginDestinationInformation"]["v:FlightSegment"] << EnhancedAirBook.build_individual_flight_segment(flight_segment_origin_destination_information)
-      
+      flight_segments.each do |flight_segment|
+        @message_body["v:OTA_AirBookRQ"]["v:OriginDestinationInformation"]["v:FlightSegment"] << EnhancedAirBook.build_individual_flight_segment(flight_segment)  
+      end
       puts "@DEBUG #{__LINE__}    @message_body=#{ap @message_body}"
     
       call_response = @savon_client.call(
