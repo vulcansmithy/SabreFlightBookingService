@@ -11,6 +11,29 @@ class BargainFinderMax
   TRIP_TYPE_RETURN                    = "Return"
   TRIP_TYPE_CIRCLE                    = "Circle"
   
+  # == Class Methods ==========================================================
+  def self.extract_air_itinerary(air_itinerary)
+    extracted_origin_destination_options = nil
+
+    raise "Passed 'air_itinerary' is not a Hash."   unless air_itinerary.class == Hash
+
+    raise "Passed 'air_itinerary' was nil."   if air_itinerary.nil?
+    
+    raise "Passed 'air_itinerary' was empty." if air_itinerary.empty?
+
+    origin_destination_option = (air_itinerary[:origin_destination_options])[:origin_destination_option]
+    
+    if    origin_destination_option.class == Array
+      extracted_origin_destination_options =   origin_destination_option
+    elsif origin_destination_option.class == Hash
+      extracted_origin_destination_options = [ origin_destination_option ]
+    else
+      raise "Expecting 'origin_destination_option' to have a return type of either an Array or Hash. The actual return type was '#{origin_destination_option.class}'."
+    end    
+    
+    return extracted_origin_destination_options
+  end
+  
   # == Instance methods =======================================================
   def initialize
     @savon_client = nil
@@ -161,7 +184,7 @@ class BargainFinderMax
     
     return message_body 
   end  
-  
+
   def air_availability_one_way(origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
 
     raise "No established 'savon_client' instance." if @savon_client.nil?
@@ -214,6 +237,30 @@ class BargainFinderMax
       
       return priced_itineraries
     end
+  end
+
+  def extract_departure_date_time(origin_destionation_option)
+    return origin_destionation_option[:flight_segment][:@departure_date_time]
+  end
+  
+  def extract_flight_number(origin_destionation_option)
+    return origin_destionation_option[:flight_segment][:@flight_number]
+  end
+  
+  def extract_res_book_desig_code(origin_destionation_option) 
+    return origin_destionation_option[:flight_segment][:@res_book_desig_code]  
+  end
+  
+  def extract_location_code_destination_location(origin_destionation_option)
+    return origin_destionation_option[:flight_segment][:arrival_airport][:@location_code]
+  end
+  
+  def extract_code_marketing_airline(origin_destionation_option) 
+    return origin_destionation_option[:flight_segment][:marketing_airline][:@code]
+  end
+  
+  def extract_location_code_origin_location(origin_destionation_option)
+    return origin_destionation_option[:flight_segment][:departure_airport][:@location_code]
   end
   
 end
