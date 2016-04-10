@@ -22,10 +22,15 @@ RSpec.describe BargainFinderMax, type: :model do
       bfm.build_passenger_type_and_quantity("INF", 1),
     ]
 
+    result = nil
     elapse_seconds = Benchmark.realtime do  
       result = bfm.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities)
     end  
     puts "@DEBUG #{__LINE__}    elapse_seconds=#{elapse_seconds}"
+    
+    expect(result.nil?).to   eq false
+    expect(result.empty?).to eq false
+
   end
 
   it "should be able to create a Air Availability request for 'Return' trip using Bargain Finder Max" do
@@ -47,12 +52,15 @@ RSpec.describe BargainFinderMax, type: :model do
       bfm.build_passenger_type_and_quantity("CNN", 1),
       bfm.build_passenger_type_and_quantity("INF", 1),
     ]
-    
+
+    result = nil  
     elapse_seconds = Benchmark.realtime do  
       result = bfm.air_availability_return(origins_and_destinations, passenger_types_and_quantities)
     end   
-    
     puts "@DEBUG #{__LINE__}    elapse_seconds=#{elapse_seconds}"
+
+    expect(result.nil?).to   eq false
+    expect(result.empty?).to eq false
   end
 
   it "should be able to create a Air Availability request for multi sector/'Circle' trip using Bargain Finder Max" do
@@ -78,13 +86,16 @@ RSpec.describe BargainFinderMax, type: :model do
       bfm.build_passenger_type_and_quantity("INF", 1),
     ]
     
+    result = nil  
     elapse_seconds = Benchmark.realtime do    
       result = bfm.air_availability_circle(origins_and_destinations, passenger_types_and_quantities)
     end
-    
     puts "@DEBUG #{__LINE__}    elapse_seconds=#{elapse_seconds}"  
+  
+    expect(result.nil?).to   eq false
+    expect(result.empty?).to eq false
   end
-     
+       
 end
 
 

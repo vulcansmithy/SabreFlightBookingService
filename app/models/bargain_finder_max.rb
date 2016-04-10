@@ -168,12 +168,15 @@ class BargainFinderMax
 
     begin
       @message_body = build_message_body(origins_and_destinations, TRIP_TYPE_ONE_WAY, passenger_types_and_quantities, request_type)  
-      response      = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: @message_body)
+      call_response = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: @message_body)
     rescue Savon::Error => error
-      puts "@DEBUG #{__LINE__}    error.http.code=#{error.http.code}" 
-      raise
+      puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
+      
+      return { status: :failed,  result: error.to_hash[:fault] }
     else
-      return response
+      priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
+      
+      return priced_itineraries
     end      
   end
 
@@ -183,12 +186,15 @@ class BargainFinderMax
 
     begin
       @message_body = build_message_body(origins_and_destinations, TRIP_TYPE_RETURN, passenger_types_and_quantities, request_type)  
-      response      = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: @message_body)
+      call_response = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: @message_body)
     rescue Savon::Error => error
-      puts "@DEBUG #{__LINE__}    error.http.code=#{error.http.code}" 
-      raise
+      puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
+      
+      return { status: :failed,  result: error.to_hash[:fault] }
     else
-      return response
+      priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
+      
+      return priced_itineraries
     end
   end
 
@@ -197,13 +203,16 @@ class BargainFinderMax
     raise "No established 'savon_client' instance." if @savon_client.nil?
 
     begin
-      message_body = build_message_body(origins_and_destinations, TRIP_TYPE_CIRCLE, passenger_types_and_quantities, request_type)  
-      response     = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: message_body)
+      @message_body = build_message_body(origins_and_destinations, TRIP_TYPE_CIRCLE, passenger_types_and_quantities, request_type)  
+      call_response = @savon_client.call(:bargain_finder_max_rq,  soap_action: "ns:OTA_AirLowFareSearchRQ", attributes: operation_attributes, message: @message_body)
     rescue Savon::Error => error
-      puts "@DEBUG #{__LINE__}    error.http.code=#{error.http.code}" 
-      raise
+      puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
+      
+      return { status: :failed,  result: error.to_hash[:fault] }
     else
-      return response
+      priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
+      
+      return priced_itineraries
     end
   end
   
