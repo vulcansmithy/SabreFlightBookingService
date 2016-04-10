@@ -35,7 +35,11 @@ RSpec.describe EnhancedAirBook, type: :model do
     session = Session.new
     session.set_to_non_production
     session.establish_session
-    
+  
+  
+    ##
+    ## Do a BargainFinderMax
+    ##   
     bargain_finder_max = BargainFinderMax.new
     bargain_finder_max.establish_connection(session)
     
@@ -62,9 +66,59 @@ RSpec.describe EnhancedAirBook, type: :model do
         :@LocationCodeOriginLocation      => bargain_finder_max.extract_location_code_origin_location(origin_destionation_option),
       )
     end
-    puts "@DEBUG #{__LINE__}    #{ap flight_segments}"
 
 
+
+    ##
+    ## Do a PassengerDetail
+    ##
+    passenger_detail = PassengerDetail.new
+    passenger_detail.establish_connection(session)
+    
+    document_advance_passenger = PassengerDetail.build_advance_passenger_document_section(
+      :@ExpirationDate    => "2018-05-26", 
+      :@Number            => "1234567890",
+      :@Type              => "P",
+      :IssueCountry       => "FR",
+      :NationalityCountry => "FR"
+    )  
+
+    person_name_advance_passenger = PassengerDetail.build_advance_passenger_person_name_section(
+      :@DateOfBirth       => "1980-12-02",
+      :@DocumentHolder    => "true",
+      :@Gender            => "M", 
+      :@NameNumber        => "1.1",
+      :GivenName          => "Charles",
+      :MiddleName         => "Cambell",
+      :Surname            => "Finley", 
+    )
+
+    contact_number_contact_info  = PassengerDetail.build_contact_info_contact_number_section(
+      :@NameNumber        => "1.1",
+      :@Phone             => "817-555-1212",
+      :@PhoneUseType      => "H",  
+    )
+
+    person_name_contact_info = PassengerDetail.build_contact_info_person_name_section(
+      :@Infant        => "false", 
+      :@NameNumber    => "1.1",
+      :@PassengerType => "ADT",
+      :GivenName      => person_name_advance_passenger[:GivenName],
+      :Surname        => person_name_advance_passenger[:Surname  ],
+    ) 
+    
+    passenger_detail_result = passenger_detail.execute_passenger_detail(
+      :document_advance_passenger    => document_advance_passenger,
+      :person_name_advance_passenger => person_name_advance_passenger,
+      :contact_number_contact_info   => contact_number_contact_info,
+      :person_name_contact_info      => person_name_contact_info
+    )
+
+
+
+    ##
+    ## Do a EnhancedAirBook
+    ##
     enhanced_air_book = EnhancedAirBook.new
     enhanced_air_book.establish_connection(session)
     
