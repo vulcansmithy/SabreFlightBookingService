@@ -184,12 +184,13 @@ class Session
         response     = savon_client.call(:session_create_rq, soap_action: "ns:SessionCreateRQ", attributes: operation_attributes, message: @message_body)
       
       rescue Savon::SOAPFault => error
-        raise (error.to_hash[:fault][:faultcode] == "soap-env:Client.AuthenticationFailed" ? "Authentication failed." : "Exception encountered.")
-
+        puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
+      
+        return { status: :failed,  result: error.to_hash[:fault] }
       else
         @binary_security_token = response.xpath("//wsse:BinarySecurityToken")[0].content 
 
-        return @binary_security_token     
+        return { status: :success, result: { binary_security_token: @binary_security_token} }  
       end
     end
     
