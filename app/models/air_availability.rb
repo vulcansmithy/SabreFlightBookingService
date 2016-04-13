@@ -67,21 +67,28 @@ class AirAvailability
     
     raise "No established 'savon_client' instance." if @savon_client.nil?
     
-    @message_body = {
-      "ns:OriginDestinationInformation" => {
-        "ns:FlightSegment" => {
-          :@DepartureDateTime => departure_date_time,
-          "ns:DestinationLocation" => { :@LocationCode => origin_location,      },
-          "ns:OriginLocation"      => { :@LocationCode => destination_location, },
+    begin
+      @message_body = {
+        "ns:OriginDestinationInformation" => {
+          "ns:FlightSegment" => {
+            :@DepartureDateTime => departure_date_time,
+            "ns:DestinationLocation" => { :@LocationCode => origin_location,      },
+            "ns:OriginLocation"      => { :@LocationCode => destination_location, },
+          },
         },
-      },
-    }
-    
-    call_response     = @savon_client.call(:ota_air_avail_rq, soap_action: "ns:OTA_AirAvailRQ", attributes: operation_attributes, message: @message_body)
-    container_element = (call_response.body[:ota_air_avail_rs])[:origin_destination_options]
-    target_element    = container_element[:origin_destination_option]
-    
-    return target_element.nil? ? {} : container_element
+      }
+      
+      call_response = @savon_client.call(:ota_air_avail_rq, soap_action: "ns:OTA_AirAvailRQ", attributes: operation_attributes, message: @message_body)
+
+    rescue Savon::SOAPFault => error
+      puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
+      
+      return { status: :failed,  result: error.to_hash[:fault] }
+    else
+      origin_destination_options = (call_response.body[:ota_air_avail_rs])[:origin_destination_options]
+      
+      return { status: :success, result: origin_destination_options }
+    end  
   end
     
 end
