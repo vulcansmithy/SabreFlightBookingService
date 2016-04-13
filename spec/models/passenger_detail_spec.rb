@@ -67,7 +67,7 @@ RSpec.describe PassengerDetail, type: :model do
       :person_name_contact_info      => person_name_contact_info
     )
 
-    expect(result.empty?).to eq false
+    expect(result[:status]).to eq :success
   end  
   
 end

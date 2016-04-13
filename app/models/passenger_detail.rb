@@ -266,62 +266,70 @@ class PassengerDetail
     
     defaults = {}
     args.merge!(defaults)
-
-    # @TODO add error checking
-    document_advance_passenger    = args[:document_advance_passenger   ]   
-    person_name_advance_passenger = args[:person_name_advance_passenger]  
-    contact_number_contact_info   = args[:contact_number_contact_info  ]  
-    person_name_contact_info      = args[:person_name_contact_info     ]  
     
-    # @TODO add a mechanism for adding the above passed hash parameter as optional
-    @message_body = {
-      "v:PostProcessing" => {
-        :@IgnoreAfter          => "false",
-        :@RedisplayReservation => "true",
-      },
+    begin
+      # @TODO add error checking
+      document_advance_passenger    = args[:document_advance_passenger   ]   
+      person_name_advance_passenger = args[:person_name_advance_passenger]  
+      contact_number_contact_info   = args[:contact_number_contact_info  ]  
+      person_name_contact_info      = args[:person_name_contact_info     ]  
+    
+      # @TODO add a mechanism for adding the above passed hash parameter as optional
+      @message_body = {
+        "v:PostProcessing" => {
+          :@IgnoreAfter          => "false",
+          :@RedisplayReservation => "true",
+        },
   
-      "v:PreProcessing" => {
-        :@IgnoreBefore => "false",
-        "v:UniqueID"   => { :@ID => "" },
-      },
+        "v:PreProcessing" => {
+          :@IgnoreBefore => "false",
+          "v:UniqueID"   => { :@ID => "" },
+        },
 
-      "v:SpecialReqDetails" => {
-        "v:SpecialServiceRQ" => {
-          "v:SpecialServiceInfo" => {
-            "v:AdvancePassenger" => {
-             :@SegmentNumber => "A",
+        "v:SpecialReqDetails" => {
+          "v:SpecialServiceRQ" => {
+            "v:SpecialServiceInfo" => {
+              "v:AdvancePassenger" => {
+               :@SegmentNumber => "A",
               
-              "v:Document"    => document_advance_passenger,
-              "v:PersonName"  => person_name_advance_passenger,
-              "v:VendorPrefs" => { "v:Airline" => { :@Hosted => "false" } },
+                "v:Document"    => document_advance_passenger,
+                "v:PersonName"  => person_name_advance_passenger,
+                "v:VendorPrefs" => { "v:Airline" => { :@Hosted => "false" } },
+              },
             },
           },
         },
-      },
       
-      "v:TravelItineraryAddInfoRQ" => {
-        "v:AgencyInfo" => {
-          "v:Address"  => {
-            "v:AddressLine"     => "SABRE TRAVEL",
-            "v:CityName"        => "SOUTHLAKE",
-            "v:CountryCode"     => "US",
-            "v:PostalCode"      => "76092",     
-            "v:StateCountyProv" => { :@StateCode => "TX" },
-            "v:StreetNmbr"      => "3150 SABRE DRIVE", 
-            "v:VendorPrefs"     => { "v:Airline" => { :@Hosted => "true" } },
+        "v:TravelItineraryAddInfoRQ" => {
+          "v:AgencyInfo" => {
+            "v:Address"  => {
+              "v:AddressLine"     => "SABRE TRAVEL",
+              "v:CityName"        => "SOUTHLAKE",
+              "v:CountryCode"     => "US",
+              "v:PostalCode"      => "76092",     
+              "v:StateCountyProv" => { :@StateCode => "TX" },
+              "v:StreetNmbr"      => "3150 SABRE DRIVE", 
+              "v:VendorPrefs"     => { "v:Airline" => { :@Hosted => "true" } },
+            },
+          },
+          "v:CustomerInfo" => {
+            "v:ContactNumbers" => { "v:ContactNumber" => contact_number_contact_info , },
+            "v:PersonName"     => person_name_contact_info,
           },
         },
-        "v:CustomerInfo" => {
-          "v:ContactNumbers" => { "v:ContactNumber" => contact_number_contact_info , },
-          "v:PersonName"     => person_name_contact_info,
-        },
-      },
-    }
+      }
     
-    call_response  = @savon_client.call(:passenger_details_rq, soap_action: "v:PassengerDetailsRQ", attributes: operation_attributes, message: @message_body)
-    target_element = (call_response.body[:passenger_details_rs])[:travel_itinerary_read_rs]
+      call_response = @savon_client.call(:passenger_details_rq, soap_action: "v:PassengerDetailsRQ", attributes: operation_attributes, message: @message_body)
+      
+    rescue Savon::SOAPFault => error
+      puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
+      
+      return { status: :failed,  result: error.to_hash[:fault] }
+    else
+      travel_itinerary_read_rs = (call_response.body[:passenger_details_rs])[:travel_itinerary_read_rs]
 
-    return target_element.nil? ? {} : target_element
+      return { status: :success, result: travel_itinerary_read_rs }
+    end  
   end
 
 end
