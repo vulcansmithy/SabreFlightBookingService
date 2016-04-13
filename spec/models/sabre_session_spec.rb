@@ -39,8 +39,8 @@ RSpec.describe SabreSession, type: :model do
     result = session.establish_session
 
     expect(result[:status]).to eq :success
-    expect(result[:result][:binary_security_token].nil?).to   eq false
-    expect(result[:result][:binary_security_token].empty?).to eq false
+    expect(result[:data][:binary_security_token].nil?).to   eq false
+    expect(result[:data][:binary_security_token].empty?).to eq false
   end
   
   it "should be able to establish a session token from a production environment" do
@@ -48,8 +48,8 @@ RSpec.describe SabreSession, type: :model do
     result = session.establish_session
 
     expect(result[:status]).to eq :success
-    expect(result[:result][:binary_security_token].nil?).to   eq false
-    expect(result[:result][:binary_security_token].empty?).to eq false
+    expect(result[:data][:binary_security_token].nil?).to   eq false
+    expect(result[:data][:binary_security_token].empty?).to eq false
   end
   
 end

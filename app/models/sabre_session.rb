@@ -192,11 +192,11 @@ class SabreSession
       rescue Savon::SOAPFault => error
         puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
       
-        return { status: :failed,  result: error.to_hash[:fault] }
+        return { status: :failed,  error: error.to_hash[:fault] }
       else
         @binary_security_token = call_response.xpath("//wsse:BinarySecurityToken")[0].content 
 
-        return { status: :success, result: { binary_security_token: @binary_security_token} }  
+        return { status: :success, data: { binary_security_token: @binary_security_token} }  
       end
     end
     
