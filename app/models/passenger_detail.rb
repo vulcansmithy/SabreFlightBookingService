@@ -324,11 +324,11 @@ class PassengerDetail
     rescue Savon::SOAPFault => error
       puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
       
-      return { status: :failed,  result: error.to_hash[:fault] }
+      return { status: :failed,  error: error.to_hash[:fault] }
     else
       travel_itinerary_read_rs = (call_response.body[:passenger_details_rs])[:travel_itinerary_read_rs]
 
-      return { status: :success, result: travel_itinerary_read_rs }
+      return { status: :success, data: { travel_itinerary: travel_itinerary_read_rs } }
     end  
   end
 
