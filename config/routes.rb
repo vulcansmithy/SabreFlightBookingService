@@ -6,7 +6,8 @@ Rails.application.routes.draw do
       :header    => { :name   => "Accept",  :value => "application/vnd.deferointernational.com; version=1"}, 
       :parameter => { :name   => "version", :value => "1"}, 
       :path      => { :value  => "v1"                    }, 
-      :defaults  => { :format => "json"                  }) do
+      :defaults  => { :format => "json"                  },
+      :default   => true) do
       
         resource :sabre_session, :only => [] do
           post "create_session", to: "sabre_session#create_session"
