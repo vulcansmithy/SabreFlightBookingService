@@ -196,7 +196,7 @@ class SabreSession
       else
         @binary_security_token = call_response.xpath("//wsse:BinarySecurityToken")[0].content 
 
-        return { status: :success, data: { binary_security_token: @binary_security_token} }  
+        return { status: :success, data: { binary_security_token: @binary_security_token } }  
       end
     end
     
