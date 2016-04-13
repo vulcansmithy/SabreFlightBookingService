@@ -177,10 +177,10 @@ class EnhancedAirBook
     rescue Savon::SOAPFault => error
       puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
       
-      return { status: :failed,  result: error.to_hash[:fault] }
+      return { status: :failed,  error: error.to_hash[:fault] }
     else
       
-      return { status: :success, result: call_response.body[:enhanced_air_book_rs] }
+      return { status: :success, data: { enhanced_air_book: call_response.body[:enhanced_air_book_rs] }}
     end
   end
 

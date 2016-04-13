@@ -54,7 +54,7 @@ RSpec.describe EnhancedAirBook, type: :model do
     ]
 
     flight_segments = []
-    picked_result   = bargain_finder_max.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities).first
+    picked_result   = (bargain_finder_max.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities))[:data][:priced_itineraries].first
 
     BargainFinderMax.extract_air_itinerary(picked_result[:air_itinerary]).each do |origin_destionation_option|
       flight_segments << EnhancedAirBook.build_flight_segment_origin_destination_information(
