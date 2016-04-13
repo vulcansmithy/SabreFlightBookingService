@@ -199,7 +199,7 @@ class BargainFinderMax
     else
       priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
       
-      return priced_itineraries
+      return { status: :failed,  result: { priced_itineraries: priced_itineraries } }
     end      
   end
 
@@ -217,7 +217,7 @@ class BargainFinderMax
     else
       priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
       
-      return priced_itineraries
+      return { status: :failed,  result: { priced_itineraries: priced_itineraries } }
     end
   end
 
@@ -235,7 +235,7 @@ class BargainFinderMax
     else
       priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
       
-      return priced_itineraries
+      return { status: :failed,  result: { priced_itineraries: priced_itineraries } }
     end
   end
 

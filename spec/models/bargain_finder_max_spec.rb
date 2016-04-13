@@ -63,8 +63,8 @@ RSpec.describe BargainFinderMax, type: :model do
     end   
     puts "@DEBUG #{__LINE__}    elapse_seconds=#{elapse_seconds}"
 
-    expect(result.nil?).to   eq false
-    expect(result.empty?).to eq false
+    expect(result[:result][:priced_itineraries].nil?  ).to eq false
+    expect(result[:result][:priced_itineraries].empty?).to eq false
   end
     
   it "should be able to create a Air Availability request for multi sector/'Circle' trip using Bargain Finder Max" do
@@ -97,8 +97,8 @@ RSpec.describe BargainFinderMax, type: :model do
     end
     puts "@DEBUG #{__LINE__}    elapse_seconds=#{elapse_seconds}"  
   
-    expect(result.nil?).to   eq false
-    expect(result.empty?).to eq false
+    expect(result[:result][:priced_itineraries].nil?  ).to eq false
+    expect(result[:result][:priced_itineraries].empty?).to eq false
   end
   
   it "should be able to call BargainFinderMax.extract_air_itinerary and return an array of origin_destination_options" do
@@ -122,9 +122,10 @@ RSpec.describe BargainFinderMax, type: :model do
       bfm.build_passenger_type_and_quantity("INF", 1),
     ]
 
-    result = bfm.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities)
+    result           = bfm.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities)
+    target_itinerary = result[:result][:priced_itineraries].first
+    extracted_origin_destination_options = BargainFinderMax.extract_air_itinerary(target_itinerary[:air_itinerary])
     
-    extracted_origin_destination_options = BargainFinderMax.extract_air_itinerary((result.first)[:air_itinerary])
     expect(extracted_origin_destination_options.class).to eq Array
     expect(extracted_origin_destination_options.size).to  eq 1
     
@@ -143,9 +144,10 @@ RSpec.describe BargainFinderMax, type: :model do
       bfm.build_passenger_type_and_quantity("INF", 1),
     ]
     
-    result = bfm.air_availability_circle(origins_and_destinations, passenger_types_and_quantities)
+    result           = bfm.air_availability_circle(origins_and_destinations, passenger_types_and_quantities)
+    target_itinerary = result[:result][:priced_itineraries].first
+    extracted_origin_destination_options = BargainFinderMax.extract_air_itinerary(target_itinerary[:air_itinerary])
     
-    extracted_origin_destination_options = BargainFinderMax.extract_air_itinerary((result.first)[:air_itinerary])
     expect(extracted_origin_destination_options.class   ).to eq Array
     expect(extracted_origin_destination_options.size > 1).to eq true
   end  
