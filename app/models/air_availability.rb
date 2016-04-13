@@ -83,11 +83,11 @@ class AirAvailability
     rescue Savon::SOAPFault => error
       puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
       
-      return { status: :failed,  result: error.to_hash[:fault] }
+      return { status: :failed,  error: error.to_hash[:fault] }
     else
       origin_destination_options = (call_response.body[:ota_air_avail_rs])[:origin_destination_options]
       
-      return { status: :success, result: origin_destination_options }
+      return { status: :success, data: { origin_destination_options: origin_destination_options } }
     end  
   end
     
