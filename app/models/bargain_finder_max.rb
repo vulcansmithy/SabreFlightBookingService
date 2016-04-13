@@ -150,7 +150,7 @@ class BargainFinderMax
         :@Code     => entry[:passenger_type],
         :@Quantity => entry[:quantity      ],
       }
-      seats_requested += entry[:quantity]
+      seats_requested += (entry[:quantity]).to_i
     end
     
     return seats_requested, passenger_type_quantity_list
@@ -185,6 +185,7 @@ class BargainFinderMax
     return message_body 
   end  
 
+  # @TODO rename air_availability_one_way
   def air_availability_one_way(origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
 
     raise "No established 'savon_client' instance." if @savon_client.nil?
@@ -199,7 +200,7 @@ class BargainFinderMax
     else
       priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
       
-      return { status: :failed,  data: { priced_itineraries: priced_itineraries } }
+      return { status: :success, data: { priced_itineraries: priced_itineraries } }
     end      
   end
 
@@ -217,7 +218,7 @@ class BargainFinderMax
     else
       priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
       
-      return { status: :failed,  data: { priced_itineraries: priced_itineraries } }
+      return { status: :success, data: { priced_itineraries: priced_itineraries } }
     end
   end
 
@@ -235,7 +236,7 @@ class BargainFinderMax
     else
       priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
       
-      return { status: :failed,  data: { priced_itineraries: priced_itineraries } }
+      return { status: :success, data: { priced_itineraries: priced_itineraries } }
     end
   end
 
