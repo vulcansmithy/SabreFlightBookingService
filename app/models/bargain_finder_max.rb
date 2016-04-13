@@ -195,11 +195,11 @@ class BargainFinderMax
     rescue Savon::Error => error
       puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
       
-      return { status: :failed,  result: error.to_hash[:fault] }
+      return { status: :failed,  error: error.to_hash[:fault] }
     else
       priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
       
-      return { status: :failed,  result: { priced_itineraries: priced_itineraries } }
+      return { status: :failed,  data: { priced_itineraries: priced_itineraries } }
     end      
   end
 
@@ -213,11 +213,11 @@ class BargainFinderMax
     rescue Savon::Error => error
       puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
       
-      return { status: :failed,  result: error.to_hash[:fault] }
+      return { status: :failed,  error: error.to_hash[:fault] }
     else
       priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
       
-      return { status: :failed,  result: { priced_itineraries: priced_itineraries } }
+      return { status: :failed,  data: { priced_itineraries: priced_itineraries } }
     end
   end
 
@@ -231,11 +231,11 @@ class BargainFinderMax
     rescue Savon::Error => error
       puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
       
-      return { status: :failed,  result: error.to_hash[:fault] }
+      return { status: :failed,  error: error.to_hash[:fault] }
     else
       priced_itineraries = ((call_response.body[:ota_air_low_fare_search_rs])[:priced_itineraries])[:priced_itinerary]
       
-      return { status: :failed,  result: { priced_itineraries: priced_itineraries } }
+      return { status: :failed,  data: { priced_itineraries: priced_itineraries } }
     end
   end
 
