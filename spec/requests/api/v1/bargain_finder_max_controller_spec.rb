@@ -2,7 +2,7 @@ require "rails_helper"
 
 describe Api::V1::BargainFinderMaxController do
   
-  it "should do something" do
+  it "should be able to successfully call the BargainFinderMax API endpoint and return a set of itineraries" do
     
     # establish a new Sabre session
     post "/api/sabre_session/create_session"
