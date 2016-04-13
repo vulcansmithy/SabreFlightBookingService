@@ -1,7 +1,16 @@
 Rails.application.routes.draw do
   
   scope :path => "/api", as: "api" do
-    api_version(:module    => "Api::V1", :header    => { :name   => "Accept",  :value => "application/vnd.deferointernational.com; version=1"}, :parameter => { :name   => "version", :value => "1"}, :path      => { :value  => "v1"                    }, :defaults  => { :format => "json"                  }) do
+    api_version(
+      :module    => "Api::V1", 
+      :header    => { :name   => "Accept",  :value => "application/vnd.deferointernational.com; version=1"}, 
+      :parameter => { :name   => "version", :value => "1"}, 
+      :path      => { :value  => "v1"                    }, 
+      :defaults  => { :format => "json"                  }) do
+      
+        resource :sabre_session, :only => [] do
+          post "create_session", to: "sabre_session#create_session"
+        end
     end
   end  
   
