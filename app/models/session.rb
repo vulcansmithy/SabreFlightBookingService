@@ -48,7 +48,8 @@ class Session
 
     @non_production_environment = false
     
-    @message_body = {}
+    @message_body   = {}
+    @message_header = {}
   end              
 
   # == Instance methods =======================================================
@@ -62,7 +63,7 @@ class Session
     puts "@DEBUG #{__LINE__}    message_id..... #{message_id  }"
     puts "@DEBUG #{__LINE__}    timestamp...... #{timestamp   }"
     
-    message_header = {
+    @message_header = {
   
       "mes:MessageHeader" => {
         :@id      => "1",
@@ -104,9 +105,9 @@ class Session
       },
     }
     
-    puts "@DEBUG #{__LINE__}    #{Gyoku.xml(message_header)}"
+    puts "@DEBUG #{__LINE__}    #{Gyoku.xml(@message_header)}"
 
-    return message_header
+    return @message_header
   end  
   
   def establish_session
@@ -163,16 +164,16 @@ class Session
     
         @message_body = {
           "ns:POS" => {
-            "ns:Source" => {
-              :@PseudoCityCode => @ipcc,
-            },
+            "ns:Source" => { :@PseudoCityCode => @ipcc, },
           },          
         } 
+
+        @message_header = build_header(HEADER_ACTION_SESSION_CREATE_RQ)
 
         savon_client = Savon.client(
           wsdl:                    SESSION_CREATE_RQ_WSDL, 
           namespaces:              namespaces,
-          soap_header:             build_header(HEADER_ACTION_SESSION_CREATE_RQ),
+          soap_header:             @message_header,
           log:                     true, 
           log_level:               :debug, 
           pretty_print_xml:        true,
@@ -180,15 +181,20 @@ class Session
           namespace_identifier:    :ns,
         )
       
-        savon_client = self.set_endpoint_environment(savon_client)
-        response     = savon_client.call(:session_create_rq, soap_action: "ns:SessionCreateRQ", attributes: operation_attributes, message: @message_body)
+        savon_client  = self.set_endpoint_environment(savon_client)
+        call_response = savon_client.call(
+          :session_create_rq, 
+          soap_action: "ns:SessionCreateRQ", 
+          attributes:   operation_attributes, 
+          message:      @message_body
+        )
       
       rescue Savon::SOAPFault => error
         puts "@DEBUG #{__LINE__}    #{ap error.to_hash[:fault]}"
       
         return { status: :failed,  result: error.to_hash[:fault] }
       else
-        @binary_security_token = response.xpath("//wsse:BinarySecurityToken")[0].content 
+        @binary_security_token = call_response.xpath("//wsse:BinarySecurityToken")[0].content 
 
         return { status: :success, result: { binary_security_token: @binary_security_token} }  
       end
