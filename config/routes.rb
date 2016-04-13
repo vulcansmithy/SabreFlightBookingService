@@ -14,7 +14,7 @@ Rails.application.routes.draw do
         end
         
         resource :bargain_finder_max, :only => [] do
-          post "execute_bargain_finder_max_one_way", to: "bargain_finder_max#execute_bargain_finder_max_one_way"
+          get  "execute_bargain_finder_max_one_way", to: "bargain_finder_max#execute_bargain_finder_max_one_way"
         end
   
     end

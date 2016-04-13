@@ -8,10 +8,10 @@ class Api::V1::BargainFinderMaxController < Api::V1::BaseController
   UNABLE_TO_DO_A_BARGAIN_FINDER_MAX_REQUEST            = "Something went wrong. Was not able to execute a Bargain Finder Max request."
   
   # == API Endpoints ==========================================================
-  # POST /api/bargain_finder_max/execute_bargain_finder_max_one_way
-  # POST /api/bargain_finder_max/execute_bargain_finder_max_one_way, {}, { "Accept" => "application/vnd.deferointernational.com; version=1" }
-  # POST /api/bargain_finder_max/execute_bargain_finder_max_one_way?version=1
-  # POST /api/v1/bargain_finder_max/execute_bargain_finder_max_one_way
+  # GET  /api/bargain_finder_max/execute_bargain_finder_max_one_way
+  # GET  /api/bargain_finder_max/execute_bargain_finder_max_one_way, {}, { "Accept" => "application/vnd.deferointernational.com; version=1" }
+  # GET  /api/bargain_finder_max/execute_bargain_finder_max_one_way?version=1
+  # GET  /api/v1/bargain_finder_max/execute_bargain_finder_max_one_way
   def execute_bargain_finder_max_one_way
     
     raise MISSING_REQUIRED_SABRE_SESSION_TOKEN if params[:sabre_session_token].nil?

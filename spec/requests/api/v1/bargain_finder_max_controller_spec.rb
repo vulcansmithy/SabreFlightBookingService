@@ -16,7 +16,7 @@ describe Api::V1::BargainFinderMaxController do
     }
     
     # call the Bargain Finder Max API endpoint
-    post "/api/bargain_finder_max/execute_bargain_finder_max_one_way", payload
+    get "/api/bargain_finder_max/execute_bargain_finder_max_one_way", payload
     expect(response.code).to eq "200"
     
     priced_itineraries = JSON.parse(response.body)["priced_itineraries"]
