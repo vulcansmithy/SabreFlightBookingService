@@ -9,7 +9,7 @@ describe Api::V1::SabreSessionController do
     
     expect(response.code).to eq "201"
 
-    binary_security_token = response.body["binary_security_token"]
+    binary_security_token = JSON.parse(response.body)["binary_security_token"]
     expect(binary_security_token.nil?).to eq false
     
     puts "@DEBUG #{__LINE__}    binary_security_token='#{binary_security_token}'"
