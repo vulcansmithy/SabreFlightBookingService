@@ -52,4 +52,19 @@ RSpec.describe SabreSession, type: :model do
     expect(result[:data][:binary_security_token].empty?).to eq false
   end
   
+  it "should be able to pass an existing session token and create a new instance of a new SabreSession object with an existing Sabre Session Token" do
+  
+    original_session = SabreSession.new
+    original_session.set_to_non_production
+    result = original_session.establish_session
+    expect(result[:status]).to eq :success
+    
+    duplicate_session = SabreSession.new
+    duplicate_session.set_to_non_production
+    result = duplicate_session.establish_session(original_session.binary_security_token)
+    expect(result[:status]).to eq :success
+    
+    expect(original_session.binary_security_token == duplicate_session.binary_security_token).to eq true
+  end
+
 end

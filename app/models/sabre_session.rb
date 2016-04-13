@@ -110,8 +110,8 @@ class SabreSession
     return @message_header
   end  
   
-  def establish_session
-    create_session_token
+  def establish_session(existing_binary_security_token=nil)
+    create_session_token(existing_binary_security_token)
   end  
   
   def re_establish_session
@@ -153,7 +153,7 @@ class SabreSession
 
   # == Private methods ========================================================
   private
-    def create_session_token
+    def create_session_token(existing_binary_security_token=nil)
       begin
         namespaces = {
           "xmlns:env" => "http://schemas.xmlsoap.org/soap/envelope/", 
@@ -168,7 +168,7 @@ class SabreSession
           },          
         } 
 
-        @message_header = build_header(HEADER_ACTION_SESSION_CREATE_RQ)
+        @message_header = build_header(HEADER_ACTION_SESSION_CREATE_RQ, existing_binary_security_token)
 
         savon_client = Savon.client(
           wsdl:                    SESSION_CREATE_RQ_WSDL, 
