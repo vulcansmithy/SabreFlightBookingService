@@ -4,7 +4,7 @@ RSpec.describe PassengerDetail, type: :model do
   
   it "should be able to receive :passenger_details_rq when executing available_operations" do
     
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     
@@ -18,7 +18,7 @@ RSpec.describe PassengerDetail, type: :model do
 
   it "should be able to execute a PassengerDetailRQ" do
     
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     

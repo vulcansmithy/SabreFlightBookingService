@@ -4,7 +4,7 @@ RSpec.describe EnhancedAirBook, type: :model do
   
   it "should be able to execute EnhancedAirBookRQ request" do
     
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     
@@ -32,7 +32,7 @@ RSpec.describe EnhancedAirBook, type: :model do
   
   it "should be able to execute an EnhancedAirBookRQ request of a 'OneWay' trip type" do
 
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     

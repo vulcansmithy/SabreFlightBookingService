@@ -4,7 +4,7 @@ RSpec.describe AirAvailability, type: :model do
   
   it "should be able to execute OTA_AirAvailLLSRQ request" do
     
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     

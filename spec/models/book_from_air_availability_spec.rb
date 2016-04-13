@@ -4,7 +4,7 @@ RSpec.describe BookFromAirAvailability, type: :model do
 
   it "should be able to find :short_sell_rq SOAP operation" do
     
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     
@@ -18,7 +18,7 @@ RSpec.describe BookFromAirAvailability, type: :model do
     
   it "should execute booking" do
     
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     

@@ -5,7 +5,7 @@ RSpec.describe BargainFinderMax, type: :model do
 
   it "should be able to create a Air Availability request for 'One Way' trip using Bargain Finder Max" do
 
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     
@@ -36,7 +36,7 @@ RSpec.describe BargainFinderMax, type: :model do
   
   it "should be able to create a Air Availability request for 'Return' trip using Bargain Finder Max" do
 
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     session.establish_session
     result = session.establish_session
@@ -69,7 +69,7 @@ RSpec.describe BargainFinderMax, type: :model do
     
   it "should be able to create a Air Availability request for multi sector/'Circle' trip using Bargain Finder Max" do
 
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     
@@ -103,7 +103,7 @@ RSpec.describe BargainFinderMax, type: :model do
   
   it "should be able to call BargainFinderMax.extract_air_itinerary and return an array of origin_destination_options" do
 
-    session = Session.new
+    session = SabreSession.new
     session.set_to_non_production
     result = session.establish_session
     
