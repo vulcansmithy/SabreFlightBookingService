@@ -6,7 +6,9 @@ RSpec.describe AirAvailability, type: :model do
     
     session = Session.new
     session.set_to_non_production
-    session.establish_session
+    result = session.establish_session
+    
+    expect(result[:status]).to eq :success
     
     air_availability = AirAvailability.new
     air_availability.establish_connection(session)

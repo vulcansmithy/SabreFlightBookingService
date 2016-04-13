@@ -6,7 +6,9 @@ RSpec.describe PassengerDetail, type: :model do
     
     session = Session.new
     session.set_to_non_production
-    session.establish_session
+    result = session.establish_session
+    
+    expect(result[:status]).to eq :success
     
     passenger_detail = PassengerDetail.new
     passenger_detail.establish_connection(session)
@@ -18,7 +20,9 @@ RSpec.describe PassengerDetail, type: :model do
     
     session = Session.new
     session.set_to_non_production
-    session.establish_session
+    result = session.establish_session
+    
+    expect(result[:status]).to eq :success
     
     passenger_detail = PassengerDetail.new
     passenger_detail.establish_connection(session)

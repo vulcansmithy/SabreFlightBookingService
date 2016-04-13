@@ -36,20 +36,20 @@ RSpec.describe Session, type: :model do
   it "should be able to establish a session token from a non-production environment" do
     session = Session.new
     session.set_to_non_production
-    call_response = session.establish_session
+    result = session.establish_session
 
-    expect(call_response[:status]).to eq :success
-    expect(call_response[:result][:binary_security_token].nil?).to   eq false
-    expect(call_response[:result][:binary_security_token].empty?).to eq false
+    expect(result[:status]).to eq :success
+    expect(result[:result][:binary_security_token].nil?).to   eq false
+    expect(result[:result][:binary_security_token].empty?).to eq false
   end
   
   it "should be able to establish a session token from a production environment" do
     session = Session.new
-    call_response = session.establish_session
+    result = session.establish_session
 
-    expect(call_response[:status]).to eq :success
-    expect(call_response[:result][:binary_security_token].nil?).to   eq false
-    expect(call_response[:result][:binary_security_token].empty?).to eq false
+    expect(result[:status]).to eq :success
+    expect(result[:result][:binary_security_token].nil?).to   eq false
+    expect(result[:result][:binary_security_token].empty?).to eq false
   end
   
 end

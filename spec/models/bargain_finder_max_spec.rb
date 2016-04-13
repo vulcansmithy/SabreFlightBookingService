@@ -7,7 +7,9 @@ RSpec.describe BargainFinderMax, type: :model do
 
     session = Session.new
     session.set_to_non_production
-    session.establish_session
+    result = session.establish_session
+    
+    expect(result[:status]).to eq :success
     
     bfm = BargainFinderMax.new
     bfm.establish_connection(session)
@@ -37,6 +39,9 @@ RSpec.describe BargainFinderMax, type: :model do
     session = Session.new
     session.set_to_non_production
     session.establish_session
+    result = session.establish_session
+    
+    expect(result[:status]).to eq :success    
     
     bfm = BargainFinderMax.new
     bfm.establish_connection(session)
@@ -66,8 +71,9 @@ RSpec.describe BargainFinderMax, type: :model do
 
     session = Session.new
     session.set_to_non_production
-    session.establish_session
+    result = session.establish_session
     
+    expect(result[:status]).to eq :success
     
     bfm = BargainFinderMax.new
     bfm.establish_connection(session)
@@ -99,7 +105,9 @@ RSpec.describe BargainFinderMax, type: :model do
 
     session = Session.new
     session.set_to_non_production
-    session.establish_session
+    result = session.establish_session
+    
+    expect(result[:status]).to eq :success
     
     bfm = BargainFinderMax.new
     bfm.establish_connection(session)

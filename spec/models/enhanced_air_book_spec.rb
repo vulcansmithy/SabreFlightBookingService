@@ -2,12 +2,13 @@ require "rails_helper"
 
 RSpec.describe EnhancedAirBook, type: :model do
   
-=begin  
   it "should be able to execute EnhancedAirBookRQ request" do
     
     session = Session.new
     session.set_to_non_production
-    session.establish_session
+    result = session.establish_session
+    
+    expect(result[:status]).to eq :success
     
     enhanced_air_book = EnhancedAirBook.new
     enhanced_air_book.establish_connection(session)
@@ -28,13 +29,14 @@ RSpec.describe EnhancedAirBook, type: :model do
     response = enhanced_air_book.execute_enhanced_air_book(flight_segments: flight_segments)
     expect(response[:status]).to eq :success
   end  
-=end
   
   it "should be able to execute an EnhancedAirBookRQ request of a 'OneWay' trip type" do
 
     session = Session.new
     session.set_to_non_production
-    session.establish_session
+    result = session.establish_session
+    
+    expect(result[:status]).to eq :success
   
   
     ##
