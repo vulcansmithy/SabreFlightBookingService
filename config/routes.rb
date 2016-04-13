@@ -1,13 +1,8 @@
 Rails.application.routes.draw do
   
   scope :path => "/api", as: "api" do
-    api_version(
-      :module    => "Api::V1", 
-      :header    => { :name   => "Accept",  :value => "application/vnd.deferointernational.com; version=1"}, 
-      :parameter => { :name   => "version", :value => "1"}, 
-      :path      => { :value  => "v1"                    }, 
-      :defaults  => { :format => "json"                  },
-      :default   => true) do
+    api_version(:module    => "Api::V1", :header    => { :name   => "Accept",  :value => "application/vnd.deferointernational.com; version=1"}, :parameter => { :name   => "version", :value => "1"}, :path      => { :value  => "v1"                    }, :defaults  => { :format => "json"                  },:default   => true) do
+    
       
         resource :sabre_session, :only => [] do
           post "create_session", to: "sabre_session#create_session"
@@ -17,6 +12,9 @@ Rails.application.routes.draw do
           get  "execute_bargain_finder_max_one_way", to: "bargain_finder_max#execute_bargain_finder_max_one_way"
         end
   
+        resource :passenger_detail, :only => [] do
+          post "execute_passenger_detail", to: "passenger_detail#execute_passenger_detail"
+        end
     end
   end  
   
