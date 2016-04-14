@@ -21,19 +21,15 @@ class Api::V1::PassengerDetailController < Api::V1::BaseController
     
     raise MISSING_REQUIRED_DOCUMENT_ADVANCE_PASSENGER_INFO if params[:document_advance_passenger].nil?
     document_advance_passenger = params[:document_advance_passenger]
-    puts "@DEBUG #{__LINE__}    document_advance_passenger=#{ap document_advance_passenger}"
 
     raise MISSING_REQUIRED_PERSON_NAME_ADVANCE_PASSENGER_INFO if params[:person_name_advance_passenger].nil?
     person_name_advance_passenger = params[:person_name_advance_passenger]
-    puts "@DEBUG #{__LINE__}    person_name_advance_passenger=#{ap person_name_advance_passenger}"
     
     raise MISSING_REQUIRED_CONTACT_NUMBER_CONTACT_INFO if params[:contact_number_contact_info].nil?
     contact_number_contact_info = params[:contact_number_contact_info]
-    puts "@DEBUG #{__LINE__}    contact_number_contact_info=#{ap contact_number_contact_info}"
     
     raise MISSING_REQUIRED_PERSON_NAME_CONTACT_INFO if params[:person_name_contact_info].nil?
     person_name_contact_info = params[:person_name_contact_info]
-    puts "@DEBUG #{__LINE__}    person_name_contact_info=#{ap person_name_contact_info}"
     
     session = SabreSession.new 
     session.set_to_non_production
