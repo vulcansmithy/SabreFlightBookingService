@@ -1,7 +1,7 @@
 class Api::V1::SabreSessionController < Api::V1::BaseController
   
   # == Constants ==============================================================
-  SABRE_SESSION_WAS_NOT_CREATED = "Request failed. Sabre Session was not able  to be created."
+  SABRE_SESSION_CREATION_UNSUCCESSFUL = "Request unsuccessful. Unable to create a Sabre Session."
   
   # == API Endpoints ==========================================================
   # POST /api/sabre_session/create_session
@@ -21,7 +21,7 @@ class Api::V1::SabreSessionController < Api::V1::BaseController
     if call_result[:status] == :success
       success_response(call_result[:data], :created)  
     else
-      error_response(SABRE_SESSION_WAS_NOT_CREATED, :bad_request)  
+      error_response(SABRE_SESSION_CREATION_UNSUCCESSFUL, :bad_request)  
     end
   end  
   
