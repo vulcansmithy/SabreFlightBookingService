@@ -259,7 +259,7 @@ class PassengerDetail
   # @option args [String] :contact_number_contact_info "contact_number_contact_info" is a hash for the ContactNumber section that is under the ContactInfo section. 
   # @option args [String] :person_name_contact_info "person_name_contact_info" is a hash for the PersonName section that is under the ContactInfo section. 
   # @return args [Hash] Return a hash representing the content of the TravelItineraryReadRS returned by Sabre.
-  def execute_passenger_detail(args)
+  def execute_request(args)
     
     # Naming convention for keys for the passed hash is [section]_[parent senction], e.g. document_advance_passenger. 
     # Document is the target section. AdvancePassenger is the parent section.

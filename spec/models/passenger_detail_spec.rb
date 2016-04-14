@@ -60,7 +60,7 @@ RSpec.describe PassengerDetail, type: :model do
       :Surname        => person_name_advance_passenger[:Surname  ],
     ) 
     
-    result = passenger_detail.execute_passenger_detail(
+    result = passenger_detail.execute_request(
       :document_advance_passenger    => document_advance_passenger,
       :person_name_advance_passenger => person_name_advance_passenger,
       :contact_number_contact_info   => contact_number_contact_info,

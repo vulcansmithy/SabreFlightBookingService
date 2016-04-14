@@ -26,7 +26,7 @@ RSpec.describe EnhancedAirBook, type: :model do
       :@LocationCodeOriginLocation      => "MNL",
     )
     
-    response = enhanced_air_book.execute_enhanced_air_book(flight_segments: flight_segments)
+    response = enhanced_air_book.execute_request(flight_segments: flight_segments)
     expect(response[:status]).to eq :success
   end  
   
@@ -109,7 +109,7 @@ RSpec.describe EnhancedAirBook, type: :model do
       :Surname        => person_name_advance_passenger[:Surname  ],
     ) 
     
-    passenger_detail_result = passenger_detail.execute_passenger_detail(
+    passenger_detail_result = passenger_detail.execute_request(
       :document_advance_passenger    => document_advance_passenger,
       :person_name_advance_passenger => person_name_advance_passenger,
       :contact_number_contact_info   => contact_number_contact_info,
@@ -124,7 +124,7 @@ RSpec.describe EnhancedAirBook, type: :model do
     enhanced_air_book = EnhancedAirBook.new
     enhanced_air_book.establish_connection(session)
     
-    response = enhanced_air_book.execute_enhanced_air_book(flight_segments: flight_segments)
+    response = enhanced_air_book.execute_request(flight_segments: flight_segments)
     expect(response[:status]).to eq :success
   end  
   

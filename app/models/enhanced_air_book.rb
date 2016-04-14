@@ -135,7 +135,7 @@ class EnhancedAirBook
     return attributes
   end
   
-  def execute_enhanced_air_book(args)
+  def execute_request(args)
     defaults = {}
     args.merge!(defaults)
     

@@ -26,7 +26,7 @@ class Api::V1::EnhancedAirBookController < Api::V1::BaseController
     enhanced_air_book = EnhancedAirBook.new
     enhanced_air_book.establish_connection(session)
     
-    call_result = enhanced_air_book.execute_enhanced_air_book(flight_segments: flight_segments)
+    call_result = enhanced_air_book.execute_request(flight_segments: flight_segments)
     
     if call_result[:status] == :success
       success_response(call_result[:data], :created)  

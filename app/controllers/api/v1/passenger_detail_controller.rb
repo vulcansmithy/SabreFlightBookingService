@@ -38,7 +38,7 @@ class Api::V1::PassengerDetailController < Api::V1::BaseController
     passenger_detail = PassengerDetail.new
     passenger_detail.establish_connection(session)
     
-    call_result = passenger_detail.execute_passenger_detail(
+    call_result = passenger_detail.execute_request(
       :document_advance_passenger    => document_advance_passenger,
       :person_name_advance_passenger => person_name_advance_passenger,
       :contact_number_contact_info   => contact_number_contact_info,
