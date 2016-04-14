@@ -1,8 +1,8 @@
 class Api::V1::EnhancedAirBookController < Api::V1::BaseController
   
   # == Constants ==============================================================
-  MISSING_REQUIRED_FLIGHT_SEGMENT_INFO      = "Missing required flight segment(s) information."
-  UNABLE_TO_DO_AN_ENHANCED_AIR_BOOK_REQUEST = "Request failed. Was not able to execute an Enhanced Air Book request."
+  MISSING_FLIGHT_SEGMENTS_PARAMS         = "'flight_segments' parameters where not passed. Said parameters are required parameters."   
+  ENHANCED_AIR_BOOK_REQUEST_UNSUCCESSFUL = "Request failed. Unable to perform EnhancedAirBook request."
   
   # == API Endpoints ==========================================================
   # POST /api/enhanced_air_book/execute_enhanced_air_book
@@ -14,7 +14,7 @@ class Api::V1::EnhancedAirBookController < Api::V1::BaseController
     raise MISSING_REQUIRED_SABRE_SESSION_TOKEN if params[:sabre_session_token].nil?
     sabre_session_token = params[:sabre_session_token]
     
-    raise MISSING_REQUIRED_DOCUMENT_ADVANCE_PASSENGER_INFO if params[:flight_segments].nil?
+    raise MISSING_FLIGHT_SEGMENTS_PARAMS if params[:flight_segments].nil?
     flight_segments = params[:flight_segments]
 
     session = SabreSession.new 
@@ -31,7 +31,7 @@ class Api::V1::EnhancedAirBookController < Api::V1::BaseController
     if call_result[:status] == :success
       success_response(call_result[:data], :created)  
     else
-      error_response(UNABLE_TO_DO_AN_ENHANCED_AIR_BOOK_REQUEST, :bad_request)  
+      error_response(ENHANCED_AIR_BOOK_REQUEST_UNSUCCESSFUL, :bad_request)  
     end 
   end  
   
