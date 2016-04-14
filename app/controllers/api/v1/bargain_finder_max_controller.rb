@@ -23,18 +23,12 @@ class Api::V1::BargainFinderMaxController < Api::V1::BaseController
     raise MISSING_REQUIRED_PASSENGER_TYPES_AND_QUANTITIES_INFO if params[:passenger_types_and_quantities].nil?
     passenger_types_and_quantities = params[:passenger_types_and_quantities]
 
-
-    # instantiate a new SabreSession object
     session = SabreSession.new 
-    
-    # for now, set it to non-production
     session.set_to_non_production
     
-    # connect to Sabre and wrap the new session to an existing Sabre session token
     call_result = session.establish_session(sabre_session_token)
     raise UNABLE_TO_ESTABLISH_A_SABRE_SESSION if call_result[:status] == :failed
     
-    # instantiate a new BargainFinderMax object
     bargain_finder_max = BargainFinderMax.new
     bargain_finder_max.establish_connection(session)
     
