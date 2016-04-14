@@ -2,10 +2,10 @@ class Api::V1::BargainFinderMaxController < Api::V1::BaseController
   
   # == Constants ==============================================================
   MISSING_REQUIRED_SABRE_SESSION_TOKEN                 = "Missing required Sabre session token."
+  UNABLE_TO_ESTABLISH_A_SABRE_SESSION                  = "Was not able to establish a Sabre Session."
   MISSING_REQUIRED_ORIGIN_AND_DESTINATION_INFO         = "Missing required origin and destination information."
   MISSING_REQUIRED_PASSENGER_TYPES_AND_QUANTITIES_INFO = "Missing required passenger types and quantities information."
-  WAS_NOT_ABLE_TO_ESTABLISH_A_SABRE_SESSION            = "Wasn't able to establish a Sabre Session."
-  UNABLE_TO_DO_A_BARGAIN_FINDER_MAX_REQUEST            = "Something went wrong. Was not able to execute a Bargain Finder Max request."
+  UNABLE_TO_DO_A_BARGAIN_FINDER_MAX_REQUEST            = "Request failed. Was not able to execute a Bargain Finder Max request."
   
   # == API Endpoints ==========================================================
   # GET  /api/bargain_finder_max/execute_bargain_finder_max_one_way
@@ -32,7 +32,7 @@ class Api::V1::BargainFinderMaxController < Api::V1::BaseController
     
     # connect to Sabre and wrap the new session to an existing Sabre session token
     call_result = session.establish_session(sabre_session_token)
-    raise WAS_NOT_ABLE_TO_ESTABLISH_A_SABRE_SESSION if call_result[:status] == :failed
+    raise UNABLE_TO_ESTABLISH_A_SABRE_SESSION if call_result[:status] == :failed
     
     # instantiate a new BargainFinderMax object
     bargain_finder_max = BargainFinderMax.new
