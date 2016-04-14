@@ -1,8 +1,8 @@
 class Api::V1::EnhancedAirBookController < Api::V1::BaseController
   
   # == Constants ==============================================================
-  MISSING_FLIGHT_SEGMENTS_PARAMS         = "'flight_segments' parameters where not passed. Said parameters are required parameters."   
-  ENHANCED_AIR_BOOK_REQUEST_UNSUCCESSFUL = "Request failed. Unable to perform EnhancedAirBook request."
+  MISSING_FLIGHT_SEGMENTS_PARAMS         = "'flight_segments' parameters where not passed. Said parameter is a required parameter."   
+  ENHANCED_AIR_BOOK_REQUEST_UNSUCCESSFUL = "Request unsuccessful. Unable to perform EnhancedAirBook request."
   
   # == API Endpoints ==========================================================
   # POST /api/enhanced_air_book/execute_enhanced_air_book

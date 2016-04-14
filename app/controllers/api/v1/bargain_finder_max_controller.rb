@@ -1,9 +1,9 @@
 class Api::V1::BargainFinderMaxController < Api::V1::BaseController
   
   # == Constants ==============================================================
-  MISSING_ORIGIN_AND_DESTINATION_PARAMS         = "'origin_and_destination' parameters where not passed. Said parameters are required parameters."
-  MISSING_PASSENGER_TYPES_AND_QUATITIES_PARAMS  = "'passenger_types_and_quantities' parameters where not passed. Said parameters are required parameters. "
-  BARGAIN_FINDER_MAX_REQUEST_UNSUCCESSFUL       = "Request failed. Unable to perform BargainFinderMax request."
+  MISSING_ORIGIN_AND_DESTINATION_PARAMS         = "'origin_and_destination' parameters where not passed. Said parameter is a required parameter."
+  MISSING_PASSENGER_TYPES_AND_QUATITIES_PARAMS  = "'passenger_types_and_quantities' parameters where not passed. Said parameter is a required parameter."
+  BARGAIN_FINDER_MAX_REQUEST_UNSUCCESSFUL       = "Request unsuccessful. Unable to perform BargainFinderMax request."
   
   # == API Endpoints ==========================================================
   # GET  /api/bargain_finder_max/execute_bargain_finder_max_one_way

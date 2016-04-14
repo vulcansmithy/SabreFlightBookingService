@@ -1,11 +1,11 @@
 class Api::V1::PassengerDetailController < Api::V1::BaseController
   
   # == Constants ==============================================================
-  MISSING_DOCUMENT_ADVANCE_PASSENGER_PARAMS    = "'document_advance_passenger' parameters where not passed. Said parameters are required parameters."   
-  MISSING_PERSON_NAME_ADVANCE_PASSENGER_PARAMS = "'person_name_advance_passenger' parameters where not passed. Said parameters are required parameters."      
-  MISSING_CONTACT_NUMBER_CONTACT_INFO_PARAMS   = "'contact_number_contact_info' parameters where not passed. Said parameters are required parameters."   
-  MISSING_PERSON_NAME_CONTACT_INFO_PARAMS      = "'person_name_contact_info' parameters where not passed. Said parameters are required parameters."  
-  PASSENGER_DETAIL_REQUEST_UNSUCCESSFUL        = "Request failed. Unable to perform PassengerDetail request."  
+  MISSING_DOCUMENT_ADVANCE_PASSENGER_PARAMS    = "'document_advance_passenger' parameters where not passed. Said parameter is a required parameter."   
+  MISSING_PERSON_NAME_ADVANCE_PASSENGER_PARAMS = "'person_name_advance_passenger' parameters where not passed. Said parameter is a required parameter."      
+  MISSING_CONTACT_NUMBER_CONTACT_INFO_PARAMS   = "'contact_number_contact_info' parameters where not passed. Said parameter is a required parameter."   
+  MISSING_PERSON_NAME_CONTACT_INFO_PARAMS      = "'person_name_contact_info' parameters where not passed. Said parameter is a required parameter."  
+  PASSENGER_DETAIL_REQUEST_UNSUCCESSFUL        = "Request unsuccessful. Unable to perform PassengerDetail request."  
 
   # == API Endpoints ==========================================================
   # POST /api/passenger_detail/execute_passenger_detail
