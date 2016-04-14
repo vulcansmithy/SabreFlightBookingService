@@ -1,5 +1,9 @@
 class Api::V1::BaseController < ApplicationController
   
+  # == Constants ==============================================================
+  MISSING_REQUIRED_SABRE_SESSION_TOKEN = "Missing required Sabre session token."
+  UNABLE_TO_ESTABLISH_A_SABRE_SESSION  = "Was not able to establish a Sabre Session."
+  
   # == Instance methods =======================================================
   def success_response(data, status_code=:ok)
     render json: data, status: status_code

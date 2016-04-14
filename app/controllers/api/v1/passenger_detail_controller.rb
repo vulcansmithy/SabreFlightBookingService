@@ -1,8 +1,6 @@
 class Api::V1::PassengerDetailController < Api::V1::BaseController
   
   # == Constants ==============================================================
-  MISSING_REQUIRED_SABRE_SESSION_TOKEN                = "Missing required Sabre session token."
-  UNABLE_TO_ESTABLISH_A_SABRE_SESSION                 = "Was not able to establish a Sabre Session."
   MISSING_REQUIRED_DOCUMENT_ADVANCE_PASSENGER_INFO    = "Missing required document advance passenger information."
   MISSING_REQUIRED_PERSON_NAME_ADVANCE_PASSENGER_INFO = "Missing required person name advance passenger information."  
   MISSING_REQUIRED_CONTACT_NUMBER_CONTACT_INFO        = "Missing required contact number contact information."

@@ -16,6 +16,7 @@ describe Api::V1::PassengerDetailController do
       :person_name_contact_info      => { :@Infant         => "false",      :@NameNumber     => "1.1",          :@PassengerType => "ADT", :GivenName    => "Charles", :Surname            => "Finley"                                                  }, 
     }
     
+    # call the Passenger Detail API endpoint
     post "/api/passenger_detail/execute_passenger_detail", payload
     expect(response.code).to eq "201"
     

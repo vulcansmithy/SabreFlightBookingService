@@ -8,7 +8,6 @@ describe Api::V1::BargainFinderMaxController do
     post "/api/sabre_session/create_session"
     expect(response.code).to eq "201"
 
-    # setup the payload
     payload = { 
       sabre_session_token:            JSON.parse(response.body)["binary_security_token"],
       origin_and_destination:         [{ departure_date_time: "2016-06-05T00:00:00", origin_location: "MNL",  destination_location:  "SIN" }],

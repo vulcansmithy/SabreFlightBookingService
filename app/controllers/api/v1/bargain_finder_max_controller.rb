@@ -1,8 +1,6 @@
 class Api::V1::BargainFinderMaxController < Api::V1::BaseController
   
   # == Constants ==============================================================
-  MISSING_REQUIRED_SABRE_SESSION_TOKEN                 = "Missing required Sabre session token."
-  UNABLE_TO_ESTABLISH_A_SABRE_SESSION                  = "Was not able to establish a Sabre Session."
   MISSING_REQUIRED_ORIGIN_AND_DESTINATION_INFO         = "Missing required origin and destination information."
   MISSING_REQUIRED_PASSENGER_TYPES_AND_QUANTITIES_INFO = "Missing required passenger types and quantities information."
   UNABLE_TO_DO_A_BARGAIN_FINDER_MAX_REQUEST            = "Request failed. Was not able to execute a Bargain Finder Max request."
