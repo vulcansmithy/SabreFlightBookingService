@@ -11,22 +11,22 @@ RSpec.describe BargainFinderMax, type: :model do
     
     expect(result[:status]).to eq :success
     
-    bfm = BargainFinderMax.new
-    bfm.establish_connection(session)
-
     origins_and_destinations = [
-      bfm.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
+      BargainFinderMax.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
     ]
     
     passenger_types_and_quantities = [
-      bfm.build_passenger_type_and_quantity("ADT", 1),
-      bfm.build_passenger_type_and_quantity("CNN", 1),
-      bfm.build_passenger_type_and_quantity("INF", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("ADT", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("CNN", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("INF", 1),
     ]
+
+    bargain_finder_max = BargainFinderMax.new
+    bargain_finder_max.establish_connection(session)
 
     result = nil
     elapse_seconds = Benchmark.realtime do  
-      result = bfm.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities)
+      result = bargain_finder_max.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities)
     end  
     puts "@DEBUG #{__LINE__}    elapse_seconds=#{elapse_seconds}"
     
@@ -43,23 +43,23 @@ RSpec.describe BargainFinderMax, type: :model do
     
     expect(result[:status]).to eq :success    
     
-    bfm = BargainFinderMax.new
-    bfm.establish_connection(session)
-    
     origins_and_destinations = [
-      bfm.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "LHR"),
-      bfm.build_origin_and_destination("2016-06-05T00:00:00", "LHR", "MNL"),
+      BargainFinderMax.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "LHR"),
+      BargainFinderMax.build_origin_and_destination("2016-06-05T00:00:00", "LHR", "MNL"),
     ]
     
     passenger_types_and_quantities = [
-      bfm.build_passenger_type_and_quantity("ADT", 1),
-      bfm.build_passenger_type_and_quantity("CNN", 1),
-      bfm.build_passenger_type_and_quantity("INF", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("ADT", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("CNN", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("INF", 1),
     ]
-
+    
+    bargain_finder_max = BargainFinderMax.new
+    bargain_finder_max.establish_connection(session)
+    
     result = nil  
     elapse_seconds = Benchmark.realtime do  
-      result = bfm.air_availability_return(origins_and_destinations, passenger_types_and_quantities)
+      result = bargain_finder_max.air_availability_return(origins_and_destinations, passenger_types_and_quantities)
     end   
     puts "@DEBUG #{__LINE__}    elapse_seconds=#{elapse_seconds}"
 
@@ -75,25 +75,25 @@ RSpec.describe BargainFinderMax, type: :model do
     
     expect(result[:status]).to eq :success
     
-    bfm = BargainFinderMax.new
-    bfm.establish_connection(session)
-    
     origins_and_destinations = [
-      bfm.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
-      bfm.build_origin_and_destination("2016-06-22T00:00:00", "SIN", "CGK"),
-      bfm.build_origin_and_destination("2016-06-24T00:00:00", "CGK", "BKK"),
-      bfm.build_origin_and_destination("2016-06-28T00:00:00", "BKK", "MNL"),
+      BargainFinderMax.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
+      BargainFinderMax.build_origin_and_destination("2016-06-22T00:00:00", "SIN", "CGK"),
+      BargainFinderMax.build_origin_and_destination("2016-06-24T00:00:00", "CGK", "BKK"),
+      BargainFinderMax.build_origin_and_destination("2016-06-28T00:00:00", "BKK", "MNL"),
     ]
     
     passenger_types_and_quantities = [
-      bfm.build_passenger_type_and_quantity("ADT", 1),
-      bfm.build_passenger_type_and_quantity("CNN", 1),
-      bfm.build_passenger_type_and_quantity("INF", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("ADT", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("CNN", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("INF", 1),
     ]
+    
+    bargain_finder_max = BargainFinderMax.new
+    bargain_finder_max.establish_connection(session)
     
     result = nil  
     elapse_seconds = Benchmark.realtime do    
-      result = bfm.air_availability_circle(origins_and_destinations, passenger_types_and_quantities)
+      result = bargain_finder_max.air_availability_circle(origins_and_destinations, passenger_types_and_quantities)
     end
     puts "@DEBUG #{__LINE__}    elapse_seconds=#{elapse_seconds}"  
   
@@ -109,20 +109,20 @@ RSpec.describe BargainFinderMax, type: :model do
     
     expect(result[:status]).to eq :success
     
-    bfm = BargainFinderMax.new
-    bfm.establish_connection(session)
-
     origins_and_destinations = [
-      bfm.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
+      BargainFinderMax.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
     ]
     
     passenger_types_and_quantities = [
-      bfm.build_passenger_type_and_quantity("ADT", 1),
-      bfm.build_passenger_type_and_quantity("CNN", 1),
-      bfm.build_passenger_type_and_quantity("INF", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("ADT", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("CNN", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("INF", 1),
     ]
+    
+    bargain_finder_max = BargainFinderMax.new
+    bargain_finder_max.establish_connection(session)
 
-    result           = bfm.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities)
+    result           = bargain_finder_max.air_availability_one_way(origins_and_destinations, passenger_types_and_quantities)
     target_itinerary = result[:data][:priced_itineraries].first
     extracted_origin_destination_options = BargainFinderMax.extract_air_itinerary(target_itinerary[:air_itinerary])
     
@@ -130,21 +130,20 @@ RSpec.describe BargainFinderMax, type: :model do
     expect(extracted_origin_destination_options.size).to  eq 1
     
     
-    
     origins_and_destinations = [
-      bfm.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
-      bfm.build_origin_and_destination("2016-06-22T00:00:00", "SIN", "CGK"),
-      bfm.build_origin_and_destination("2016-06-24T00:00:00", "CGK", "BKK"),
-      bfm.build_origin_and_destination("2016-06-28T00:00:00", "BKK", "MNL"),
+      BargainFinderMax.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
+      BargainFinderMax.build_origin_and_destination("2016-06-22T00:00:00", "SIN", "CGK"),
+      BargainFinderMax.build_origin_and_destination("2016-06-24T00:00:00", "CGK", "BKK"),
+      BargainFinderMax.build_origin_and_destination("2016-06-28T00:00:00", "BKK", "MNL"),
     ]
     
     passenger_types_and_quantities = [
-      bfm.build_passenger_type_and_quantity("ADT", 1),
-      bfm.build_passenger_type_and_quantity("CNN", 1),
-      bfm.build_passenger_type_and_quantity("INF", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("ADT", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("CNN", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("INF", 1),
     ]
     
-    result           = bfm.air_availability_circle(origins_and_destinations, passenger_types_and_quantities)
+    result           = bargain_finder_max.air_availability_circle(origins_and_destinations, passenger_types_and_quantities)
     target_itinerary = result[:data][:priced_itineraries].first
     extracted_origin_destination_options = BargainFinderMax.extract_air_itinerary(target_itinerary[:air_itinerary])
     

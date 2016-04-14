@@ -1,9 +1,9 @@
 class Api::V1::BargainFinderMaxController < Api::V1::BaseController
   
   # == Constants ==============================================================
-  MISSING_REQUIRED_ORIGIN_AND_DESTINATION_INFO         = "Missing required origin and destination information."
-  MISSING_REQUIRED_PASSENGER_TYPES_AND_QUANTITIES_INFO = "Missing required passenger types and quantities information."
-  UNABLE_TO_DO_A_BARGAIN_FINDER_MAX_REQUEST            = "Request failed. Was not able to execute a Bargain Finder Max request."
+  MISSING_ORIGIN_AND_DESTINATION_PARAMS         = "'origin_and_destination' parameters where not passed. Said parameters are required parameters."
+  MISSING_PASSENGER_TYPES_AND_QUATITIES_PARAMS  = "'passenger_types_and_quantities' parameters where not passed. Said parameters are required parameters. "
+  BARGAIN_FINDER_MAX_REQUEST_UNSUCCESSFUL       = "Request failed. Unable to perform BargainFinderMax request."
   
   # == API Endpoints ==========================================================
   # GET  /api/bargain_finder_max/execute_bargain_finder_max_one_way
@@ -15,10 +15,10 @@ class Api::V1::BargainFinderMaxController < Api::V1::BaseController
     raise MISSING_REQUIRED_SABRE_SESSION_TOKEN if params[:sabre_session_token].nil?
     sabre_session_token = params[:sabre_session_token]
 
-    raise MISSING_REQUIRED_ORIGIN_AND_DESTINATION_INFO if params[:origin_and_destination].nil?
+    raise MISSING_ORIGIN_AND_DESTINATION_PARAMS if params[:origin_and_destination].nil?
     origin_and_destination = params[:origin_and_destination].first
 
-    raise MISSING_REQUIRED_PASSENGER_TYPES_AND_QUANTITIES_INFO if params[:passenger_types_and_quantities].nil?
+    raise MISSING_PASSENGER_TYPES_AND_QUATITIES_PARAMS if params[:passenger_types_and_quantities].nil?
     passenger_types_and_quantities = params[:passenger_types_and_quantities]
 
     session = SabreSession.new 
@@ -35,7 +35,7 @@ class Api::V1::BargainFinderMaxController < Api::V1::BaseController
     if call_result[:status] == :success
       success_response(call_result[:data], :ok)  
     else
-      error_response(UNABLE_TO_DO_A_BARGAIN_FINDER_MAX_REQUEST, :bad_request)  
+      error_response(BARGAIN_FINDER_MAX_REQUEST_UNSUCCESSFUL, :bad_request)  
     end    
   end  
 

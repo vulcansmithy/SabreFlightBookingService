@@ -8,10 +8,20 @@ describe Api::V1::BargainFinderMaxController do
     post "/api/sabre_session/create_session"
     expect(response.code).to eq "201"
 
+    origins_and_destinations = [
+      BargainFinderMax.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
+    ]
+    
+    passenger_types_and_quantities = [
+      BargainFinderMax.build_passenger_type_and_quantity("ADT", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("CNN", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("INF", 1),
+    ]
+
     payload = { 
       sabre_session_token:            JSON.parse(response.body)["binary_security_token"],
-      origin_and_destination:         [{ departure_date_time: "2016-06-05T00:00:00", origin_location: "MNL",  destination_location:  "SIN" }],
-      passenger_types_and_quantities: [{ passenger_type: "ADT", quantity: 1 }, { passenger_type: "CNN", quantity: 1 }, { passenger_type: "INF", quantity:1 }]
+      origin_and_destination:         origins_and_destinations,
+      passenger_types_and_quantities: passenger_types_and_quantities
     }
     
     # call the Bargain Finder Max API endpoint

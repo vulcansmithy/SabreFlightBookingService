@@ -46,11 +46,11 @@ RSpec.describe EnhancedAirBook, type: :model do
     bargain_finder_max.establish_connection(session)
     
     origins_and_destinations = [
-      bargain_finder_max.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
+      BargainFinderMax.build_origin_and_destination("2016-06-05T00:00:00", "MNL", "SIN"),
     ]
     
     passenger_types_and_quantities = [
-      bargain_finder_max.build_passenger_type_and_quantity("ADT", 1),
+      BargainFinderMax.build_passenger_type_and_quantity("ADT", 1),
     ]
 
     flight_segments = []
