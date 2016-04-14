@@ -20,6 +20,10 @@ Rails.application.routes.draw do
       resource :passenger_detail, :only => [] do
         post "execute_passenger_detail", to: "passenger_detail#execute_passenger_detail"
       end
+      
+      resource :enhanced_air_book, :only => [] do
+        post "execute_enhanced_air_book", to: "enhanced_air_book#execute_enhanced_air_book"
+      end
     end
   end  
   
