@@ -185,7 +185,30 @@ class BargainFinderMax
     return message_body 
   end  
 
-  # @TODO rename air_availability_one_way
+  def extract_departure_date_time(origin_destionation_option)
+    return origin_destionation_option[:flight_segment][:@departure_date_time]
+  end
+  
+  def extract_flight_number(origin_destionation_option)
+    return origin_destionation_option[:flight_segment][:@flight_number]
+  end
+  
+  def extract_res_book_desig_code(origin_destionation_option) 
+    return origin_destionation_option[:flight_segment][:@res_book_desig_code]  
+  end
+  
+  def extract_location_code_destination_location(origin_destionation_option)
+    return origin_destionation_option[:flight_segment][:arrival_airport][:@location_code]
+  end
+  
+  def extract_code_marketing_airline(origin_destionation_option) 
+    return origin_destionation_option[:flight_segment][:marketing_airline][:@code]
+  end
+  
+  def extract_location_code_origin_location(origin_destionation_option)
+    return origin_destionation_option[:flight_segment][:departure_airport][:@location_code]
+  end
+  
   def air_availability_one_way(origins_and_destinations, passenger_types_and_quantities, request_type="50ITINS")
 
     raise "No established 'savon_client' instance." if @savon_client.nil?
@@ -238,30 +261,6 @@ class BargainFinderMax
       
       return { status: :success, data: { priced_itineraries: priced_itineraries } }
     end
-  end
-
-  def extract_departure_date_time(origin_destionation_option)
-    return origin_destionation_option[:flight_segment][:@departure_date_time]
-  end
-  
-  def extract_flight_number(origin_destionation_option)
-    return origin_destionation_option[:flight_segment][:@flight_number]
-  end
-  
-  def extract_res_book_desig_code(origin_destionation_option) 
-    return origin_destionation_option[:flight_segment][:@res_book_desig_code]  
-  end
-  
-  def extract_location_code_destination_location(origin_destionation_option)
-    return origin_destionation_option[:flight_segment][:arrival_airport][:@location_code]
-  end
-  
-  def extract_code_marketing_airline(origin_destionation_option) 
-    return origin_destionation_option[:flight_segment][:marketing_airline][:@code]
-  end
-  
-  def extract_location_code_origin_location(origin_destionation_option)
-    return origin_destionation_option[:flight_segment][:departure_airport][:@location_code]
   end
   
 end
