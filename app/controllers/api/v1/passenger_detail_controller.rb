@@ -1,12 +1,12 @@
 class Api::V1::PassengerDetailController < Api::V1::BaseController
   
   # == Constants ==============================================================
-  MISSING_REQUIRED_DOCUMENT_ADVANCE_PASSENGER_INFO    = "Missing required document advance passenger information."
-  MISSING_REQUIRED_PERSON_NAME_ADVANCE_PASSENGER_INFO = "Missing required person name advance passenger information."  
-  MISSING_REQUIRED_CONTACT_NUMBER_CONTACT_INFO        = "Missing required contact number contact information."
-  MISSING_REQUIRED_PERSON_NAME_CONTACT_INFO           = "Missing required person name contact information."
-  UNABLE_TO_DO_A_PASSENGER_DETAIL_REQUEST             = "Request failed. Was not able to execute a Passenger Detail request."
-  
+  MISSING_DOCUMENT_ADVANCE_PASSENGER_PARAMS    = "'document_advance_passenger' parameters where not passed. Said parameters are required parameters."   
+  MISSING_PERSON_NAME_ADVANCE_PASSENGER_PARAMS = "'person_name_advance_passenger' parameters where not passed. Said parameters are required parameters."      
+  MISSING_CONTACT_NUMBER_CONTACT_INFO_PARAMS   = "'contact_number_contact_info' parameters where not passed. Said parameters are required parameters."   
+  MISSING_PERSON_NAME_CONTACT_INFO_PARAMS      = "'person_name_contact_info' parameters where not passed. Said parameters are required parameters."  
+  PASSENGER_DETAIL_REQUEST_UNSUCCESSFUL        = "Request failed. Unable to perform PassengerDetail request."  
+
   # == API Endpoints ==========================================================
   # POST /api/passenger_detail/execute_passenger_detail
   # POST /api/passenger_detail/execute_passenger_detail, {}, { "Accept" => "application/vnd.deferointernational.com; version=1" }
@@ -17,16 +17,16 @@ class Api::V1::PassengerDetailController < Api::V1::BaseController
     raise MISSING_REQUIRED_SABRE_SESSION_TOKEN if params[:sabre_session_token].nil?
     sabre_session_token = params[:sabre_session_token]
     
-    raise MISSING_REQUIRED_DOCUMENT_ADVANCE_PASSENGER_INFO if params[:document_advance_passenger].nil?
+    raise MISSING_DOCUMENT_ADVANCE_PASSENGER_PARAMS if params[:document_advance_passenger].nil?
     document_advance_passenger = params[:document_advance_passenger]
 
-    raise MISSING_REQUIRED_PERSON_NAME_ADVANCE_PASSENGER_INFO if params[:person_name_advance_passenger].nil?
+    raise MISSING_PERSON_NAME_ADVANCE_PASSENGER_PARAMS if params[:person_name_advance_passenger].nil?
     person_name_advance_passenger = params[:person_name_advance_passenger]
     
-    raise MISSING_REQUIRED_CONTACT_NUMBER_CONTACT_INFO if params[:contact_number_contact_info].nil?
+    raise MISSING_CONTACT_NUMBER_CONTACT_INFO_PARAMS if params[:contact_number_contact_info].nil?
     contact_number_contact_info = params[:contact_number_contact_info]
     
-    raise MISSING_REQUIRED_PERSON_NAME_CONTACT_INFO if params[:person_name_contact_info].nil?
+    raise MISSING_PERSON_NAME_CONTACT_INFO_PARAMS if params[:person_name_contact_info].nil?
     person_name_contact_info = params[:person_name_contact_info]
     
     session = SabreSession.new 
@@ -48,7 +48,7 @@ class Api::V1::PassengerDetailController < Api::V1::BaseController
     if call_result[:status] == :success
       success_response(call_result[:data], :created)  
     else
-      error_response(UNABLE_TO_DO_A_PASSENGER_DETAIL_REQUEST, :bad_request)  
+      error_response(PASSENGER_DETAIL_REQUEST_UNSUCCESSFUL, :bad_request)  
     end 
   end  
   
