@@ -29,10 +29,11 @@ describe Api::V1::EnhancedAirBookController do
     post "/api/enhanced_air_book/execute_enhanced_air_book", payload
     expect(response.code).to eq "201"
     
-    enhanced_air_book = JSON.parse(response.body)["enhanced_air_book"]
-    expect(enhanced_air_book.nil?).to eq false
+    returned_data = JSON.parse(response.body)
+    expect(returned_data.nil?).to eq false
     
-    puts "@DEBUG #{__LINE__}    #{ap enhanced_air_book}"
+    expect(returned_data["ota_air_book_rs"         ].nil?).to eq false
+    expect(returned_data["travel_itinerary_read_rs"].nil?).to eq false
   end
 
 end

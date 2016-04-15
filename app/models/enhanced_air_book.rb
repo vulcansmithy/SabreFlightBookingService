@@ -179,8 +179,9 @@ class EnhancedAirBook
       
       return { status: :failed,  error: error.to_hash[:fault] }
     else
-      
-      return { status: :success, data: { enhanced_air_book: call_response.body[:enhanced_air_book_rs] }}
+      returned_data = call_response.body[:enhanced_air_book_rs]
+
+      return { status: :success, data:  returned_data }
     end
   end
 
