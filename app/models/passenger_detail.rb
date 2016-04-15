@@ -326,9 +326,9 @@ class PassengerDetail
       
       return { status: :failed,  error: error.to_hash[:fault] }
     else
-      travel_itinerary_read_rs = (call_response.body[:passenger_details_rs])[:travel_itinerary_read_rs]
+      travel_itinerary = ((call_response.body[:passenger_details_rs])[:travel_itinerary_read_rs])[:travel_itinerary]
 
-      return { status: :success, data: { travel_itinerary: travel_itinerary_read_rs } }
+      return { status: :success, data: travel_itinerary }
     end  
   end
 

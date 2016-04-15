@@ -51,10 +51,15 @@ describe Api::V1::PassengerDetailController do
     post "/api/passenger_detail/execute_passenger_detail", payload
     expect(response.code).to eq "201"
     
-    travel_itinerary = JSON.parse(response.body)["travel_itinerary"]
-    expect(travel_itinerary.nil?).to eq false
+    returned_data = JSON.parse(response.body)
+    expect(returned_data.nil?).to eq false
     
-    puts "@DEBUG #{__LINE__}    #{ap travel_itinerary}"
+    customer_info = returned_data["customer_info"]
+    expect(customer_info.nil?).to eq false
+
+    # make sure the returned_data contains the one passed to the API  
+    expect((customer_info["person_name"])["given_name"]).to eq "CHARLES"
+    expect((customer_info["person_name"])["surname"   ]).to eq "FINLEY"
   end
 
 end
