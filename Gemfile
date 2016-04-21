@@ -56,7 +56,7 @@ group :development, :test do
   
   gem "awesome_print", "1.6.1"   # https://github.com/michaeldv/awesome_print
   gem "gyoku",         "1.3.1"   # https://github.com/savonrb/gyoku 
-  gem "rspec-rails",   "3.2.1"   # https://github.com/rspec/rspec-rails
+  gem "rspec-rails",   "3.4.2"   # https://github.com/rspec/rspec-rails
   gem "guard-rspec",   "4.5.0"   # https://github.com/guard/guard-rspec
   gem "rb-fsevent",    "0.9.4"   # https://github.com/thibaudgg/rb-fsevent
   gem "faker",         "1.4.3"   # https://github.com/stympy/faker
