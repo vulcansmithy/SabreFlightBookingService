@@ -12,15 +12,26 @@ class Api::V1::BargainFinderMaxController < Api::V1::BaseController
   # GET  /api/v1/bargain_finder_max/execute_bargain_finder_max_one_way
   def execute_bargain_finder_max_one_way
     
+    # make sure the existing sabre_session_token was passed
     raise MISSING_REQUIRED_SABRE_SESSION_TOKEN if params[:sabre_session_token].nil?
     sabre_session_token = params[:sabre_session_token]
 
+    # make sure origin_and_destination was passed
     raise MISSING_ORIGIN_AND_DESTINATION_PARAMS if params[:origin_and_destination].nil?
-    origin_and_destination = params[:origin_and_destination].first
+    
+    # take the passed origin_and_destination that is in json format and convert into a Hash
+    origin_and_destination = (JSON.parse(params[:origin_and_destination]).first).symbolize_keys
 
+    # make sure passenger_types_and_quantities was passed
     raise MISSING_PASSENGER_TYPES_AND_QUATITIES_PARAMS if params[:passenger_types_and_quantities].nil?
-    passenger_types_and_quantities = params[:passenger_types_and_quantities]
-
+    
+    # take the passed passenger_types_and_quantities that is in json format and convert into a Hash
+    passenger_types_and_quantities = []
+    JSON.parse(params[:passenger_types_and_quantities]).each do |item|
+      passenger_types_and_quantities << item.symbolize_keys
+    end
+    
+    
     session = SabreSession.new 
     session.set_to_non_production
     
@@ -30,7 +41,6 @@ class Api::V1::BargainFinderMaxController < Api::V1::BaseController
     bargain_finder_max = BargainFinderMax.new
     bargain_finder_max.establish_connection(session)
     
-    # @TODO rename air_availability_one_way
     call_result = bargain_finder_max.air_availability_one_way([ origin_and_destination ], passenger_types_and_quantities)
     if call_result[:status] == :success
       success_response(call_result[:data], :ok)  
