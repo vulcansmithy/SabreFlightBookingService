@@ -18,16 +18,17 @@ class Api::V1::PassengerDetailController < Api::V1::BaseController
     sabre_session_token = params[:sabre_session_token]
     
     raise MISSING_DOCUMENT_ADVANCE_PASSENGER_PARAMS if params[:document_advance_passenger].nil?
-    document_advance_passenger = params[:document_advance_passenger]
-
+    document_advance_passenger = JSON.parse(params[:document_advance_passenger]).symbolize_keys
+    puts "@DEBUG #{__LINE__}    document_advance_passenger=#{ap document_advance_passenger}"
+    
     raise MISSING_PERSON_NAME_ADVANCE_PASSENGER_PARAMS if params[:person_name_advance_passenger].nil?
-    person_name_advance_passenger = params[:person_name_advance_passenger]
+    person_name_advance_passenger = JSON.parse(params[:person_name_advance_passenger]).symbolize_keys
     
     raise MISSING_CONTACT_NUMBER_CONTACT_INFO_PARAMS if params[:contact_number_contact_info].nil?
-    contact_number_contact_info = params[:contact_number_contact_info]
+    contact_number_contact_info = JSON.parse(params[:contact_number_contact_info]).symbolize_keys
     
     raise MISSING_PERSON_NAME_CONTACT_INFO_PARAMS if params[:person_name_contact_info].nil?
-    person_name_contact_info = params[:person_name_contact_info]
+    person_name_contact_info = JSON.parse(params[:person_name_contact_info]).symbolize_keys
     
     session = SabreSession.new 
     session.set_to_non_production
