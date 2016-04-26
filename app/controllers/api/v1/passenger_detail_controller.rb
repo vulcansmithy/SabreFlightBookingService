@@ -47,7 +47,8 @@ class Api::V1::PassengerDetailController < Api::V1::BaseController
     )
     
     if call_result[:status] == :success
-      success_response(call_result[:data], :created)  
+      # @TODO for some reason, what the API callee is getting is status code of 200 (ok) and not 201 (created)
+      success_response({ "status" => :created, "data" => call_result[:data] })  
     else
       error_response(PASSENGER_DETAIL_REQUEST_UNSUCCESSFUL, :bad_request)  
     end 
