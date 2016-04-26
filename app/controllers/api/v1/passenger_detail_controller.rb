@@ -19,7 +19,6 @@ class Api::V1::PassengerDetailController < Api::V1::BaseController
     
     raise MISSING_DOCUMENT_ADVANCE_PASSENGER_PARAMS if params[:document_advance_passenger].nil?
     document_advance_passenger = JSON.parse(params[:document_advance_passenger]).symbolize_keys
-    puts "@DEBUG #{__LINE__}    document_advance_passenger=#{ap document_advance_passenger}"
     
     raise MISSING_PERSON_NAME_ADVANCE_PASSENGER_PARAMS if params[:person_name_advance_passenger].nil?
     person_name_advance_passenger = JSON.parse(params[:person_name_advance_passenger]).symbolize_keys
