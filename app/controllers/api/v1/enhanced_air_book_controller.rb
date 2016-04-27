@@ -15,7 +15,12 @@ class Api::V1::EnhancedAirBookController < Api::V1::BaseController
     sabre_session_token = params[:sabre_session_token]
     
     raise MISSING_FLIGHT_SEGMENTS_PARAMS if params[:flight_segments].nil?
-    flight_segments = params[:flight_segments]
+    parsed_json_params = JSON.parse(params[:flight_segments])
+    
+    flight_segments = []
+    parsed_json_params.each do |segment|
+      flight_segments << segment.symbolize_keys
+    end
 
     session = SabreSession.new 
     session.set_to_non_production
@@ -29,7 +34,8 @@ class Api::V1::EnhancedAirBookController < Api::V1::BaseController
     call_result = enhanced_air_book.execute_request(flight_segments: flight_segments)
     
     if call_result[:status] == :success
-      success_response(call_result[:data], :created)  
+      # @TODO for some reason, what the API callee is getting is status code of 200 (ok) and not 201 (created)
+      success_response({ "status" => :created, "data" => call_result[:data] }, :created)  
     else
       error_response(ENHANCED_AIR_BOOK_REQUEST_UNSUCCESSFUL, :bad_request)  
     end 
