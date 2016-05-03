@@ -291,10 +291,8 @@ class PassengerDetail
             "v:SpecialServiceInfo" => {
               "v:AdvancePassenger" => {
                :@SegmentNumber => "A",
-              
-                "v:Document"    => document_advance_passenger,
-                "v:PersonName"  => person_name_advance_passenger,
-                "v:VendorPrefs" => { "v:Airline" => { :@Hosted => "false" } },
+                "v:Document"   => document_advance_passenger,
+                "v:PersonName" => person_name_advance_passenger,
               },
             },
           },
@@ -309,7 +307,6 @@ class PassengerDetail
               "v:PostalCode"      => "76092",     
               "v:StateCountyProv" => { :@StateCode => "TX" },
               "v:StreetNmbr"      => "3150 SABRE DRIVE", 
-              "v:VendorPrefs"     => { "v:Airline" => { :@Hosted => "true" } },
             },
           },
           "v:CustomerInfo" => {
