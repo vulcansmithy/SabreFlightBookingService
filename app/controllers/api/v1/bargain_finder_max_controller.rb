@@ -21,7 +21,6 @@ class Api::V1::BargainFinderMaxController < Api::V1::BaseController
     
     # take the passed origin_and_destination that is in json format and convert into a Hash
     origin_and_destination = (JSON.parse(params[:origin_and_destination]).first).symbolize_keys
-    puts "@DEBUG #{__LINE__}    origin_and_destination=#{ap origin_and_destination}"
 
     # make sure passenger_types_and_quantities was passed
     raise MISSING_PASSENGER_TYPES_AND_QUATITIES_PARAMS if params[:passenger_types_and_quantities].nil?

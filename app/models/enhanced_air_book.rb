@@ -165,7 +165,6 @@ class EnhancedAirBook
       flight_segments.each do |flight_segment|
         @message_body["v:OTA_AirBookRQ"]["v:OriginDestinationInformation"]["v:FlightSegment"] << EnhancedAirBook.build_individual_flight_segment(flight_segment)  
       end
-      puts "@DEBUG #{__LINE__}    @message_body=#{ap @message_body}"
     
       call_response = @savon_client.call(
         :enhanced_air_book_rq, 
