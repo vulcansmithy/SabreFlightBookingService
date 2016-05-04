@@ -277,8 +277,17 @@ class PassengerDetail
       # @TODO add a mechanism for adding the above passed hash parameter as optional
       @message_body = {
         "v:PostProcessing" => {
-          :@IgnoreAfter          => "false",
+          :@IgnoreAfter          => "true",
           :@RedisplayReservation => "true",
+          
+          "v:EndTransactionRQ" => {
+            "v:EndTransaction" => {
+              :@Ind => "true",
+            },
+            "v:Source" => {
+              :@ReceivedFrom => "6DEFERO",
+            },
+          },
         },
   
         "v:PreProcessing" => {

@@ -154,7 +154,7 @@ class EnhancedAirBook
         },
       
         "v:PostProcessing" => {
-          :@IgnoreAfter => "true",
+          :@IgnoreAfter => "false",
           "v:RedisplayReservation" => { },
         },
         "v:PreProcessing" => {
