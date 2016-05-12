@@ -69,5 +69,6 @@ end
 gem "savon",            "2.11.1"  # https://github.com/savonrb/savon
 gem "dotenv-rails",     "2.0.1"   # https://github.com/bkeepers/dotenv 
 gem "versionist",       "1.4.1"   # https://github.com/bploetz/versionist
+gem "puma",             "3.4.0"   # https://github.com/puma/puma
                               
 
