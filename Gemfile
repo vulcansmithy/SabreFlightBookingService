@@ -53,7 +53,8 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
-  
+
+  gem "dotenv-rails",   "2.0.1"   # https://github.com/bkeepers/dotenv   
   gem "awesome_print",  "1.6.1"   # https://github.com/michaeldv/awesome_print
   gem "gyoku",          "1.3.1"   # https://github.com/savonrb/gyoku 
   gem "rspec-rails",    "3.4.2"   # https://github.com/rspec/rspec-rails
@@ -67,7 +68,6 @@ group :production do
 end
 
 gem "savon",            "2.11.1"  # https://github.com/savonrb/savon
-gem "dotenv-rails",     "2.0.1"   # https://github.com/bkeepers/dotenv 
 gem "versionist",       "1.4.1"   # https://github.com/bploetz/versionist
 gem "puma",             "3.4.0"   # https://github.com/puma/puma
                               
