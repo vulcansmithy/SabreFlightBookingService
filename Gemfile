@@ -54,17 +54,20 @@ group :development, :test do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
   
-  gem "awesome_print", "1.6.1"   # https://github.com/michaeldv/awesome_print
-  gem "gyoku",         "1.3.1"   # https://github.com/savonrb/gyoku 
-  gem "rspec-rails",   "3.4.2"   # https://github.com/rspec/rspec-rails
-  gem "guard-rspec",   "4.5.0"   # https://github.com/guard/guard-rspec
-  gem "rb-fsevent",    "0.9.4"   # https://github.com/thibaudgg/rb-fsevent
-  gem "faker",         "1.4.3"   # https://github.com/stympy/faker
-  
+  gem "awesome_print",  "1.6.1"   # https://github.com/michaeldv/awesome_print
+  gem "gyoku",          "1.3.1"   # https://github.com/savonrb/gyoku 
+  gem "rspec-rails",    "3.4.2"   # https://github.com/rspec/rspec-rails
+  gem "guard-rspec",    "4.5.0"   # https://github.com/guard/guard-rspec
+  gem "rb-fsevent",     "0.9.4"   # https://github.com/thibaudgg/rb-fsevent
+  gem "faker",          "1.4.3"   # https://github.com/stympy/faker
 end
 
-gem "savon",           "2.11.1"                                                 # https://github.com/savonrb/savon
-gem "dotenv-rails",    "2.0.1", :groups => [:development, :test, :production]   # https://github.com/bkeepers/dotenv 
-gem "versionist",      "1.4.1"                                                  # https://github.com/bploetz/versionist
+group :production do
+  gem "rails_12factor", "0.0.3"   # https://github.com/heroku/rails_12factor
+end
+
+gem "savon",            "2.11.1"  # https://github.com/savonrb/savon
+gem "dotenv-rails",     "2.0.1"   # https://github.com/bkeepers/dotenv 
+gem "versionist",       "1.4.1"   # https://github.com/bploetz/versionist
                               
 
