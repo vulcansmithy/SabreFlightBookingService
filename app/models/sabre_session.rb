@@ -25,26 +25,26 @@ class SabreSession
   # == Initalizer ============================================================              
   def initialize(attributes={})
     super
-    
-    # retrieve required setting for 'username'
-    raise "Missing required 'username' configuration setting." if ENV["username"].nil?
-    @username = attributes[:username].nil? ? ENV["username"] : attributes[:username] 
 
-    # retrieve required setting for 'password'  
-    raise "Missing required 'password' configuration setting." if ENV["password"].nil?
-    @password = attributes[:password].nil? ? ENV["password"] : attributes[:password] 
+    # retrieve required setting for 'USERNAME'
+    raise "Missing required 'SABRE_ACCOUNT_USERNAME' configuration setting." if ENV["USERNAME"].nil?
+    @username = attributes[:username].nil? ? ENV["USERNAME"] : attributes[:username] 
+
+    # retrieve required setting for 'PASSWORD'  
+    raise "Missing required 'PASSWORD' configuration setting." if ENV["PASSWORD"].nil?
+    @password = attributes[:password].nil? ? ENV["PASSWORD"] : attributes[:password] 
     
-    # retrieve required setting for 'ipcc'  
-    raise "Missing required 'ipcc' configuration setting." if ENV["ipcc"].nil?
-    @ipcc = attributes[:ipcc].nil? ? ENV["ipcc"] : attributes[:ipcc] 
+    # retrieve required setting for 'IPCC'  
+    raise "Missing required 'IPCC' configuration setting." if ENV["IPCC"].nil?
+    @ipcc = attributes[:ipcc].nil? ? ENV["IPCC"] : attributes[:ipcc] 
   
-    # retrieve setting for 'account_email'        
-    raise "Missing 'account_email' configuration setting." if ENV["account_email"].nil?
-    @account_email = attributes[:account_email].nil? ? ENV["account_email"] : attributes[:account_email] 
+    # retrieve setting for 'ACCOUNT_EMAIL'        
+    raise "Missing 'ACCOUNT_EMAIL' configuration setting." if ENV["ACCOUNT_EMAIL"].nil?
+    @account_email = attributes[:account_email].nil? ? ENV["ACCOUNT_EMAIL"] : attributes[:account_email] 
     
-    # retrieve setting for 'domain'  
-    raise "Missing 'domain' configuration setting." if ENV["domain"].nil?
-    @domain = attributes[:domain].nil? ? ENV["domain"] : attributes[:domain] 
+    # retrieve setting for 'DOMAIN'  
+    raise "Missing 'DOMAIN' configuration setting." if ENV["DOMAIN"].nil?
+    @domain = attributes[:domain].nil? ? ENV["DOMAIN"] : attributes[:domain] 
 
     @non_production_environment = false
     

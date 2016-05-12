@@ -17,44 +17,40 @@ class Sessionn
                 
 
   def initialize_configuration
-    
-    # retrieve required setting for 'username'
-    if ENV["username"].nil?
+    # retrieve required setting for 'USERNAME'
+    if ENV["USERNAME"].nil?
       raise "Missing required 'username' configuration setting." 
     else  
-      @username = ENV["username"]
+      @username = ENV["USERNAME"]
     end
     
-    # retrieve required setting for 'password'  
-    if ENV["password"].nil?
-      raise "Missing required 'password' configuration setting." 
+    # retrieve required setting for 'PASSWORD'  
+    if ENV["PASSWORD"].nil?
+      raise "Missing required 'PASSWORD' configuration setting." 
     else  
-      @password = ENV["password"]
+      @password = ENV["PASSWORD"]
     end
     
-    # retrieve required setting for 'ipcc'  
-    if ENV["ipcc"].nil?
-      raise "Missing required 'ipcc' configuration setting." 
+    # retrieve required setting for 'IPCC'  
+    if ENV["IPCC"].nil?
+      raise "Missing required 'IPCC' configuration setting." 
     else
-      @ipcc = ENV["ipcc"]
+      @ipcc = ENV["IPCC"]
     end
   
-     # TODO is 'domain' a required field
-    # retrieve setting for 'account_email'        
-    if ENV["account_email"].nil?
-      raise "Missing 'account_email' configuration setting." 
+    # retrieve setting for 'ACCOUNT_EMAIL'        
+    if ENV["ACCOUNT_EMAIL"].nil?
+      raise "Missing 'ACCOUNT_EMAIL' configuration setting." 
     else
-      @account_email = ENV["account_email"]
+      @account_email = ENV["ACCOUNT_EMAIL"]
     end
     
-    # TODO is 'domain' a required field
-    # retrieve setting for 'domain'  
-    if ENV["domain"].nil?
-      raise "Missing 'account_email' configuration setting." 
+    # retrieve setting for 'DOMAIN'  
+    if ENV["DOMAIN"].nil?
+      raise "Missing 'DOMAIN' configuration setting." 
     else
-      @domain = ENV["domain"]
+      @domain = ENV["DOMAIN"]
     end
-    
   end
 
   def establish
